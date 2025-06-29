@@ -1,8 +1,16 @@
 ---
 permalink: /about/
 title: "About"
+layout: single
+author_profile: true
 ---
 
-Tempor velit sint sunt ipsum tempor enim ad qui ullamco. Est dolore anim ad velit duis dolore minim sunt aliquip amet commodo labore. Ut eu pariatur aute ea aute excepteur laborum. Esse ea esse excepteur minim mollit qui cillum excepteur ex dolore magna. Labore deserunt fugiat incididunt incididunt sint ea. Consequat dolore aute laboris quis proident quis non et est consectetur ex eiusmod sit culpa.
+Hi, I'm **Mat Leszkiewicz** — a cybersecurity enthusiast with a background in computer science, DevOps, and technical support engineering. After completing a Higher Diploma in Computer Science at South East Technological University, I’ve focused my learning and professional development on cybersecurity, threat intelligence, and Security Operations Center (SoC) methodologies.
 
-Cupidatat ea do et in excepteur in. Ad nostrud ut est esse eu duis ea sunt eiusmod. Aliquip tempor veniam sint elit fugiat. Velit incididunt laboris amet incididunt labore dolore irure velit excepteur commodo deserunt laborum. Consectetur eu fugiat veniam veniam Lorem labore magna eiusmod. Ea occaecat reprehenderit pariatur consectetur minim labore ut aliquip.
+Currently, I work as a Technical Support Engineer at Intercom, where I debug complex issues, build internal tools, and contribute to incident response. My past experience also includes a DevOps internship at FundRecs, where I developed AWS CI/CD pipelines and security infrastructure, and earlier roles at TikTok and Accenture in model optimization and content moderation.
+
+With hands-on experience in Python, Java, JavaScript, cloud services like AWS, and tools like Elasticsearch, Git, and Docker, I aim to bridge the gap between engineering and security.
+
+I'm passionate about learning, resilient in challenges, and always curious about how systems work—and how they can be secured. My goal is to transition into a full-time **cybersecurity analyst** role, where I can apply my skills to detect, respond to, and prevent real-world threats.
+
+When I'm not working or learning, I enjoy hiking, traveling, and diving deep into psychology and social engineering topics.

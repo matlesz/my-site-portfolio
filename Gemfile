@@ -15,3 +15,7 @@ group :jekyll_plugins do
   gem "jekyll-include-cache"
   gem "jekyll-algolia"
 end
+
+gem "nokogiri", "~> 1.13"
+
+gem "faraday-retry", "~> 2.3"
