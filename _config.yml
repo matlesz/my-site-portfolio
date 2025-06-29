@@ -23,7 +23,8 @@ linkedin_username: mat-leszkiewicz
 github_username: matelsz
 minimal_mistakes_skin: dark
 search: true
-
+#google_analytics
+google_analytics: G-ZZ2462N63Z
 # Build settings
 markdown: kramdown
 remote_theme: mmistakes/minimal-mistakes
