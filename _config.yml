@@ -74,6 +74,9 @@ author:
     - label: "LinkedIn"
       icon: "fab fa-fw fa-linkedin"
       url: "https://www.linkedin.com/in/mat-leszkiewicz/"
+    - label: "TryHackMe"
+      icon: "fab fa-fw fa-hacker-news"
+      url: "https://tryhackme.com/p/matlesz"
 
 footer:
   links:
@@ -86,6 +89,7 @@ footer:
     - label: "LinkedIn"
       icon: "fab fa-fw fa-linkedin"
       url: "https://www.linkedin.com/in/mat-leszkiewicz/"
+
 
 defaults:
   # _posts

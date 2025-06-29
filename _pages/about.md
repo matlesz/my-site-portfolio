@@ -14,3 +14,6 @@ With hands-on experience in Python, Java, JavaScript, cloud services like AWS, a
 I'm passionate about learning, resilient in challenges, and always curious about how systems work—and how they can be secured. My goal is to transition into a full-time **cybersecurity analyst** role, where I can apply my skills to detect, respond to, and prevent real-world threats.
 
 When I'm not working or learning, I enjoy hiking, traveling, and diving deep into psychology and social engineering topics.
+
+<iframe src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=4282750" style='border:none;'></iframe>
+
