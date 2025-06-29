@@ -26,7 +26,7 @@ title: "Curriculum Vitae"
 
 ## Education
 
-**01/2021–12/2024 | Southeast Technological University in Waterford**  
+**01/21–12/24 | Southeast Technological University in Waterford**  
 *Higher Diploma in Computer Science*
 
 **Main Modules:**
