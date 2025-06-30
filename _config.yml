@@ -30,8 +30,11 @@ search: true
 markdown: kramdown
 remote_theme: mmistakes/minimal-mistakes
 
-#google_analytics
-google_analytics: G-ZZ2462N63Z
+# google_analytics
+analytics:
+  provider: "google-gtag"
+  google:
+    tracking_id: "G-ZZ2462N63Z"
 
 # Outputting
 permalink: /:categories/:title/
