@@ -13,8 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-#google_analytics
-google_analytics: G-ZZ2462N63Z
+
 
 title: ML Portfolio
 email: matlesz@gmail.com
@@ -30,6 +29,10 @@ search: true
 # Build settings
 markdown: kramdown
 remote_theme: mmistakes/minimal-mistakes
+
+#google_analytics
+google_analytics: G-ZZ2462N63Z
+
 # Outputting
 permalink: /:categories/:title/
 paginate: 5 # amount of posts to show
