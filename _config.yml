@@ -32,9 +32,10 @@ remote_theme: mmistakes/minimal-mistakes
 
 # google_analytics
 analytics:
-  provider: "google-gtag"
+  provider: "google-gtag" # false (default), "google", "google-universal", "google-gtag", "custom"
   google:
     tracking_id: "G-ZZ2462N63Z"
+    anonymize_ip: false # default
 
 # Outputting
 permalink: /:categories/:title/
@@ -72,7 +73,7 @@ author:
   bio    : "I'm a support engineer with a passion for cybersecurity and mission to help people be safer in the web."
   links:
     - label: "Website"
-      icon: "fas fa-fw fa-link"
+      icon: "fab fa-fw fa-link"
       url: "https://matleszkiewicz.dev"
     - label: "x.com"
       icon: "fab fa-fw fa-x-twitter"
