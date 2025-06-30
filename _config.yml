@@ -32,10 +32,11 @@ remote_theme: mmistakes/minimal-mistakes
 
 # google_analytics
 analytics:
-  provider: "google-gtag" # false (default), "google", "google-universal", "google-gtag", "custom"
+  provider: "google-gtag"
   google:
     tracking_id: "G-ZZ2462N63Z"
     anonymize_ip: false # default
+
 
 # Outputting
 permalink: /:categories/:title/
