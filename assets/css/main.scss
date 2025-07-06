@@ -9,3 +9,22 @@
     visibility: visible !important;
     color: inherit !important;
 }
+
+// Make author bio-photo larger on mobile
+@media (max-width: 600px) {
+    .sidebar .h-card {
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    .sidebar .author__avatar {
+        width: 120px !important;
+        height: 120px !important;
+        margin-right: 16px !important;
+        flex-shrink: 0 !important;
+    }
+
+    .sidebar .author__content {
+        flex: 1 1 0% !important;
+    }
+}
