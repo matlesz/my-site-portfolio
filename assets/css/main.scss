@@ -1,4 +1,10 @@
+---
+---
+
 @charset "utf-8";
+
+$paragraph-indent: false;
+$indent-var: 0.55em;
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
@@ -10,22 +16,67 @@
     color: inherit !important;
 }
 
-// Make author bio-photo larger on mobile
+// Make author profile cleaner on small screens
 @media (max-width: 600px) {
     .sidebar .h-card {
         display: flex !important;
+        flex-direction: column !important;
         align-items: center !important;
+        text-align: center;
+        gap: 0.75rem;
     }
 
     .sidebar .author__avatar {
-        width: 120px !important;
-        height: 120px !important;
-        margin-right: 16px !important;
+        width: 140px !important;
+        height: 140px !important;
+        margin: 0 auto !important;
         flex-shrink: 0 !important;
     }
 
     .sidebar .author__content {
-        flex: 1 1 0% !important;
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .sidebar .author__urls-wrapper {
+        width: 100% !important;
+        display: block !important;
+    }
+
+    .sidebar .author__urls-wrapper button {
+        display: none !important;
+    }
+
+    .sidebar .author__urls {
+        display: grid !important;
+        position: static !important;
+        margin: 0.75rem auto 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        max-width: 320px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.35rem 0.75rem;
+        text-align: left;
+    }
+
+    .sidebar .author__urls li {
+        margin: 0 !important;
+    }
+
+    .sidebar .author__urls a {
+        margin: 0 !important;
+        padding: 0.2rem 0 !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .sidebar .author__urls {
+        grid-template-columns: 1fr;
+        max-width: 240px;
     }
 }
 
@@ -87,6 +138,40 @@ h6,
     font-size: 0.85rem;
 }
 
+.layout--single .page__content {
+    line-height: 1.3;
+}
+
+.layout--single .page__content p,
+.layout--single .page__content li {
+    line-height: 1.3;
+}
+
+.layout--single .page__content p {
+    margin: 0 0 0.65rem;
+}
+
+.layout--single .page__content p + p {
+    margin-top: 0;
+}
+
+.layout--single .page__content li {
+    margin-bottom: 0.3rem;
+}
+
+.layout--single .page__content ul,
+.layout--single .page__content ol {
+    margin-bottom: 0.6rem;
+}
+
+.layout--single .page__title,
+.layout--single .page__content h1,
+.layout--single .page__content h2,
+.layout--single .page__content h3,
+.layout--single .page__content h4 {
+    line-height: 1.08;
+}
+
 .page__meta,
 .page__footer,
 .archive__item-excerpt {
@@ -118,9 +203,23 @@ h6,
 }
 
 .masthead {
-    background: rgba(11, 15, 23, 0.9);
-    border-bottom: 1px solid var(--tech-border);
+    background: transparent;
+    border-bottom: 0;
+    backdrop-filter: none;
+}
+
+.masthead__inner-wrap {
+    margin: 1.25rem auto 0;
+    padding: 0.75rem 1.5rem;
+    background: rgba(17, 24, 39, 0.9);
+    border: 1px solid var(--tech-border);
+    border-radius: 20px;
+    box-shadow: var(--tech-shadow);
     backdrop-filter: blur(14px);
+}
+
+.greedy-nav {
+    background: transparent;
 }
 
 .greedy-nav a,
@@ -135,7 +234,35 @@ h6,
     border-radius: 18px;
 }
 
+.layout--home .sidebar {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.layout--home .sidebar > * {
+    margin: 0;
+}
+
+.layout--home .author__name,
+.layout--home .author__bio {
+    margin: 0;
+}
+
+.sidebar .author__avatar {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .sidebar .author__avatar img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
     border-radius: 18px;
     border: 1px solid var(--tech-border);
     box-shadow: var(--tech-shadow);
@@ -145,8 +272,13 @@ h6,
     .sidebar {
         background: var(--tech-surface);
         border: 1px solid var(--tech-border);
-        padding: 1.5rem;
+        padding: 1.75rem;
         box-shadow: var(--tech-shadow);
+    }
+
+    .layout--home .sidebar,
+    .layout--home .home-hero {
+        min-height: clamp(380px, 45vh, 520px);
     }
 }
 
@@ -169,6 +301,19 @@ h6,
     color: var(--tech-text);
 }
 
+.archive__item-title {
+    font-size: 1.15rem;
+    line-height: 1.2;
+}
+
+.layout--home .archive__item {
+    padding: 1.2rem 1.4rem;
+}
+
+.layout--home .archive__item-title {
+    margin-top: 0.35rem;
+}
+
 .archive__item-title a:hover,
 .archive__item-title a:focus {
     color: var(--tech-accent);
@@ -187,11 +332,26 @@ blockquote {
     border-radius: 12px;
 }
 
+.tryhackme-embed {
+    display: flex;
+    justify-content: center;
+    margin: 1.75rem 0;
+    overflow: hidden;
+}
+
+.tryhackme-embed__frame {
+    border: 0;
+    width: min(760px, 100%);
+    max-width: 100%;
+    height: 150px;
+    display: block;
+}
+
 .home-hero {
     background: rgba(17, 24, 39, 0.85);
     border: 1px solid var(--tech-border);
     border-radius: 24px;
-    padding: clamp(2rem, 3vw, 3rem);
+    padding: 1.75rem;
     box-shadow: var(--tech-shadow);
     display: grid;
     gap: 1.5rem;
@@ -206,7 +366,7 @@ blockquote {
 }
 
 .home-hero__title {
-    font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+    font-size: clamp(1.45rem, 2.8vw, 2.3rem);
     margin: 0 0 1rem;
     max-width: 22ch;
 }
@@ -227,7 +387,8 @@ blockquote {
 .home-metrics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.25rem;
+    gap: 1.6rem;
+    padding: 0.25rem;
     margin: 0;
 }
 
@@ -235,7 +396,7 @@ blockquote {
     background: rgba(17, 24, 39, 0.85);
     border: 1px solid var(--tech-border);
     border-radius: 16px;
-    padding: 1.25rem 1.5rem;
+    padding: 1.75rem;
     box-shadow: var(--tech-shadow);
     display: flex;
     flex-wrap: wrap;
@@ -280,6 +441,7 @@ blockquote {
 .home-section__title {
     font-size: 1.1rem;
     margin: 0 0 1rem;
+    padding-top: 0.5rem;
 }
 
 .home-grid {
@@ -345,13 +507,13 @@ blockquote {
     }
 
     .home-hero__title {
-        font-size: 2.1rem;
+        font-size: 1.85rem;
         max-width: 18ch;
     }
 
     .home-metrics {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 1.2rem;
     }
 
     .home-card {

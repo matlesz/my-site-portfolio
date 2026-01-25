@@ -9,10 +9,12 @@
 - `_config.yml` global site settings and theme config.
 - `_data/` YAML data files (navigation, etc).
 - `_includes/` HTML/Liquid partials (custom head, footer).
+- `index.html` custom home page content (layout home).
 - `_pages/` standalone pages with front matter.
 - `_posts/` dated blog posts.
 - `assets/css/main.scss` theme imports and custom CSS overrides.
 - `assets/images/` site images and icons.
+- `plans/` internal planning docs (not site content).
 - `_site/` generated site output; do not edit by hand.
 
 ## Setup
@@ -37,6 +39,7 @@
 - Use `layout: single` unless another layout is required.
 - Prefer explicit `permalink` for pages in `_pages`.
 - Posts in `_posts` follow the `YYYY-MM-DD-Title.md` filename pattern used here.
+- Home and Projects pages list posts tagged `Homelab` or `homelab`; keep that tag on homelab series posts.
 - Keep front matter keys ordered consistently: `title`, `date`, `permalink`, `layout`, then feature flags.
 - Use lower-case booleans (`true`/`false`) in front matter.
 - Tags are a YAML list: `tags: [Tag One, Tag Two]`.
@@ -77,6 +80,9 @@
 - Use `!important` only when required to override the theme.
 - Favor class selectors over element selectors for overrides.
 - Keep media queries grouped with the related selectors.
+- Reuse `:root` tech palette tokens (`--tech-*`) instead of adding new hex colors.
+- Home and Projects layout components rely on `.home-*` classes (hero, metrics, grid, cards).
+- Font pairing is Manrope (body) + Space Grotesk (headings); keep CSS in sync with `_includes/head/custom.html`.
 
 ## JavaScript (inline)
 - Inline JS lives in `_includes/head/custom.html`.
@@ -84,6 +90,7 @@
 - Guard global dependencies before use (e.g., check `window.cookieconsent` exists).
 - Prefer `window.addEventListener("load", ...)` for initialization.
 - Keep scripts small; use CDN links for third-party libraries.
+- Google Fonts links and cookie consent assets are also defined in `_includes/head/custom.html`.
 
 ## Naming conventions
 - Pages in `_pages` use concise lowercase filenames with hyphens.

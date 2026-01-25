@@ -15,5 +15,6 @@ I'm passionate about learning, resilient in challenges, and always curious about
 
 When I'm not working or learning, I enjoy hiking, traveling, and diving deep into psychology and social engineering topics.
 
-<iframe src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=4282750" style='border:none;'></iframe>
-
+<div class="tryhackme-embed">
+    <iframe class="tryhackme-embed__frame" src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=4282750" title="TryHackMe public profile badge" loading="lazy"></iframe>
+</div>
