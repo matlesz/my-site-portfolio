@@ -1,0 +1,10 @@
+{
+  "editor.formatOnSave": true,
+  "[scss]": {
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": null
+  },
+  "files.associations": {
+    "assets/css/main.scss": "scss"
+  }
+}

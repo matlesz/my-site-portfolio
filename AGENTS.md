@@ -40,6 +40,7 @@
 - Prefer explicit `permalink` for pages in `_pages`.
 - Posts in `_posts` follow the `YYYY-MM-DD-Title.md` filename pattern used here.
 - Home and Projects pages list posts tagged `Homelab` or `homelab`; keep that tag on homelab series posts.
+- Home and Projects Homelab/Other Projects sections use curated post titles; update those title lists if a post title changes.
 - Keep front matter keys ordered consistently: `title`, `date`, `permalink`, `layout`, then feature flags.
 - Use lower-case booleans (`true`/`false`) in front matter.
 - Tags are a YAML list: `tags: [Tag One, Tag Two]`.
@@ -85,6 +86,7 @@
 - Reuse `:root` tech palette tokens (`--tech-*`) instead of adding new hex colors.
 - Home and Projects layout components rely on `.home-*` classes (hero, metrics, grid, cards).
 - Font pairing is Manrope (body) + Space Grotesk (headings); keep CSS in sync with `_includes/head/custom.html`.
+- About page uses `classes: about-page` for increased body line-height; keep the class if editing that front matter.
 
 ## JavaScript (inline)
 - Inline JS lives in `_includes/head/custom.html`.

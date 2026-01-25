@@ -16,6 +16,8 @@
 
 
 title: ML Portfolio
+masthead_title: "ML"
+logo: /favicon.svg
 email: matlesz@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Cybersecurity-focused portfolio of Mat Leszkiewicz — aspiring analyst with a background in DevOps, 

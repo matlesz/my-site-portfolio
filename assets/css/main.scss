@@ -27,8 +27,8 @@ $indent-var: 0.55em;
     }
 
     .sidebar .author__avatar {
-        width: 140px !important;
-        height: 140px !important;
+        width: 200px !important;
+        height: 200px !important;
         margin: 0 auto !important;
         flex-shrink: 0 !important;
     }
@@ -207,8 +207,21 @@ h6,
     gap: 2.75rem;
 }
 
+.layout--home .sidebar,
+.layout--home .home-hero {
+    margin-top: 0;
+}
+
 .layout--home .page__content > * {
     margin: 0;
+}
+
+#main {
+    padding-top: 1.75rem;
+}
+
+.page .page__inner-wrap {
+    margin-top: 0;
 }
 
 .masthead {
@@ -219,12 +232,15 @@ h6,
 
 .masthead__inner-wrap {
     margin: 1.25rem auto 0;
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 1rem 1.25rem;
     background: rgba(17, 24, 39, 0.9);
     border: 1px solid var(--tech-border);
     border-radius: 20px;
     box-shadow: var(--tech-shadow);
     backdrop-filter: blur(14px);
+    width: calc(100% - 2rem);
+    max-width: calc(1280px - 2rem);
+    box-sizing: border-box;
 }
 
 .greedy-nav {
@@ -250,7 +266,7 @@ h6,
     gap: 1rem;
 }
 
-.layout--home .sidebar > * {
+.layout--home .sidebar>* {
     margin: 0;
 }
 
@@ -260,8 +276,8 @@ h6,
 }
 
 .sidebar .author__avatar {
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     margin: 0 auto 1rem;
     display: flex;
     align-items: center;
@@ -269,8 +285,8 @@ h6,
 }
 
 .sidebar .author__avatar img {
-    width: 150px;
-    height: 150px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     border-radius: 18px;
     border: 1px solid var(--tech-border);
@@ -278,11 +294,20 @@ h6,
 }
 
 @media (min-width: 1024px) {
+    .layout--single #main {
+        padding-top: 1rem;
+    }
+}
+
+@media (min-width: 1024px) {
     .sidebar {
         background: var(--tech-surface);
         border: 1px solid var(--tech-border);
-        padding: 1.75rem;
+        padding: 1rem;
         box-shadow: var(--tech-shadow);
+        position: sticky;
+        top: 0.5rem;
+        align-self: flex-start;
     }
 
     .layout--home .sidebar,
@@ -391,7 +416,7 @@ blockquote {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.6rem;
-    padding: 0.25rem;
+    padding: 1rem;
     margin: 0;
 }
 
@@ -429,7 +454,7 @@ blockquote {
 .home-metric__detail {
     flex-basis: 100%;
     margin: 0.35rem 0 0;
-    font-size: 0.85rem;
+    font-size: 0.55rem;
     color: var(--tech-muted);
     line-height: 1.35;
 }
