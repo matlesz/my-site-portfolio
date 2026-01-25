@@ -1,8 +1,9 @@
 ---
-permalink: /about/
 title: "About"
+permalink: /about/
 layout: single
 author_profile: true
+classes: about-page
 ---
 
 Hi, I'm **Mat Leszkiewicz** — a cybersecurity enthusiast with a background in computer science, DevOps, and technical support engineering. After completing a Higher Diploma in Computer Science at South East Technological University, I’ve focused my learning and professional development on cybersecurity, threat intelligence, and Security Operations Center (SoC) methodologies.

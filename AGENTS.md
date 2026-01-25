@@ -72,9 +72,11 @@
 - Use `rel="nofollow noopener noreferrer"` on external links (see `footer.html`).
 - Prefer small includes in `_includes/` instead of repeating blocks in pages.
 - Avoid deeply nested Liquid where a data file can drive the structure.
+- TryHackMe badge embeds should use the `.tryhackme-embed` wrapper and `.tryhackme-embed__frame` iframe classes for responsive layout.
 
 ## SCSS/CSS
 - Keep theme imports at the top of `assets/css/main.scss`.
+- Keep the YAML front matter (`---`) at the top of `assets/css/main.scss` so Jekyll recompiles the stylesheet.
 - Add custom overrides below the imports.
 - Use 4-space indentation in SCSS blocks to match existing style.
 - Use `!important` only when required to override the theme.
@@ -140,6 +142,7 @@
 - The site runs on `http://localhost:4000` by default.
 - Config changes require a server restart.
 - If you see missing GitHub metadata warnings, they are expected without tokens.
+- Pagination is set high (`paginate: 100`) to avoid extra pages for small post counts.
 
 ## Cursor and Copilot rules
 - No Cursor rules found (`.cursor/rules/` or `.cursorrules`).

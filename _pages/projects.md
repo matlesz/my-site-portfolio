@@ -12,28 +12,45 @@ This page highlights the projects and lab work that represent the way I approach
 {% assign homelab_posts_lower = site.posts | where_exp: "post", "post.tags contains 'homelab'" %}
 {% assign homelab_posts = homelab_posts_upper | concat: homelab_posts_lower | uniq | sort: "date" | reverse %}
 
-## Homelab series
-
-<div class="home-grid">
-    <div class="home-card">
-        <h3>Homelab Series</h3>
-        <p>Ongoing infrastructure builds covering Proxmox, storage, networking, and secure remote access.</p>
-        <ul class="home-list">
-            {% for post in homelab_posts %}
-            <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
-            {% endfor %}
-        </ul>
+<section class="home-section">
+    <div class="home-section__header">
+        <h2 class="home-section__title">Homelab series</h2>
+        <span class="home-section__rule" aria-hidden="true"></span>
+        <p class="home-section__subtitle">Ongoing infrastructure builds covering Proxmox, storage, networking, and secure remote access.</p>
     </div>
-    <a class="home-card" href="{{ "/myGeekDB-Next.JS-app/" | relative_url }}">
-        <h3>geekDb: Fullstack Movie Database</h3>
-        <p>Next.js application with MongoDB-backed CRUD workflows and a modern UI.</p>
-    </a>
-    <a class="home-card" href="{{ "/RaspberryPi-RTSB-server/" | relative_url }}">
-        <h3>Raspberry Pi RTSP Streaming Server</h3>
-        <p>Edge streaming lab exploring protocols, networking, and reliability.</p>
-    </a>
-</div>
+    {% assign homelab_featured_titles = "How OpenCode + ChatGPT Accelerated My Homelab|Building My HomeLab: From Scratch to Self-Hosting|How to Choose Your First Home Server Hardware: A Practical Guide" | split: "|" %}
+    <div class="entries-list">
+        {% for homelab_title in homelab_featured_titles %}
+        {% assign featured_post = homelab_posts | where: "title", homelab_title | first %}
+        {% if featured_post %}
+        {% assign post = featured_post %}
+        {% include archive-single.html type="list" %}
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
 
-## More work
+<section class="home-section">
+    <div class="home-section__header">
+        <h2 class="home-section__title">Other project</h2>
+        <span class="home-section__rule" aria-hidden="true"></span>
+    </div>
+    {% assign project_featured_titles = "geekDb: A Fullstack Movie Database Built with Next.js|Turning a Raspberry Pi into an RTSP Streaming Server" | split: "|" %}
+    <div class="entries-list">
+        {% for project_title in project_featured_titles %}
+        {% assign project_post = site.posts | where: "title", project_title | first %}
+        {% if project_post %}
+        {% assign post = project_post %}
+        {% include archive-single.html type="list" %}
+        {% endif %}
+        {% endfor %}
+    </div>
+</section>
 
-Explore the full archive in the posts section for detailed build notes, experiments, and infrastructure writeups.
+<section class="home-section">
+    <div class="home-section__header">
+        <h2 class="home-section__title">More work</h2>
+        <span class="home-section__rule" aria-hidden="true"></span>
+    </div>
+    <p>Explore the full archive in the posts section for detailed build notes, experiments, and infrastructure writeups.</p>
+</section>
