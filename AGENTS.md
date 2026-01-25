@@ -78,6 +78,7 @@
 ## SCSS/CSS
 - Keep theme imports at the top of `assets/css/main.scss`.
 - Keep the YAML front matter (`---`) at the top of `assets/css/main.scss` so Jekyll recompiles the stylesheet.
+- `assets/css/main.scss` includes global layout tweaks (masthead spacing, sticky sidebar) and home layout styling; prefer updating these overrides instead of editing theme partials.
 - Add custom overrides below the imports.
 - Use 4-space indentation in SCSS blocks to match existing style.
 - Use `!important` only when required to override the theme.
