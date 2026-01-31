@@ -52,7 +52,18 @@ title: "Curriculum Vitae"
 
 ## Work Experience
 
-**06/23–Present | Intercom**  
+**01/26–Present | Intercom**  
+*Product Support Engineer, Ireland*
+Embedded with the Email team, focused on keeping the GitHub issues backlog healthy, accelerating triage, and ensuring Customer Support and Sales have clear, accurate updates through Intercom.
+
+- Owned day-to-day triage for Email-related issues (inbound reports + internal escalations), investigating symptoms, validating against production signals, and clarifying next steps.
+- Reduced the open/untriaged Email backlog by ~30% in my first 2 weeks by auditing existing GitHub issues, closing outdated/fixed items, and improving overall backlog hygiene.
+- Acted as a bridge between the Email team and Customer Support + Sales, providing timely updates and context via Intercom so customer-facing teams could communicate confidently.
+- Built AI-assisted workflows (Claude Code skill-building) to streamline backlog operations—speeding up triage, improving consistency, and producing ready-to-implement plans based on production data, cross-checked against the codebase and documentation.
+- Supported incident response by joining war rooms, helping with investigation context and customer communications during high-severity events.
+- Contributed small, high-leverage bug fixes from the Email backlog to reduce repeat reports and unblock customers faster.
+
+**06/23–01/26 | Intercom**  
 *Technical Support Engineer, Ireland*
 - Debugging complex issues and solving technical problems for customers using Ruby, Rails, JavaScript, and native mobile development.
 - Utilizing technical knowledge to develop tools that enhance team efficiency and effectiveness.
@@ -88,7 +99,7 @@ title: "Curriculum Vitae"
 
 ## Technology Skills
 
-**Network Architecture** • **Docker** • **AWS** • **Elastic Stack** • **Honeycomb** • **Git** • **HTML5** • **CSS3** • **Python** • **Linux** • **Bash** • **Raspberry Pi** • **JavaScript** • **Ruby** • **Java** • **SQL** • **NoSQL** • **Application architecture** • **Full Stack** • **Web API** • **NodeJS** • **Atlassian Stack** • **Heroku** • **Next.JS** • **Kotlin**
+**Network Architecture** • **Docker** • **AWS** • **Elastic Stack** • **Honeycomb** • **Git** • **HTML5** • **CSS3** • **Python** • **Linux** • **Bash** • **Raspberry Pi** • **JavaScript** • **Ruby** • **Java** • **SQL** • **NoSQL** • **Application architecture** • **Full Stack** • **Web API** • **NodeJS** • **Atlassian Stack** • **Heroku** • **Next.JS** • **Kotlin** • **AWS** • **AI Automation** • **Code Analysis** • **Kibana** • **Honeycomb** • **Log Analysis** • **Incident Response**
 
 ---
 
