@@ -54,8 +54,7 @@ title: "Curriculum Vitae"
 
 **01/26–Present | Intercom**  
 *Product Support Engineer, Ireland*
-Embedded with the Email team, focused on keeping the GitHub issues backlog healthy, accelerating triage, and ensuring Customer Support and Sales have clear, accurate updates through Intercom.
-
+- Embedded with the Email team, focused on keeping the GitHub issues backlog healthy, accelerating triage, and ensuring Customer Support and Sales have clear, accurate updates through Intercom.
 - Owned day-to-day triage for Email-related issues (inbound reports + internal escalations), investigating symptoms, validating against production signals, and clarifying next steps.
 - Reduced the open/untriaged Email backlog by ~30% in my first 2 weeks by auditing existing GitHub issues, closing outdated/fixed items, and improving overall backlog hygiene.
 - Acted as a bridge between the Email team and Customer Support + Sales, providing timely updates and context via Intercom so customer-facing teams could communicate confidently.
