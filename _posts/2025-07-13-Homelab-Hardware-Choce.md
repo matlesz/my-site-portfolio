@@ -1,9 +1,13 @@
 ---
 title: "How to Choose Your First Home Server Hardware: A Practical Guide"
 date: 2025-07-13
+layout: single
+author_profile: true
+read_time: true
+share: true
+related: true
 tags: ["homelab", "home server", "hardware guide"]
 description: "A practical guide to help you choose your first home server, whether you're just starting out or scaling up."
-
 ---
 
 Choosing your first home server starts with understanding your needs, your budget, and how much room you want to leave for future upgrades. Whether you're leaning toward a compact mini PC, a full-sized tower, or even a rackmount setup, your goal is to find the sweet spot between performance, efficiency, and expandability.

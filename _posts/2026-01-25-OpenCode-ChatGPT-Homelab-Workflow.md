@@ -88,6 +88,7 @@ To avoid security or stability mistakes, I enforced a few rules:
 
 ## 🧪 Example Snippets
 
+{% raw %}
 ```bash
 # Jump to Proxmox
 ssh proxmox
@@ -98,6 +99,7 @@ docker compose -f /opt/homepage/docker-compose.yml restart
 # List running containers
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 ```
+{% endraw %}
 
 ---
 
@@ -115,6 +117,20 @@ docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 - Add richer widgets (API-powered) for Jellyfin, Portainer, and qBittorrent
 - Automate backup snapshots for `/opt` configs
 - Add monitoring stack (Grafana + Prometheus)
+
+---
+
+## 📚 References
+
+- [Proxmox VE Documentation](https://pve.proxmox.com/pve-docs/)
+- [Docker Compose file reference](https://docs.docker.com/compose/compose-file/)
+- [Docker `ps` command reference](https://docs.docker.com/engine/reference/commandline/ps/)
+- [Homepage Docker installation](https://gethomepage.dev/installation/docker/)
+- [Homepage configuration docs](https://gethomepage.dev/configs/)
+- [Portainer documentation](https://docs.portainer.io/)
+- [Home Assistant documentation](https://www.home-assistant.io/docs/)
+- [n8n documentation](https://docs.n8n.io/)
+- [Installing qBittorrent](https://github.com/qbittorrent/qBittorrent/wiki/Installing-qBittorrent)
 
 ---
 

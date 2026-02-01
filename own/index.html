@@ -1,0 +1,930 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.3 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>ML Portfolio</title>
+<meta name="description" content="Cybersecurity-focused portfolio of Mat Leszkiewicz — aspiring analyst with a background in DevOps,  full-stack development, and incident response.  Showcasing projects, blog posts, and career highlights.">
+
+
+  <meta name="author" content="Mat Leszkiewicz">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ML Portfolio">
+<meta property="og:title" content="ML Portfolio">
+<meta property="og:url" content="http://localhost:4000/">
+
+
+  <meta property="og:description" content="Cybersecurity-focused portfolio of Mat Leszkiewicz — aspiring analyst with a background in DevOps,  full-stack development, and incident response.  Showcasing projects, blog posts, and career highlights.">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/">
+
+
+
+
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+    "name": null,
+    "url": "http://localhost:4000/"
+}
+</script>
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="ML Portfolio Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+/>
+
+<!-- Cookie Consent -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+<script>
+    window.addEventListener("load", function () {
+        window.cookieconsent.initialise({
+            palette: {
+                popup: { background: "#000" },
+                button: { background: "#f1d600" }
+            },
+            theme: "classic",
+            position: "bottom-right",
+            content: {
+                message: "This website uses cookies to ensure you get the best experience.",
+                dismiss: "Got it!",
+                link: "Learn more",
+                href: "/privacy-policy/"
+            }
+        });
+    });
+</script>
+
+  </head>
+
+  <body class="layout--home" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/favicon.svg" alt="ML"></a>
+        
+        <a class="site-title" href="/">
+          ML
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/posts/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/projects/"
+                
+                
+              >Projects</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/cv/"
+                
+                
+              >CV</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="http://localhost:4000/">
+        <img src="/assets/images/bio-photo.jpg" alt="Mat Leszkiewicz" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="http://localhost:4000/" itemprop="url">Mat Leszkiewicz</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>I’m a support engineer with a passion for cybersecurity and mission to help people be safer in the web.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://matleszkiewicz.dev" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-link" aria-hidden="true"></i><span class="label">Website</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/M_Leszkiewicz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span class="label">x.com</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/matlesz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/mat-leszkiewicz/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://tryhackme.com/p/matlesz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-hacker-news" aria-hidden="true"></i><span class="label">TryHackMe</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <div class="archive">
+    
+      <h1 id="page-title" class="page__title"></h1>
+    
+    <div class="home-hero">
+    <p class="home-hero__eyebrow">Infrastructure + Systems Engineering</p>
+    <h1 class="home-hero__title">Building resilient infrastructure with a security-first mindset.</h1>
+    <p class="home-hero__lede">
+        I am Mat Leszkiewicz, a support engineer focused on infrastructure reliability, automation, and security
+        operations.
+        This portfolio captures the homelab builds, system projects, and incident response lessons that define how I
+        work.
+    </p>
+    <div class="home-hero__meta">
+        <span class="home-pill">Infrastructure reliability</span>
+        <span class="home-pill">Systems automation</span>
+        <span class="home-pill">Security operations</span>
+        <span class="home-pill">Threat response</span>
+    </div>
+</div>
+
+<div class="home-metrics">
+    <div class="home-metric">
+        <p class="home-metric__label">Current role</p>
+        <p class="home-metric__value">Technical Support Engineer</p>
+    </div>
+    <div class="home-metric">
+        <p class="home-metric__label">Core focus</p>
+        <p class="home-metric__value">Infrastructure + automation</p>
+    </div>
+    <div class="home-metric">
+        <p class="home-metric__label">Security lens</p>
+        <p class="home-metric__value">Incident response, detection</p>
+    </div>
+    <div class="home-metric">
+        <p class="home-metric__label">Stack</p>
+        <p class="home-metric__value">AWS, Linux, Docker</p>
+    </div>
+</div>
+
+<section class="home-section">
+    <div class="home-section__header">
+        <h2 class="home-section__title">Focus Areas</h2>
+        <span class="home-section__rule" aria-hidden="true"></span>
+    </div>
+    <div class="home-metrics">
+        <div class="home-metric">
+            <p class="home-metric__value">Infrastructure engineering</p>
+            <p class="home-metric__detail">Platform reliability, system design, and performance-aware operations.</p>
+        </div>
+        <div class="home-metric">
+            <p class="home-metric__value">Security operations</p>
+            <p class="home-metric__detail">Incident response workflows, log analysis, and detection engineering.</p>
+        </div>
+        <div class="home-metric">
+            <p class="home-metric__value">Automation and observability</p>
+            <p class="home-metric__detail">AWS pipelines, tooling, and practical monitoring for production systems.</p>
+        </div>
+        <div class="home-metric">
+
+            <p class="home-metric__value">AI enablement</p>
+            <p class="home-metric__detail">Applied AI tooling, workflow automation, and ops augmentation.</p>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<section class="home-section">
+    <div class="home-section__header">
+        <h2 class="home-section__title">Homelab series</h2>
+        <span class="home-section__rule" aria-hidden="true"></span>
+        <p class="home-section__subtitle">Ongoing infrastructure builds covering Proxmox, storage, networking, and
+            secure remote access.</p>
+    </div>
+    
+    <div class="entries-list">
+        
+        
+        
+        
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/OpenCode-ChatGPT-Homelab-Workflow/" rel="permalink">How OpenCode + ChatGPT Accelerated My Homelab
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  “Homelab work is fun until you forget what you changed last night.”
+
+
+</p>
+  </article>
+</div>
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Homelab-Hardware-Choce/" rel="permalink">How to Choose Your First Home Server Hardware: A Practical Guide
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Choosing your first home server starts with understanding your needs, your budget, and how much room you want to leave for future upgrades. Whether you’re le...</p>
+  </article>
+</div>
+
+        
+        
+    </div>
+</section>
+
+<section class="home-section">
+    <div class="home-section__header">
+        <h2 class="home-section__title">Other Projects</h2>
+        <span class="home-section__rule" aria-hidden="true"></span>
+    </div>
+    
+    <div class="entries-list">
+        
+        
+        
+        
+        
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/myGeekDB-Next.JS-app/" rel="permalink">geekDb: A Fullstack Movie Database Built with Next.js
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">geekDb is a full-stack web application inspired by IMDB, developed as part of my journey to deepen my skills in frontend and backend web development using th...</p>
+  </article>
+</div>
+
+        
+        
+        
+        
+        
+    </div>
+</section>
+
+<h3 class="archive__subtitle">Recent Posts</h3>
+
+
+
+
+<div class="entries-list">
+  
+
+
+
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Homelab-Update-Nextcloud-Music-Assistant/" rel="permalink">Homelab Update: Nextcloud + Music Assistant with Tailscale
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  “Every new service adds value. Every new service adds a new place to forget a setting.”
+
+
+</p>
+  </article>
+</div>
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/OpenCode-ChatGPT-Homelab-Workflow/" rel="permalink">How OpenCode + ChatGPT Accelerated My Homelab
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  “Homelab work is fun until you forget what you changed last night.”
+
+
+</p>
+  </article>
+</div>
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Building-My-HomeLab-From-Scratch-to-Self-Hosting/" rel="permalink">Building My HomeLab: From Scratch to Self-Hosting
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  “If it ain’t broke, you haven’t installed Jellyfin yet.”
+
+
+</p>
+  </article>
+</div>
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Homelab-Hardware-Choce/" rel="permalink">How to Choose Your First Home Server Hardware: A Practical Guide
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Choosing your first home server starts with understanding your needs, your budget, and how much room you want to leave for future upgrades. Whether you’re le...</p>
+  </article>
+</div>
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Building-Parallel-CI-CD-Pipelines-with-AWS/" rel="permalink">Building Parallel CI/CD Pipelines with AWS at Fundrecs
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">🧩 Project Overview
+
+</p>
+  </article>
+</div>
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/myGeekDB-Next.JS-app/" rel="permalink">geekDb: A Fullstack Movie Database Built with Next.js
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">geekDb is a full-stack web application inspired by IMDB, developed as part of my journey to deepen my skills in frontend and backend web development using th...</p>
+  </article>
+</div>
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/RaspberryPi-RTSB-server/" rel="permalink">Turning a Raspberry Pi into an RTSP Streaming Server
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">As part of my academic and personal learning journey into system design, networking, and edge computing, I developed a lightweight RTSP (Real-Time Streaming ...</p>
+  </article>
+</div>
+
+
+
+
+<div class="list__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/MyGeekDB-Kotlin-app/" rel="permalink">MyGeekDB: An IMDB-Style Android App in Kotlin
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">As part of my portfolio and continuous learning in full-stack and mobile development, I created MyGeekDB — an IMDB-style Android app built with Kotlin. The g...</p>
+  </article>
+</div>
+
+</div>
+
+
+
+
+  </div>
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+    <ul class="social-icons">
+        
+        
+        
+        <li><a href="https://x.com/M_Leszkiewicz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-x-twitter" aria-hidden="true"></i> x.com</a></li>
+        
+        
+        
+        <li><a href="https://github.com/matlesz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+        
+        
+        <li><a href="https://www.linkedin.com/in/mat-leszkiewicz/" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+        
+        
+    </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 ML Portfolio.</div>
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>

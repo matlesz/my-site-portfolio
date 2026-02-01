@@ -1,0 +1,446 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.3 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>AGENTS - ML Portfolio</title>
+<meta name="description" content="Cybersecurity-focused portfolio of Mat Leszkiewicz — aspiring analyst with a background in DevOps,  full-stack development, and incident response.  Showcasing projects, blog posts, and career highlights.">
+
+
+  <meta name="author" content="Mat Leszkiewicz">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ML Portfolio">
+<meta property="og:title" content="AGENTS">
+<meta property="og:url" content="http://localhost:4000/AGENTS/">
+
+
+  <meta property="og:description" content="Cybersecurity-focused portfolio of Mat Leszkiewicz — aspiring analyst with a background in DevOps,  full-stack development, and incident response.  Showcasing projects, blog posts, and career highlights.">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/AGENTS/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="ML Portfolio Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+/>
+
+<!-- Cookie Consent -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+<script>
+    window.addEventListener("load", function () {
+        window.cookieconsent.initialise({
+            palette: {
+                popup: { background: "#000" },
+                button: { background: "#f1d600" }
+            },
+            theme: "classic",
+            position: "bottom-right",
+            content: {
+                message: "This website uses cookies to ensure you get the best experience.",
+                dismiss: "Got it!",
+                link: "Learn more",
+                href: "/privacy-policy/"
+            }
+        });
+    });
+</script>
+
+  </head>
+
+  <body class="layout--default" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/favicon.svg" alt="ML"></a>
+        
+        <a class="site-title" href="/">
+          ML
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/posts/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/projects/"
+                
+                
+              >Projects</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/cv/"
+                
+                
+              >CV</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      <h1 id="agents">AGENTS</h1>
+
+<h2 id="purpose">Purpose</h2>
+<ul>
+  <li>Provide commands and conventions for agentic changes in this repo.</li>
+  <li>Repository is a Jekyll site using Minimal Mistakes and GitHub Pages.</li>
+  <li>Prefer editing source content, not generated output.</li>
+</ul>
+
+<h2 id="repository-layout">Repository layout</h2>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_config.yml</code> global site settings and theme config.</li>
+  <li><code class="language-plaintext highlighter-rouge">_data/</code> YAML data files (navigation, etc).</li>
+  <li><code class="language-plaintext highlighter-rouge">_includes/</code> HTML/Liquid partials (custom head, footer).</li>
+  <li><code class="language-plaintext highlighter-rouge">index.html</code> custom home page content (layout home).</li>
+  <li><code class="language-plaintext highlighter-rouge">_pages/</code> standalone pages with front matter.</li>
+  <li><code class="language-plaintext highlighter-rouge">_posts/</code> dated blog posts.</li>
+  <li><code class="language-plaintext highlighter-rouge">assets/css/main.scss</code> theme imports and custom CSS overrides.</li>
+  <li><code class="language-plaintext highlighter-rouge">assets/images/</code> site images and icons.</li>
+  <li><code class="language-plaintext highlighter-rouge">plans/</code> internal planning docs (not site content).</li>
+  <li><code class="language-plaintext highlighter-rouge">_site/</code> generated site output; do not edit by hand.</li>
+</ul>
+
+<h2 id="setup">Setup</h2>
+<ul>
+  <li>Ruby + Bundler are required; gems are defined in <code class="language-plaintext highlighter-rouge">Gemfile</code>.</li>
+  <li>Install dependencies with <code class="language-plaintext highlighter-rouge">bundle install</code>.</li>
+</ul>
+
+<h2 id="build-and-dev-commands">Build and dev commands</h2>
+<ul>
+  <li>Dev server: <code class="language-plaintext highlighter-rouge">bundle exec jekyll serve</code></li>
+  <li>Dev server with drafts: <code class="language-plaintext highlighter-rouge">bundle exec jekyll serve --drafts</code></li>
+  <li>Dev server with live reload: <code class="language-plaintext highlighter-rouge">bundle exec jekyll serve --livereload</code></li>
+  <li>Build static site: <code class="language-plaintext highlighter-rouge">bundle exec jekyll build</code></li>
+  <li>Clean generated files: <code class="language-plaintext highlighter-rouge">bundle exec jekyll clean</code></li>
+  <li>If you change <code class="language-plaintext highlighter-rouge">_config.yml</code>, restart the dev server.</li>
+</ul>
+
+<h2 id="lint-and-tests">Lint and tests</h2>
+<ul>
+  <li>No linting tools are configured in this repo.</li>
+  <li>No automated test runner is configured.</li>
+  <li>Single-test command: not applicable (no test suite).</li>
+</ul>
+
+<h2 id="content-conventions">Content conventions</h2>
+<ul>
+  <li>All pages and posts start with YAML front matter in <code class="language-plaintext highlighter-rouge">---</code> blocks.</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">layout: single</code> unless another layout is required.</li>
+  <li>Prefer explicit <code class="language-plaintext highlighter-rouge">permalink</code> for pages in <code class="language-plaintext highlighter-rouge">_pages</code>.</li>
+  <li>Posts in <code class="language-plaintext highlighter-rouge">_posts</code> follow the <code class="language-plaintext highlighter-rouge">YYYY-MM-DD-Title.md</code> filename pattern used here.</li>
+  <li>Home and Projects pages list posts tagged <code class="language-plaintext highlighter-rouge">Homelab</code> or <code class="language-plaintext highlighter-rouge">homelab</code>; keep that tag on homelab series posts.</li>
+  <li>Home and Projects Homelab/Other Projects sections use curated post titles; update those title lists if a post title changes.</li>
+  <li>Keep front matter keys ordered consistently: <code class="language-plaintext highlighter-rouge">title</code>, <code class="language-plaintext highlighter-rouge">date</code>, <code class="language-plaintext highlighter-rouge">permalink</code>, <code class="language-plaintext highlighter-rouge">layout</code>, then feature flags.</li>
+  <li>Use lower-case booleans (<code class="language-plaintext highlighter-rouge">true</code>/<code class="language-plaintext highlighter-rouge">false</code>) in front matter.</li>
+  <li>Tags are a YAML list: <code class="language-plaintext highlighter-rouge">tags: [Tag One, Tag Two]</code>.</li>
+</ul>
+
+<h2 id="front-matter-reference">Front matter reference</h2>
+<ul>
+  <li>Posts: <code class="language-plaintext highlighter-rouge">title</code>, <code class="language-plaintext highlighter-rouge">date</code>, <code class="language-plaintext highlighter-rouge">layout</code>, <code class="language-plaintext highlighter-rouge">author_profile</code>, <code class="language-plaintext highlighter-rouge">read_time</code>, <code class="language-plaintext highlighter-rouge">share</code>, <code class="language-plaintext highlighter-rouge">related</code>, <code class="language-plaintext highlighter-rouge">tags</code>.</li>
+  <li>Pages: <code class="language-plaintext highlighter-rouge">title</code>, <code class="language-plaintext highlighter-rouge">permalink</code>, <code class="language-plaintext highlighter-rouge">layout</code>, <code class="language-plaintext highlighter-rouge">author_profile</code>, <code class="language-plaintext highlighter-rouge">excerpt</code> when needed.</li>
+  <li>Dates use ISO format (<code class="language-plaintext highlighter-rouge">YYYY-MM-DD</code>).</li>
+  <li>Wrap titles in double quotes if they include punctuation.</li>
+  <li>Keep excerpt text short and sentence-cased.</li>
+</ul>
+
+<h2 id="markdown-style">Markdown style</h2>
+<ul>
+  <li>Use blank lines to separate blocks; avoid trailing whitespace.</li>
+  <li>Prefer ATX headers (<code class="language-plaintext highlighter-rouge">##</code>) and keep heading levels consistent.</li>
+  <li>Use fenced code blocks with language labels (e.g. ```yaml).</li>
+  <li>Links should include full URLs for external resources.</li>
+  <li>Use standard Markdown; avoid custom HTML unless needed.</li>
+  <li>If HTML is required, keep it minimal and valid.</li>
+</ul>
+
+<h2 id="yaml-style">YAML style</h2>
+<ul>
+  <li>Indent with 2 spaces, no tabs.</li>
+  <li>Use quotes for strings with punctuation or leading/trailing whitespace.</li>
+  <li>Keep lists aligned under their parent key, one item per line when long.</li>
+  <li>Sort navigation items in <code class="language-plaintext highlighter-rouge">_data/navigation.yml</code> by display order.</li>
+</ul>
+
+<h2 id="liquid-and-html">Liquid and HTML</h2>
+<ul>
+  <li>Indent HTML and Liquid blocks with 4 spaces.</li>
+  <li>Keep Liquid tags aligned with the HTML structure for readability.</li>
+  <li>Use double quotes for HTML attributes.</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">rel="nofollow noopener noreferrer"</code> on external links (see <code class="language-plaintext highlighter-rouge">footer.html</code>).</li>
+  <li>Prefer small includes in <code class="language-plaintext highlighter-rouge">_includes/</code> instead of repeating blocks in pages.</li>
+  <li>Avoid deeply nested Liquid where a data file can drive the structure.</li>
+  <li>TryHackMe badge embeds should use the <code class="language-plaintext highlighter-rouge">.tryhackme-embed</code> wrapper and <code class="language-plaintext highlighter-rouge">.tryhackme-embed__frame</code> iframe classes for responsive layout.</li>
+</ul>
+
+<h2 id="scsscss">SCSS/CSS</h2>
+<ul>
+  <li>Keep theme imports at the top of <code class="language-plaintext highlighter-rouge">assets/css/main.scss</code>.</li>
+  <li>Keep the YAML front matter (<code class="language-plaintext highlighter-rouge">---</code>) at the top of <code class="language-plaintext highlighter-rouge">assets/css/main.scss</code> so Jekyll recompiles the stylesheet.</li>
+  <li><code class="language-plaintext highlighter-rouge">assets/css/main.scss</code> includes global layout tweaks (masthead spacing, sticky sidebar) and home layout styling; prefer updating these overrides instead of editing theme partials.</li>
+  <li>Add custom overrides below the imports.</li>
+  <li>Use 4-space indentation in SCSS blocks to match existing style.</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">!important</code> only when required to override the theme.</li>
+  <li>Favor class selectors over element selectors for overrides.</li>
+  <li>Keep media queries grouped with the related selectors.</li>
+  <li>Reuse <code class="language-plaintext highlighter-rouge">:root</code> tech palette tokens (<code class="language-plaintext highlighter-rouge">--tech-*</code>) instead of adding new hex colors.</li>
+  <li>Home and Projects layout components rely on <code class="language-plaintext highlighter-rouge">.home-*</code> classes (hero, metrics, grid, cards).</li>
+  <li>Font pairing is Manrope (body) + Space Grotesk (headings); keep CSS in sync with <code class="language-plaintext highlighter-rouge">_includes/head/custom.html</code>.</li>
+  <li>About page uses <code class="language-plaintext highlighter-rouge">classes: about-page</code> for increased body line-height; keep the class if editing that front matter.</li>
+</ul>
+
+<h2 id="javascript-inline">JavaScript (inline)</h2>
+<ul>
+  <li>Inline JS lives in <code class="language-plaintext highlighter-rouge">_includes/head/custom.html</code>.</li>
+  <li>Use 4-space indentation and double quotes to match existing style.</li>
+  <li>Guard global dependencies before use (e.g., check <code class="language-plaintext highlighter-rouge">window.cookieconsent</code> exists).</li>
+  <li>Prefer <code class="language-plaintext highlighter-rouge">window.addEventListener("load", ...)</code> for initialization.</li>
+  <li>Keep scripts small; use CDN links for third-party libraries.</li>
+  <li>Google Fonts links and cookie consent assets are also defined in <code class="language-plaintext highlighter-rouge">_includes/head/custom.html</code>.</li>
+</ul>
+
+<h2 id="naming-conventions">Naming conventions</h2>
+<ul>
+  <li>Pages in <code class="language-plaintext highlighter-rouge">_pages</code> use concise lowercase filenames with hyphens.</li>
+  <li>Posts filenames start with date and use title case words separated by spaces or hyphens, matching existing files.</li>
+  <li>Use descriptive <code class="language-plaintext highlighter-rouge">title</code> values in front matter; keep them consistent with the file name.</li>
+  <li>Image filenames in <code class="language-plaintext highlighter-rouge">assets/images</code> should be lowercase with hyphens.</li>
+</ul>
+
+<h2 id="data-and-navigation">Data and navigation</h2>
+<ul>
+  <li>Use <code class="language-plaintext highlighter-rouge">_data/navigation.yml</code> for top nav updates.</li>
+  <li>Keep <code class="language-plaintext highlighter-rouge">title</code> values quoted for navigation items.</li>
+  <li>URLs should be root-relative (e.g., <code class="language-plaintext highlighter-rouge">/about/</code>).</li>
+</ul>
+
+<h2 id="error-handling-and-safety">Error handling and safety</h2>
+<ul>
+  <li>For Liquid, avoid referencing missing data keys; use defaults or conditionals.</li>
+  <li>For JS, check optional objects before calling methods.</li>
+  <li>For external embeds (iframes), verify the URL and keep HTML minimal.</li>
+</ul>
+
+<h2 id="theme-usage">Theme usage</h2>
+<ul>
+  <li>The site uses <code class="language-plaintext highlighter-rouge">remote_theme: mmistakes/minimal-mistakes</code>.</li>
+  <li>Prefer customization through <code class="language-plaintext highlighter-rouge">_config.yml</code>, <code class="language-plaintext highlighter-rouge">_data/*</code>, and <code class="language-plaintext highlighter-rouge">assets/css/main.scss</code>.</li>
+  <li>Avoid editing theme files inside the gem or <code class="language-plaintext highlighter-rouge">_site</code>.</li>
+</ul>
+
+<h2 id="images-and-media">Images and media</h2>
+<ul>
+  <li>Place images in <code class="language-plaintext highlighter-rouge">assets/images</code> and reference with absolute paths.</li>
+  <li>Use descriptive alt text when embedding images in Markdown.</li>
+  <li>Optimize large images before committing.</li>
+</ul>
+
+<h2 id="accessibility-and-seo">Accessibility and SEO</h2>
+<ul>
+  <li>Use heading levels in order without skipping.</li>
+  <li>Provide alt text for images and meaningful link text.</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">excerpt</code> front matter for SEO snippets when relevant.</li>
+  <li>Avoid overly long titles; keep under roughly 70 characters.</li>
+  <li>Keep per-post meta sections in content if present.</li>
+</ul>
+
+<h2 id="formatting-and-typography">Formatting and typography</h2>
+<ul>
+  <li>Use sentence case for body text; avoid ALL CAPS.</li>
+  <li>Keep line length reasonable in prose; wrap at paragraph boundaries.</li>
+  <li>Use lists for step-by-step instructions.</li>
+  <li>Use consistent spelling (US English).</li>
+  <li>Avoid inline styles; use SCSS overrides instead.</li>
+</ul>
+
+<h2 id="generated-output">Generated output</h2>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">_site/</code> is generated by Jekyll; do not edit or hand-patch files there.</li>
+  <li>When making content or style changes, regenerate via <code class="language-plaintext highlighter-rouge">bundle exec jekyll build</code>.</li>
+</ul>
+
+<h2 id="local-dev-notes">Local dev notes</h2>
+<ul>
+  <li>The site runs on <code class="language-plaintext highlighter-rouge">http://localhost:4000</code> by default.</li>
+  <li>Config changes require a server restart.</li>
+  <li>If you see missing GitHub metadata warnings, they are expected without tokens.</li>
+  <li>Pagination is set high (<code class="language-plaintext highlighter-rouge">paginate: 100</code>) to avoid extra pages for small post counts.</li>
+</ul>
+
+<h2 id="cursor-and-copilot-rules">Cursor and Copilot rules</h2>
+<ul>
+  <li>No Cursor rules found (<code class="language-plaintext highlighter-rouge">.cursor/rules/</code> or <code class="language-plaintext highlighter-rouge">.cursorrules</code>).</li>
+  <li>No Copilot instructions found (<code class="language-plaintext highlighter-rouge">.github/copilot-instructions.md</code>).</li>
+</ul>
+
+<h2 id="quick-checks-before-commit">Quick checks before commit</h2>
+<ul>
+  <li>Run <code class="language-plaintext highlighter-rouge">bundle exec jekyll build</code> to verify the site compiles.</li>
+  <li>Ensure new posts render correctly in the dev server.</li>
+  <li>Check links and embeds manually since no automated link checker exists.</li>
+  <li>Avoid committing secrets; the repo is public-facing content.</li>
+</ul>
+
+<h2 id="notes-for-agents">Notes for agents</h2>
+<ul>
+  <li>Respect existing content tone and formatting.</li>
+  <li>Keep changes scoped to source files, not generated output.</li>
+  <li>Prefer minimal, reversible edits; avoid global rewrites.</li>
+  <li>When uncertain about style, follow the closest existing file in the same folder.</li>
+</ul>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+    <ul class="social-icons">
+        
+        
+        
+        <li><a href="https://x.com/M_Leszkiewicz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-x-twitter" aria-hidden="true"></i> x.com</a></li>
+        
+        
+        
+        <li><a href="https://github.com/matlesz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+        
+        
+        <li><a href="https://www.linkedin.com/in/mat-leszkiewicz/" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+        
+        
+    </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 ML Portfolio.</div>
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>

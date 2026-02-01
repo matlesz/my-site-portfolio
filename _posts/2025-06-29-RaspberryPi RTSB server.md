@@ -5,6 +5,7 @@ layout: single
 author_profile: true
 read_time: true
 share: true
+related: true
 tags: [RaspberryPi, Networking, Linux, Projects]
 ---
 

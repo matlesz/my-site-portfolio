@@ -1,0 +1,844 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.3 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Homelab Update: Nextcloud + Music Assistant with Tailscale - ML Portfolio</title>
+<meta name="description" content="A hands-on recap of adding Nextcloud and Music Assistant to my Docker VM, the gotchas I hit, and how I fixed each one.">
+
+
+  <meta name="author" content="Mat Leszkiewicz">
+  
+  <meta property="article:author" content="Mat Leszkiewicz">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ML Portfolio">
+<meta property="og:title" content="Homelab Update: Nextcloud + Music Assistant with Tailscale">
+<meta property="og:url" content="http://localhost:4000/Homelab-Update-Nextcloud-Music-Assistant/">
+
+
+  <meta property="og:description" content="A hands-on recap of adding Nextcloud and Music Assistant to my Docker VM, the gotchas I hit, and how I fixed each one.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2026-02-01T00:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/Homelab-Update-Nextcloud-Music-Assistant/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="ML Portfolio Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+/>
+
+<!-- Cookie Consent -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+<script>
+    window.addEventListener("load", function () {
+        window.cookieconsent.initialise({
+            palette: {
+                popup: { background: "#000" },
+                button: { background: "#f1d600" }
+            },
+            theme: "classic",
+            position: "bottom-right",
+            content: {
+                message: "This website uses cookies to ensure you get the best experience.",
+                dismiss: "Got it!",
+                link: "Learn more",
+                href: "/privacy-policy/"
+            }
+        });
+    });
+</script>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/favicon.svg" alt="ML"></a>
+        
+        <a class="site-title" href="/">
+          ML
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/posts/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/projects/"
+                
+                
+              >Projects</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/cv/"
+                
+                
+              >CV</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="http://localhost:4000/">
+        <img src="/assets/images/bio-photo.jpg" alt="Mat Leszkiewicz" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="http://localhost:4000/" itemprop="url">Mat Leszkiewicz</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>I’m a support engineer with a passion for cybersecurity and mission to help people be safer in the web.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://matleszkiewicz.dev" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-link" aria-hidden="true"></i><span class="label">Website</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/M_Leszkiewicz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span class="label">x.com</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/matlesz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/mat-leszkiewicz/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://tryhackme.com/p/matlesz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-hacker-news" aria-hidden="true"></i><span class="label">TryHackMe</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Homelab Update: Nextcloud + Music Assistant with Tailscale">
+    <meta itemprop="description" content="  “Every new service adds value. Every new service adds a new place to forget a setting.”">
+    <meta itemprop="datePublished" content="2026-02-01T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="http://localhost:4000/Homelab-Update-Nextcloud-Music-Assistant/" itemprop="url">Homelab Update: Nextcloud + Music Assistant with Tailscale
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <blockquote>
+  <p>“Every new service adds value. Every new service adds a new place to forget a setting.”</p>
+</blockquote>
+
+<p>Today’s session was a full-stack homelab sprint: <strong>Nextcloud</strong> for file sync, <strong>Music Assistant</strong> for media control, and a pile of Tailscale + SMB details that only surface once you actually ship. It started as “let’s add two services,” and ended with a surprisingly long list of tiny fixes that turned a shaky setup into something repeatable.</p>
+
+<p>If you’ve ever clicked “Add service,” felt good for five minutes, then spent the next hour chasing port conflicts and permissions—you’ll relate.</p>
+
+<p>Note: I’ve redacted Tailscale DNS names, IPs, and LAN IPs in this public post. Replace placeholders like <code class="language-plaintext highlighter-rouge">&lt;TAILSCALE_HOST&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;DOCKERVM_LAN_IP&gt;</code> with your own values.</p>
+
+<hr />
+
+<h2 id="-what-i-shipped">✅ What I Shipped</h2>
+
+<h3 id="music-assistant">Music Assistant</h3>
+<ul>
+  <li>Deployed on the Docker VM, <strong>host network</strong> for discovery and playback.</li>
+  <li>Media library via SMB: <code class="language-plaintext highlighter-rouge">/mnt/media/media/Music</code> (read-only).</li>
+  <li>LAN UI: <code class="language-plaintext highlighter-rouge">http://&lt;DOCKERVM_LAN_IP&gt;:8095</code>.</li>
+  <li>Tailscale access moved to <strong>port <code class="language-plaintext highlighter-rouge">18095</code></strong> to avoid host-network conflicts.</li>
+</ul>
+
+<p>The reason for host network: Music Assistant relies on discovery and multicast. It behaves better when it can see the LAN directly.</p>
+
+<h3 id="nextcloud">Nextcloud</h3>
+<ul>
+  <li>Deployed on the Docker VM with <strong>MariaDB + Redis</strong>.</li>
+  <li>Data directory: <code class="language-plaintext highlighter-rouge">/mnt/media/NextCloud</code> (CIFS mount).</li>
+  <li>LAN UI: <code class="language-plaintext highlighter-rouge">https://&lt;DOCKERVM_LAN_IP&gt;:8081</code> (self-signed TLS).</li>
+  <li>Tailscale HTTPS: <code class="language-plaintext highlighter-rouge">https://&lt;TAILSCALE_HOST&gt;:8081</code>.</li>
+</ul>
+
+<p>I chose the LSIO image for clean PUID/PGID handling, which matters when the data directory lives on a CIFS mount.</p>
+
+<h3 id="operational-improvements">Operational improvements</h3>
+<ul>
+  <li>Added a <strong>boot automation</strong> systemd unit so containers start cleanly after reboot.</li>
+  <li>Updated Homepage with <strong>Music Assistant</strong> and <strong>Nextcloud</strong>.</li>
+  <li>Updated Home Assistant to <strong>2026.1.3</strong> to resolve Music Assistant integration mismatch.</li>
+</ul>
+
+<p>The theme here: the services were easy; <strong>the glue was the hard part</strong>.</p>
+
+<hr />
+
+<h2 id="-gotchas-and-fixes-that-actually-worked">🧨 Gotchas (And Fixes That Actually Worked)</h2>
+
+<h3 id="1-music-assistant-integration-version-mismatch">1) Music Assistant integration version mismatch</h3>
+<p><strong>Symptom:</strong> “The Music Assistant server is not the correct version” in Home Assistant.</p>
+
+<p><strong>Fix:</strong> HA was too old. Updated Home Assistant to <code class="language-plaintext highlighter-rouge">2026.1.3</code> (backup created first). That pulled a newer <code class="language-plaintext highlighter-rouge">music-assistant-client</code> that matches MA’s API schema.</p>
+
+<p>This is one of those “silent mismatch” failures—you can hit the MA UI fine, but the HA integration refuses to bind.</p>
+
+<hr />
+
+<h3 id="2-ma--ha-link-404-during-oauth-callback">2) MA ↔ HA link 404 during OAuth callback</h3>
+<p><strong>Symptom:</strong> Browser redirected to <code class="language-plaintext highlighter-rouge">http://&lt;DOCKERVM_LAN_IP&gt;:8095/auth/external/callback</code> with 404.</p>
+
+<p><strong>Root cause:</strong> I entered the <strong>Music Assistant URL</strong> instead of the <strong>Home Assistant URL</strong> during linking.</p>
+
+<p><strong>Fix:</strong> Use HA URL in MA’s prompt (e.g. <code class="language-plaintext highlighter-rouge">http://&lt;HOME_ASSISTANT_LAN_IP&gt;:8123</code>).</p>
+
+<hr />
+
+<h3 id="3-nextcloud-access-through-untrusted-domain">3) Nextcloud “Access through untrusted domain”</h3>
+<p><strong>Symptom:</strong> Nextcloud refused access via <code class="language-plaintext highlighter-rouge">https://&lt;TAILSCALE_HOST&gt;:8081</code>.</p>
+
+<p><strong>Fix:</strong> Add Tailscale domain and IP to <code class="language-plaintext highlighter-rouge">trusted_domains</code> in <code class="language-plaintext highlighter-rouge">config.php</code>, then restart Nextcloud.</p>
+
+<p>In practice, I also add LAN IP + hostname variants to avoid future “why is this blocked” surprises.</p>
+
+<hr />
+
+<h3 id="4-nextcloud-data-directory-readable-by-other-people">4) Nextcloud data directory “readable by other people”</h3>
+<p><strong>Symptom:</strong> Nextcloud install blocked due to permissive CIFS mount permissions.</p>
+
+<p><strong>Fix:</strong> Update <code class="language-plaintext highlighter-rouge">/etc/fstab</code> to include <code class="language-plaintext highlighter-rouge">file_mode=0660,dir_mode=0770</code> and remount.</p>
+
+<p>This is a CIFS quirk: <code class="language-plaintext highlighter-rouge">chmod</code> inside the mount won’t fix it. The mode comes from mount options.</p>
+
+<p>Also required:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">systemctl daemon-reload</code> after fstab edits.</li>
+  <li>If remount complained “device busy,” unmount first: <code class="language-plaintext highlighter-rouge">umount -f /mnt/media</code> then <code class="language-plaintext highlighter-rouge">mount /mnt/media</code>.</li>
+</ul>
+
+<hr />
+
+<h3 id="5-tailscale-serve-stole-my-docker-ports">5) Tailscale Serve stole my Docker ports</h3>
+<p><strong>Symptom:</strong> Containers started but ports were dead locally; Docker logs showed port binding errors.</p>
+
+<p><strong>Root cause:</strong> <code class="language-plaintext highlighter-rouge">tailscale serve</code> had already bound host ports like <code class="language-plaintext highlighter-rouge">3000</code>, <code class="language-plaintext highlighter-rouge">8080</code>, <code class="language-plaintext highlighter-rouge">8081</code>, <code class="language-plaintext highlighter-rouge">5678</code>.</p>
+
+<p><strong>Fix:</strong> Disable Serve on those ports before container start, then re-enable after Docker publishes ports. Also switched the startup script to use <code class="language-plaintext highlighter-rouge">docker compose up -d --force-recreate</code> so ports are always re‑published.</p>
+
+<p>If Docker can’t bind a port at boot, the container may appear “up” but won’t actually be reachable. I now treat port conflicts as a first‑class boot concern.</p>
+
+<hr />
+
+<h3 id="6-music-assistant--tailscale-serve-conflict">6) Music Assistant + Tailscale Serve conflict</h3>
+<p><strong>Symptom:</strong> MA uses host networking; Serve on <code class="language-plaintext highlighter-rouge">8095</code> conflicts with that port.</p>
+
+<p><strong>Fix:</strong> Proxy MA via Tailscale on <strong><code class="language-plaintext highlighter-rouge">18095</code></strong>, which forwards to <code class="language-plaintext highlighter-rouge">127.0.0.1:8095</code>.</p>
+
+<p>That keeps MA’s host network intact while still giving me clean remote access.</p>
+
+<hr />
+
+<h2 id="️-commands-that-saved-me">🛠️ Commands That Saved Me</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Quick restart of the Nextcloud stack</span>
+docker compose <span class="nt">--env-file</span> /opt/nextcloud/.env <span class="nt">-f</span> /opt/nextcloud/docker-compose.yml up <span class="nt">-d</span>
+
+<span class="c"># Disable/enable Tailscale Serve ports</span>
+tailscale serve <span class="nt">--https</span><span class="o">=</span>8081 off
+tailscale serve <span class="nt">--bg</span> <span class="nt">--https</span><span class="o">=</span>8081 <span class="nt">--yes</span> https+insecure://127.0.0.1:8081
+
+<span class="c"># Verify Nextcloud data perms</span>
+<span class="nb">stat</span> <span class="nt">-c</span> <span class="s2">"%a %n"</span> /mnt/media/NextCloud
+</code></pre></div></div>
+
+<p>I keep these in my runbook now because I hit the same pitfalls more than once.</p>
+
+<hr />
+
+<h2 id="-current-access-points">✅ Current Access Points</h2>
+
+<ul>
+  <li>Music Assistant (LAN): <code class="language-plaintext highlighter-rouge">http://&lt;DOCKERVM_LAN_IP&gt;:8095</code></li>
+  <li>Music Assistant (Tailscale): <code class="language-plaintext highlighter-rouge">https://&lt;TAILSCALE_HOST&gt;:18095</code></li>
+  <li>Nextcloud (LAN): <code class="language-plaintext highlighter-rouge">https://&lt;DOCKERVM_LAN_IP&gt;:8081</code></li>
+  <li>Nextcloud (Tailscale): <code class="language-plaintext highlighter-rouge">https://&lt;TAILSCALE_HOST&gt;:8081</code></li>
+</ul>
+
+<hr />
+
+<h2 id="-next-up">🔜 Next Up</h2>
+
+<ul>
+  <li>Finish Nextcloud setup wizard and enable Redis file locking.</li>
+  <li>Add MA + Nextcloud widgets to Homepage.</li>
+  <li>Optional: move MA off host network and into a dedicated port map if needed.</li>
+</ul>
+
+<hr />
+
+<h2 id="-pro-tip-make-reboots-boring">✅ Pro Tip: Make Reboots Boring</h2>
+
+<p>After a VM reboot, services may start in the wrong order. The fix is a <strong>boot automation</strong> script that:</p>
+<ul>
+  <li>waits for Docker</li>
+  <li>ensures <code class="language-plaintext highlighter-rouge">/mnt/media</code> is mounted and responsive</li>
+  <li>disables Tailscale Serve temporarily (so Docker can bind ports)</li>
+  <li>uses <code class="language-plaintext highlighter-rouge">docker compose up -d --force-recreate</code> to restore port publishing</li>
+  <li>re‑enables Serve after everything is up</li>
+</ul>
+
+<p>This single change turned “every reboot is a fire drill” into “everything just comes back.”</p>
+
+<hr />
+
+<h2 id="-references">🔗 References</h2>
+
+<ul>
+  <li><a href="https://music-assistant.io/">Music Assistant documentation</a></li>
+  <li><a href="https://www.home-assistant.io/integrations/music_assistant/">Home Assistant: Music Assistant integration</a></li>
+  <li><a href="https://docs.linuxserver.io/images/docker-nextcloud/">LinuxServer Nextcloud image</a></li>
+  <li><a href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#trusted-domains">Nextcloud trusted domains</a></li>
+  <li><a href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/reverse_proxy_configuration.html">Nextcloud reverse proxy guidance</a></li>
+  <li><a href="https://tailscale.com/kb/1112/serve">Tailscale Serve docs</a></li>
+  <li><a href="https://docs.docker.com/compose/">Docker Compose reference</a></li>
+  <li><a href="https://man7.org/linux/man-pages/man8/mount.cifs.8.html">mount.cifs manual</a></li>
+</ul>
+
+<hr />
+
+<h2 id="-meta-description">🧠 Meta Description</h2>
+
+<p>Today’s homelab sprint added Nextcloud and Music Assistant on Docker with Tailscale access, plus a full list of real-world gotchas and fixes: version mismatches, untrusted domains, CIFS permissions, and port conflicts.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#docker" class="page__taxonomy-item p-category" rel="tag">Docker</a><span class="sep">, </span>
+    
+      <a href="/tags/#homelab" class="page__taxonomy-item p-category" rel="tag">Homelab</a><span class="sep">, </span>
+    
+      <a href="/tags/#music-assistant" class="page__taxonomy-item p-category" rel="tag">Music Assistant</a><span class="sep">, </span>
+    
+      <a href="/tags/#nextcloud" class="page__taxonomy-item p-category" rel="tag">Nextcloud</a><span class="sep">, </span>
+    
+      <a href="/tags/#tailscale" class="page__taxonomy-item p-category" rel="tag">Tailscale</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2026-02-01T00:00:00+00:00">February 1, 2026</time></p>
+
+      </footer>
+
+      <div class="page__share">
+    <h4 class="page__share-title">Share on</h4>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://localhost:4000/Homelab-Update-Nextcloud-Music-Assistant/"
+        class="btn btn--linkedin"
+        onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+        title="Share on LinkedIn">
+        <i class="fab fa-linkedin" aria-hidden="true"></i><span> LinkedIn </span>
+    </a>
+    <br>
+    <a href="https://x.com/intent/tweet?text=Homelab%20Update:%20Nextcloud%20+%20Music%20Assistant%20with%20Tailscale&url=http://localhost:4000/Homelab-Update-Nextcloud-Music-Assistant/"
+        class="btn btn--x"
+        onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+        title="Share on X.com">
+        <i class="fab fa-x-twitter" aria-hidden="true"></i><span> X.com (Twitter) </span>
+    </a>
+
+    <a href="https://www.reddit.com/submit?url=http%3A%2F%2Flocalhost%3A4000%2FHomelab-Update-Nextcloud-Music-Assistant%2F&title=Homelab Update: Nextcloud + Music Assistant with Tailscale"
+        class="btn btn--reddit" title=" Reddit">
+        <i class="fab fa-fw fa-reddit" aria-hidden="true"></i><span> Reddit</span>
+    </a>
+</div>
+
+      
+  <nav class="pagination">
+    
+      <a href="/OpenCode-ChatGPT-Homelab-Workflow/" class="pagination--pager" title="How OpenCode + ChatGPT Accelerated My Homelab">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/OpenCode-ChatGPT-Homelab-Workflow/" rel="permalink">How OpenCode + ChatGPT Accelerated My Homelab
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  “Homelab work is fun until you forget what you changed last night.”
+
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Building-My-HomeLab-From-Scratch-to-Self-Hosting/" rel="permalink">Building My HomeLab: From Scratch to Self-Hosting
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  “If it ain’t broke, you haven’t installed Jellyfin yet.”
+
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Homelab-Hardware-Choce/" rel="permalink">How to Choose Your First Home Server Hardware: A Practical Guide
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Choosing your first home server starts with understanding your needs, your budget, and how much room you want to leave for future upgrades. Whether you’re le...</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Building-Parallel-CI-CD-Pipelines-with-AWS/" rel="permalink">Building Parallel CI/CD Pipelines with AWS at Fundrecs
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">🧩 Project Overview
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+    <ul class="social-icons">
+        
+        
+        
+        <li><a href="https://x.com/M_Leszkiewicz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-x-twitter" aria-hidden="true"></i> x.com</a></li>
+        
+        
+        
+        <li><a href="https://github.com/matlesz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+        
+        
+        <li><a href="https://www.linkedin.com/in/mat-leszkiewicz/" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+        
+        
+    </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 ML Portfolio.</div>
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>

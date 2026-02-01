@@ -1,0 +1,354 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.3 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Blog Modernization Plan - ML Portfolio</title>
+<meta name="description" content="Cybersecurity-focused portfolio of Mat Leszkiewicz — aspiring analyst with a background in DevOps,  full-stack development, and incident response.  Showcasing projects, blog posts, and career highlights.">
+
+
+  <meta name="author" content="Mat Leszkiewicz">
+  
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ML Portfolio">
+<meta property="og:title" content="Blog Modernization Plan">
+<meta property="og:url" content="http://localhost:4000/plans/upgrades_plan/">
+
+
+  <meta property="og:description" content="Cybersecurity-focused portfolio of Mat Leszkiewicz — aspiring analyst with a background in DevOps,  full-stack development, and incident response.  Showcasing projects, blog posts, and career highlights.">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/plans/upgrades_plan/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="ML Portfolio Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+/>
+
+<!-- Cookie Consent -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+<script>
+    window.addEventListener("load", function () {
+        window.cookieconsent.initialise({
+            palette: {
+                popup: { background: "#000" },
+                button: { background: "#f1d600" }
+            },
+            theme: "classic",
+            position: "bottom-right",
+            content: {
+                message: "This website uses cookies to ensure you get the best experience.",
+                dismiss: "Got it!",
+                link: "Learn more",
+                href: "/privacy-policy/"
+            }
+        });
+    });
+</script>
+
+  </head>
+
+  <body class="layout--default" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/favicon.svg" alt="ML"></a>
+        
+        <a class="site-title" href="/">
+          ML
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/posts/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/projects/"
+                
+                
+              >Projects</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/cv/"
+                
+                
+              >CV</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      <h1 id="blog-modernization-plan">Blog Modernization Plan</h1>
+
+<h2 id="goals">Goals</h2>
+<ul>
+  <li>Present a modern, elegant, and professional visual identity.</li>
+  <li>Improve readability and scanning for recruiters and peers.</li>
+  <li>Make the portfolio feel intentional, not template-default.</li>
+  <li>Keep changes compatible with Minimal Mistakes and GitHub Pages.</li>
+</ul>
+
+<h2 id="current-observations">Current Observations</h2>
+<ul>
+  <li>Theme is Minimal Mistakes with a dark skin; typography and spacing feel dense.</li>
+  <li>Navigation is minimal, but key sections (projects, highlights) are not emphasized.</li>
+  <li>The layout relies on defaults; custom styling is limited to small overrides.</li>
+  <li>Posts mix emojis, long paragraphs, and dense sections, which can feel noisy.</li>
+</ul>
+
+<h2 id="visual-direction-options-pick-one-to-anchor-the-style">Visual Direction Options (pick one to anchor the style)</h2>
+<ul>
+  <li>Modern editorial: serif headings + clean sans body, generous spacing, muted palette.</li>
+  <li>Sleek tech: geometric sans, crisp contrasts, subtle gradients, restrained accents.</li>
+  <li>Executive portfolio: warm neutrals, minimal accents, strong hierarchy.</li>
+</ul>
+
+<h2 id="typography">Typography</h2>
+<ul>
+  <li>Replace default theme typography with a clear pairing (e.g., Serif for headings, Sans for body).</li>
+  <li>Set a tighter scale: 1.0 body, 1.25, 1.56, 1.95, 2.44 for headings.</li>
+  <li>Increase line-height for body copy (1.6 to 1.75) and widen max text width.</li>
+  <li>Standardize heading casing and reduce emoji use in headings.</li>
+</ul>
+
+<h2 id="color-and-theme">Color and Theme</h2>
+<ul>
+  <li>Move away from default dark skin unless it is part of the brand story.</li>
+  <li>Define CSS variables for a small palette: background, surface, text, muted, accent.</li>
+  <li>Use one restrained accent color for links and callouts.</li>
+  <li>Introduce subtle background texture or gradient for depth.</li>
+</ul>
+
+<h2 id="layout-and-spacing">Layout and Spacing</h2>
+<ul>
+  <li>Increase vertical rhythm: consistent section spacing and breathing room.</li>
+  <li>Make the hero section more prominent with a short headline and value proposition.</li>
+  <li>Add a highlight block for primary focus (security, devops, incident response).</li>
+  <li>Rebalance the sidebar to feel secondary on desktop and collapsible on mobile.</li>
+</ul>
+
+<h2 id="navigation-and-structure">Navigation and Structure</h2>
+<ul>
+  <li>Add a Projects or Case Studies section and link it in navigation.</li>
+  <li>Add a Highlights section on the home page: 3 to 4 key achievements.</li>
+  <li>Keep navigation titles short and action oriented.</li>
+  <li>Consider a landing page for portfolio with featured posts and skills.</li>
+</ul>
+
+<h2 id="imagery-and-visuals">Imagery and Visuals</h2>
+<ul>
+  <li>Use a consistent avatar style or professional headshot.</li>
+  <li>Add tasteful cover images for featured posts with a unified style.</li>
+  <li>Standardize image ratios and compression (e.g., 16:9 or 4:3).</li>
+</ul>
+
+<h2 id="content-cleanup">Content Cleanup</h2>
+<ul>
+  <li>Reduce long paragraphs and break into short, scannable blocks.</li>
+  <li>Use callouts sparingly for key insights instead of frequent emojis.</li>
+  <li>Normalize tags and categories to a small set of strategic topics.</li>
+  <li>Add a concise author bio and mission statement for consistency.</li>
+</ul>
+
+<h2 id="components-and-enhancements">Components and Enhancements</h2>
+<ul>
+  <li>Add a simple metrics strip (years experience, focus areas, certifications).</li>
+  <li>Create a reusable project card include for featured work.</li>
+  <li>Add a clean CTA section for contact or collaboration.</li>
+</ul>
+
+<h2 id="accessibility-and-seo">Accessibility and SEO</h2>
+<ul>
+  <li>Keep heading order consistent and avoid skipped levels.</li>
+  <li>Ensure color contrast meets WCAG AA for body text.</li>
+  <li>Add <code class="language-plaintext highlighter-rouge">excerpt</code> for posts and pages used in previews.</li>
+  <li>Use descriptive alt text and link text.</li>
+</ul>
+
+<h2 id="performance-and-build">Performance and Build</h2>
+<ul>
+  <li>Keep image sizes small and optimized.</li>
+  <li>Avoid heavy JavaScript; use Minimal Mistakes built-ins where possible.</li>
+  <li>Verify site builds with <code class="language-plaintext highlighter-rouge">bundle exec jekyll build</code>.</li>
+</ul>
+
+<h2 id="implementation-plan">Implementation Plan</h2>
+<ol>
+  <li>Define design direction and palette (update <code class="language-plaintext highlighter-rouge">_config.yml</code> and <code class="language-plaintext highlighter-rouge">assets/css/main.scss</code>).</li>
+  <li>Update typography and layout spacing (custom CSS variables and overrides).</li>
+  <li>Refresh home page structure and add a portfolio landing page if desired.</li>
+  <li>Create reusable includes for project cards and highlight blocks.</li>
+  <li>Normalize post formatting and add feature images where relevant.</li>
+  <li>Update navigation and footer links for clarity and professionalism.</li>
+  <li>Validate accessibility and run a full build.</li>
+</ol>
+
+<h2 id="acceptance-checklist">Acceptance Checklist</h2>
+<ul>
+  <li>Visual hierarchy is clear on desktop and mobile.</li>
+  <li>Navigation reflects core content (About, Projects, Posts, CV).</li>
+  <li>Posts are readable without dense blocks or excessive emoji.</li>
+  <li>Design feels cohesive across pages and posts.</li>
+  <li>Build completes without warnings.</li>
+</ul>
+
+<h2 id="risks-and-considerations">Risks and Considerations</h2>
+<ul>
+  <li>Over-customizing may diverge from Minimal Mistakes defaults.</li>
+  <li>Dark theme can limit professional tone for non-technical audiences.</li>
+  <li>Additional includes increase maintenance unless documented.</li>
+</ul>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+    <ul class="social-icons">
+        
+        
+        
+        <li><a href="https://x.com/M_Leszkiewicz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-x-twitter" aria-hidden="true"></i> x.com</a></li>
+        
+        
+        
+        <li><a href="https://github.com/matlesz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+        
+        
+        <li><a href="https://www.linkedin.com/in/mat-leszkiewicz/" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+        
+        
+    </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 ML Portfolio.</div>
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>

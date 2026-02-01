@@ -1,10 +1,12 @@
 ---
-title: Building Parallel CI/CD Pipelines with AWS at Fundrecs
+title: "Building Parallel CI/CD Pipelines with AWS at Fundrecs"
 date: 2025-06-30
-tags: [CI/CD, AWS, DevOps]
 layout: single
+author_profile: true
 read_time: true
 share: true
+related: true
+tags: ["CI/CD", AWS, DevOps]
 ---
 
 ## 🧩 Project Overview

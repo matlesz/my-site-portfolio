@@ -1,0 +1,1043 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2026-02-01T15:00:51+00:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ML Portfolio</title><subtitle>Cybersecurity-focused portfolio of Mat Leszkiewicz — aspiring analyst with a background in DevOps,  full-stack development, and incident response.  Showcasing projects, blog posts, and career highlights.</subtitle><author><name>Mat Leszkiewicz</name></author><entry><title type="html">Homelab Update: Nextcloud + Music Assistant with Tailscale</title><link href="http://localhost:4000/Homelab-Update-Nextcloud-Music-Assistant/" rel="alternate" type="text/html" title="Homelab Update: Nextcloud + Music Assistant with Tailscale" /><published>2026-02-01T00:00:00+00:00</published><updated>2026-02-01T00:00:00+00:00</updated><id>http://localhost:4000/Homelab-Update-Nextcloud-Music-Assistant</id><content type="html" xml:base="http://localhost:4000/Homelab-Update-Nextcloud-Music-Assistant/"><![CDATA[<blockquote>
+  <p>“Every new service adds value. Every new service adds a new place to forget a setting.”</p>
+</blockquote>
+
+<p>Today’s session was a full-stack homelab sprint: <strong>Nextcloud</strong> for file sync, <strong>Music Assistant</strong> for media control, and a pile of Tailscale + SMB details that only surface once you actually ship. It started as “let’s add two services,” and ended with a surprisingly long list of tiny fixes that turned a shaky setup into something repeatable.</p>
+
+<p>If you’ve ever clicked “Add service,” felt good for five minutes, then spent the next hour chasing port conflicts and permissions—you’ll relate.</p>
+
+<p>Note: I’ve redacted Tailscale DNS names, IPs, and LAN IPs in this public post. Replace placeholders like <code class="language-plaintext highlighter-rouge">&lt;TAILSCALE_HOST&gt;</code> and <code class="language-plaintext highlighter-rouge">&lt;DOCKERVM_LAN_IP&gt;</code> with your own values.</p>
+
+<hr />
+
+<h2 id="-what-i-shipped">✅ What I Shipped</h2>
+
+<h3 id="music-assistant">Music Assistant</h3>
+<ul>
+  <li>Deployed on the Docker VM, <strong>host network</strong> for discovery and playback.</li>
+  <li>Media library via SMB: <code class="language-plaintext highlighter-rouge">/mnt/media/media/Music</code> (read-only).</li>
+  <li>LAN UI: <code class="language-plaintext highlighter-rouge">http://&lt;DOCKERVM_LAN_IP&gt;:8095</code>.</li>
+  <li>Tailscale access moved to <strong>port <code class="language-plaintext highlighter-rouge">18095</code></strong> to avoid host-network conflicts.</li>
+</ul>
+
+<p>The reason for host network: Music Assistant relies on discovery and multicast. It behaves better when it can see the LAN directly.</p>
+
+<h3 id="nextcloud">Nextcloud</h3>
+<ul>
+  <li>Deployed on the Docker VM with <strong>MariaDB + Redis</strong>.</li>
+  <li>Data directory: <code class="language-plaintext highlighter-rouge">/mnt/media/NextCloud</code> (CIFS mount).</li>
+  <li>LAN UI: <code class="language-plaintext highlighter-rouge">https://&lt;DOCKERVM_LAN_IP&gt;:8081</code> (self-signed TLS).</li>
+  <li>Tailscale HTTPS: <code class="language-plaintext highlighter-rouge">https://&lt;TAILSCALE_HOST&gt;:8081</code>.</li>
+</ul>
+
+<p>I chose the LSIO image for clean PUID/PGID handling, which matters when the data directory lives on a CIFS mount.</p>
+
+<h3 id="operational-improvements">Operational improvements</h3>
+<ul>
+  <li>Added a <strong>boot automation</strong> systemd unit so containers start cleanly after reboot.</li>
+  <li>Updated Homepage with <strong>Music Assistant</strong> and <strong>Nextcloud</strong>.</li>
+  <li>Updated Home Assistant to <strong>2026.1.3</strong> to resolve Music Assistant integration mismatch.</li>
+</ul>
+
+<p>The theme here: the services were easy; <strong>the glue was the hard part</strong>.</p>
+
+<hr />
+
+<h2 id="-gotchas-and-fixes-that-actually-worked">🧨 Gotchas (And Fixes That Actually Worked)</h2>
+
+<h3 id="1-music-assistant-integration-version-mismatch">1) Music Assistant integration version mismatch</h3>
+<p><strong>Symptom:</strong> “The Music Assistant server is not the correct version” in Home Assistant.</p>
+
+<p><strong>Fix:</strong> HA was too old. Updated Home Assistant to <code class="language-plaintext highlighter-rouge">2026.1.3</code> (backup created first). That pulled a newer <code class="language-plaintext highlighter-rouge">music-assistant-client</code> that matches MA’s API schema.</p>
+
+<p>This is one of those “silent mismatch” failures—you can hit the MA UI fine, but the HA integration refuses to bind.</p>
+
+<hr />
+
+<h3 id="2-ma--ha-link-404-during-oauth-callback">2) MA ↔ HA link 404 during OAuth callback</h3>
+<p><strong>Symptom:</strong> Browser redirected to <code class="language-plaintext highlighter-rouge">http://&lt;DOCKERVM_LAN_IP&gt;:8095/auth/external/callback</code> with 404.</p>
+
+<p><strong>Root cause:</strong> I entered the <strong>Music Assistant URL</strong> instead of the <strong>Home Assistant URL</strong> during linking.</p>
+
+<p><strong>Fix:</strong> Use HA URL in MA’s prompt (e.g. <code class="language-plaintext highlighter-rouge">http://&lt;HOME_ASSISTANT_LAN_IP&gt;:8123</code>).</p>
+
+<hr />
+
+<h3 id="3-nextcloud-access-through-untrusted-domain">3) Nextcloud “Access through untrusted domain”</h3>
+<p><strong>Symptom:</strong> Nextcloud refused access via <code class="language-plaintext highlighter-rouge">https://&lt;TAILSCALE_HOST&gt;:8081</code>.</p>
+
+<p><strong>Fix:</strong> Add Tailscale domain and IP to <code class="language-plaintext highlighter-rouge">trusted_domains</code> in <code class="language-plaintext highlighter-rouge">config.php</code>, then restart Nextcloud.</p>
+
+<p>In practice, I also add LAN IP + hostname variants to avoid future “why is this blocked” surprises.</p>
+
+<hr />
+
+<h3 id="4-nextcloud-data-directory-readable-by-other-people">4) Nextcloud data directory “readable by other people”</h3>
+<p><strong>Symptom:</strong> Nextcloud install blocked due to permissive CIFS mount permissions.</p>
+
+<p><strong>Fix:</strong> Update <code class="language-plaintext highlighter-rouge">/etc/fstab</code> to include <code class="language-plaintext highlighter-rouge">file_mode=0660,dir_mode=0770</code> and remount.</p>
+
+<p>This is a CIFS quirk: <code class="language-plaintext highlighter-rouge">chmod</code> inside the mount won’t fix it. The mode comes from mount options.</p>
+
+<p>Also required:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">systemctl daemon-reload</code> after fstab edits.</li>
+  <li>If remount complained “device busy,” unmount first: <code class="language-plaintext highlighter-rouge">umount -f /mnt/media</code> then <code class="language-plaintext highlighter-rouge">mount /mnt/media</code>.</li>
+</ul>
+
+<hr />
+
+<h3 id="5-tailscale-serve-stole-my-docker-ports">5) Tailscale Serve stole my Docker ports</h3>
+<p><strong>Symptom:</strong> Containers started but ports were dead locally; Docker logs showed port binding errors.</p>
+
+<p><strong>Root cause:</strong> <code class="language-plaintext highlighter-rouge">tailscale serve</code> had already bound host ports like <code class="language-plaintext highlighter-rouge">3000</code>, <code class="language-plaintext highlighter-rouge">8080</code>, <code class="language-plaintext highlighter-rouge">8081</code>, <code class="language-plaintext highlighter-rouge">5678</code>.</p>
+
+<p><strong>Fix:</strong> Disable Serve on those ports before container start, then re-enable after Docker publishes ports. Also switched the startup script to use <code class="language-plaintext highlighter-rouge">docker compose up -d --force-recreate</code> so ports are always re‑published.</p>
+
+<p>If Docker can’t bind a port at boot, the container may appear “up” but won’t actually be reachable. I now treat port conflicts as a first‑class boot concern.</p>
+
+<hr />
+
+<h3 id="6-music-assistant--tailscale-serve-conflict">6) Music Assistant + Tailscale Serve conflict</h3>
+<p><strong>Symptom:</strong> MA uses host networking; Serve on <code class="language-plaintext highlighter-rouge">8095</code> conflicts with that port.</p>
+
+<p><strong>Fix:</strong> Proxy MA via Tailscale on <strong><code class="language-plaintext highlighter-rouge">18095</code></strong>, which forwards to <code class="language-plaintext highlighter-rouge">127.0.0.1:8095</code>.</p>
+
+<p>That keeps MA’s host network intact while still giving me clean remote access.</p>
+
+<hr />
+
+<h2 id="️-commands-that-saved-me">🛠️ Commands That Saved Me</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Quick restart of the Nextcloud stack</span>
+docker compose <span class="nt">--env-file</span> /opt/nextcloud/.env <span class="nt">-f</span> /opt/nextcloud/docker-compose.yml up <span class="nt">-d</span>
+
+<span class="c"># Disable/enable Tailscale Serve ports</span>
+tailscale serve <span class="nt">--https</span><span class="o">=</span>8081 off
+tailscale serve <span class="nt">--bg</span> <span class="nt">--https</span><span class="o">=</span>8081 <span class="nt">--yes</span> https+insecure://127.0.0.1:8081
+
+<span class="c"># Verify Nextcloud data perms</span>
+<span class="nb">stat</span> <span class="nt">-c</span> <span class="s2">"%a %n"</span> /mnt/media/NextCloud
+</code></pre></div></div>
+
+<p>I keep these in my runbook now because I hit the same pitfalls more than once.</p>
+
+<hr />
+
+<h2 id="-current-access-points">✅ Current Access Points</h2>
+
+<ul>
+  <li>Music Assistant (LAN): <code class="language-plaintext highlighter-rouge">http://&lt;DOCKERVM_LAN_IP&gt;:8095</code></li>
+  <li>Music Assistant (Tailscale): <code class="language-plaintext highlighter-rouge">https://&lt;TAILSCALE_HOST&gt;:18095</code></li>
+  <li>Nextcloud (LAN): <code class="language-plaintext highlighter-rouge">https://&lt;DOCKERVM_LAN_IP&gt;:8081</code></li>
+  <li>Nextcloud (Tailscale): <code class="language-plaintext highlighter-rouge">https://&lt;TAILSCALE_HOST&gt;:8081</code></li>
+</ul>
+
+<hr />
+
+<h2 id="-next-up">🔜 Next Up</h2>
+
+<ul>
+  <li>Finish Nextcloud setup wizard and enable Redis file locking.</li>
+  <li>Add MA + Nextcloud widgets to Homepage.</li>
+  <li>Optional: move MA off host network and into a dedicated port map if needed.</li>
+</ul>
+
+<hr />
+
+<h2 id="-pro-tip-make-reboots-boring">✅ Pro Tip: Make Reboots Boring</h2>
+
+<p>After a VM reboot, services may start in the wrong order. The fix is a <strong>boot automation</strong> script that:</p>
+<ul>
+  <li>waits for Docker</li>
+  <li>ensures <code class="language-plaintext highlighter-rouge">/mnt/media</code> is mounted and responsive</li>
+  <li>disables Tailscale Serve temporarily (so Docker can bind ports)</li>
+  <li>uses <code class="language-plaintext highlighter-rouge">docker compose up -d --force-recreate</code> to restore port publishing</li>
+  <li>re‑enables Serve after everything is up</li>
+</ul>
+
+<p>This single change turned “every reboot is a fire drill” into “everything just comes back.”</p>
+
+<hr />
+
+<h2 id="-references">🔗 References</h2>
+
+<ul>
+  <li><a href="https://music-assistant.io/">Music Assistant documentation</a></li>
+  <li><a href="https://www.home-assistant.io/integrations/music_assistant/">Home Assistant: Music Assistant integration</a></li>
+  <li><a href="https://docs.linuxserver.io/images/docker-nextcloud/">LinuxServer Nextcloud image</a></li>
+  <li><a href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/config_sample_php_parameters.html#trusted-domains">Nextcloud trusted domains</a></li>
+  <li><a href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/reverse_proxy_configuration.html">Nextcloud reverse proxy guidance</a></li>
+  <li><a href="https://tailscale.com/kb/1112/serve">Tailscale Serve docs</a></li>
+  <li><a href="https://docs.docker.com/compose/">Docker Compose reference</a></li>
+  <li><a href="https://man7.org/linux/man-pages/man8/mount.cifs.8.html">mount.cifs manual</a></li>
+</ul>
+
+<hr />
+
+<h2 id="-meta-description">🧠 Meta Description</h2>
+
+<p>Today’s homelab sprint added Nextcloud and Music Assistant on Docker with Tailscale access, plus a full list of real-world gotchas and fixes: version mismatches, untrusted domains, CIFS permissions, and port conflicts.</p>]]></content><author><name>Mat Leszkiewicz</name></author><category term="Homelab" /><category term="Nextcloud" /><category term="Music Assistant" /><category term="Tailscale" /><category term="Docker" /><summary type="html"><![CDATA[A hands-on recap of adding Nextcloud and Music Assistant to my Docker VM, the gotchas I hit, and how I fixed each one.]]></summary></entry><entry><title type="html">How OpenCode + ChatGPT Accelerated My Homelab</title><link href="http://localhost:4000/OpenCode-ChatGPT-Homelab-Workflow/" rel="alternate" type="text/html" title="How OpenCode + ChatGPT Accelerated My Homelab" /><published>2026-01-25T00:00:00+00:00</published><updated>2026-01-25T00:00:00+00:00</updated><id>http://localhost:4000/OpenCode-ChatGPT-Homelab-Workflow</id><content type="html" xml:base="http://localhost:4000/OpenCode-ChatGPT-Homelab-Workflow/"><![CDATA[<blockquote>
+  <p>“Homelab work is fun until you forget what you changed last night.”</p>
+</blockquote>
+
+<p>Running a homelab is equal parts experimentation and documentation debt. I wanted to move faster without losing track of what I changed, why I changed it, and how to undo it. The fix was to integrate <strong>OpenCode</strong> with <strong>ChatGPT</strong> and treat it as my infrastructure co-pilot.</p>
+
+<p>This post documents how I wired that workflow together and the concrete things it helped me ship.</p>
+
+<hr />
+
+<h2 id="-the-problem-context-rot-in-a-fast-moving-lab">🧭 The Problem: Context Rot in a Fast-Moving Lab</h2>
+
+<p>My setup has multiple layers—Proxmox, VMs, LXC containers, Docker Compose projects, and SMB mounts. Each change might touch several systems. Keeping mental notes wasn’t sustainable, and ad-hoc tweaks made it hard to reproduce or explain what I did.</p>
+
+<p>I needed:</p>
+<ul>
+  <li>A shared source of truth</li>
+  <li>Structured runbooks and plans</li>
+  <li>Safe, repeatable changes</li>
+  <li>A way to integrate new services fast without losing the plot</li>
+</ul>
+
+<hr />
+
+<h2 id="-the-workflow-opencode--chatgpt-as-a-co-pilot">🧠 The Workflow: OpenCode + ChatGPT as a Co-Pilot</h2>
+
+<p>OpenCode gave me an interactive CLI layer where ChatGPT could:</p>
+<ul>
+  <li>Read and update documentation</li>
+  <li>Run safe commands and capture outputs</li>
+  <li>Create service snapshots without leaking secrets</li>
+  <li>Build dashboards and validate endpoints</li>
+</ul>
+
+<p>Instead of asking it to “do everything,” I gave it a <strong>framework</strong>:</p>
+
+<h3 id="1-agent-guidance">1) Agent Guidance</h3>
+<p>I created an <code class="language-plaintext highlighter-rouge">AGENTS.md</code> file so the agent knows the house rules (no secrets, no destructive commands, keep changes scoped).</p>
+
+<h3 id="2-verified-context">2) Verified Context</h3>
+<p>The homelab state lives in a living document (<code class="language-plaintext highlighter-rouge">homelab_context.md</code>). When something changes, the agent updates it with real outputs, not guesses.</p>
+
+<h3 id="3-repo-structure-that-matches-reality">3) Repo Structure That Matches Reality</h3>
+<p>I organized the repo into <code class="language-plaintext highlighter-rouge">docs/</code>, <code class="language-plaintext highlighter-rouge">plans/</code>, <code class="language-plaintext highlighter-rouge">services/</code>, and <code class="language-plaintext highlighter-rouge">runbooks/</code>, so planning and execution stay separate but connected.</p>
+
+<hr />
+
+<h2 id="️-what-this-helped-me-ship">⚙️ What This Helped Me Ship</h2>
+
+<h3 id="-homepage-dashboard">✅ Homepage dashboard</h3>
+<p>The agent deployed a <strong>Homepage</strong> container, configured widgets, and wired all the service links. It also fixed the host validation error by setting allowed hosts in config and environment.</p>
+
+<p><img src="/assets/images/homelab-dashboard-2026-01.png" alt="Homelab dashboard screenshot" /></p>
+
+<p><em>Current dashboard layout while the setup is still evolving.</em></p>
+
+<h3 id="-service-snapshots-in-git">✅ Service snapshots in Git</h3>
+<p>We captured sanitized compose snapshots for:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">n8n</code></li>
+  <li><code class="language-plaintext highlighter-rouge">qBittorrent</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Portainer</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Home Assistant</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Homepage</code></li>
+</ul>
+
+<h3 id="-runbooks-and-docs">✅ Runbooks and docs</h3>
+<p>Every service change ends up as a doc update—no more “future me will remember.”</p>
+
+<h3 id="-build-small-iterate-fast">✅ Build small, iterate fast</h3>
+<p>I’m deliberately building the smallest useful version of each piece first. It’s easy to get discouraged by gorgeous dashboards on Reddit, but shipping a simple, working layout beats waiting for perfection. The polish can come later.</p>
+
+<hr />
+
+<h2 id="-guardrails-that-kept-it-safe">🔒 Guardrails That Kept It Safe</h2>
+
+<p>To avoid security or stability mistakes, I enforced a few rules:</p>
+<ul>
+  <li><strong>Secrets never enter Git</strong></li>
+  <li><strong>env.example</strong> files instead of real <code class="language-plaintext highlighter-rouge">.env</code></li>
+  <li><strong>No destructive commands</strong> without explicit confirmation</li>
+  <li><strong>Every change documented</strong> in the homelab context or service snapshot</li>
+</ul>
+
+<hr />
+
+<h2 id="-example-snippets">🧪 Example Snippets</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Jump to Proxmox</span>
+ssh proxmox
+
+<span class="c"># Update Homepage</span>
+docker compose <span class="nt">-f</span> /opt/homepage/docker-compose.yml restart
+
+<span class="c"># List running containers</span>
+docker ps <span class="nt">--format</span> <span class="s2">"table {{.Names}}</span><span class="se">\t</span><span class="s2">{{.Status}}</span><span class="se">\t</span><span class="s2">{{.Ports}}"</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-results-so-far">📈 Results So Far</h2>
+
+<ul>
+  <li>Faster iteration without losing context</li>
+  <li>A clean, navigable repo that mirrors the real lab</li>
+  <li>Dashboards and docs that stay in sync</li>
+  <li>Safer changes with explicit runbooks</li>
+</ul>
+
+<hr />
+
+<h2 id="-whats-next">🔜 What’s Next</h2>
+
+<ul>
+  <li>Add richer widgets (API-powered) for Jellyfin, Portainer, and qBittorrent</li>
+  <li>Automate backup snapshots for <code class="language-plaintext highlighter-rouge">/opt</code> configs</li>
+  <li>Add monitoring stack (Grafana + Prometheus)</li>
+</ul>
+
+<hr />
+
+<h2 id="-references">📚 References</h2>
+
+<ul>
+  <li><a href="https://pve.proxmox.com/pve-docs/">Proxmox VE Documentation</a></li>
+  <li><a href="https://docs.docker.com/compose/compose-file/">Docker Compose file reference</a></li>
+  <li><a href="https://docs.docker.com/engine/reference/commandline/ps/">Docker <code class="language-plaintext highlighter-rouge">ps</code> command reference</a></li>
+  <li><a href="https://gethomepage.dev/installation/docker/">Homepage Docker installation</a></li>
+  <li><a href="https://gethomepage.dev/configs/">Homepage configuration docs</a></li>
+  <li><a href="https://docs.portainer.io/">Portainer documentation</a></li>
+  <li><a href="https://www.home-assistant.io/docs/">Home Assistant documentation</a></li>
+  <li><a href="https://docs.n8n.io/">n8n documentation</a></li>
+  <li><a href="https://github.com/qbittorrent/qBittorrent/wiki/Installing-qBittorrent">Installing qBittorrent</a></li>
+</ul>
+
+<hr />
+
+<h2 id="-meta-description">🧠 Meta Description</h2>
+
+<p>How I used OpenCode with ChatGPT to turn homelab sprawl into a documented, repeatable workflow—deploying dashboards, runbooks, and service snapshots without losing track of changes.</p>]]></content><author><name>Mat Leszkiewicz</name></author><category term="Homelab" /><category term="Automation" /><category term="ChatGPT" /><category term="OpenCode" /><category term="DevOps" /><summary type="html"><![CDATA[How I used OpenCode with ChatGPT to turn homelab chaos into a documented, repeatable workflow with dashboards, runbooks, and service snapshots.]]></summary></entry><entry><title type="html">Building My HomeLab: From Scratch to Self-Hosting</title><link href="http://localhost:4000/Building-My-HomeLab-From-Scratch-to-Self-Hosting/" rel="alternate" type="text/html" title="Building My HomeLab: From Scratch to Self-Hosting" /><published>2025-07-23T00:00:00+01:00</published><updated>2025-07-23T00:00:00+01:00</updated><id>http://localhost:4000/Building%20My%20HomeLab:%20From%20Scratch%20to%20Self-Hosting</id><content type="html" xml:base="http://localhost:4000/Building-My-HomeLab-From-Scratch-to-Self-Hosting/"><![CDATA[<blockquote>
+  <p>“If it ain’t broke, you haven’t installed Jellyfin yet.”</p>
+</blockquote>
+
+<p>Over the last few months, I’ve been on a mission to build a full-featured home lab. What started as a simple curiosity about self-hosting quickly turned into an exciting project where I learned more than any tutorial could teach.</p>
+
+<p>My goal? Host essential services like file storage, media streaming, DNS filtering, automation, and remote access using <strong>Proxmox</strong> as the foundation. Along the way, I made plenty of wrong turns (some hilariously frustrating), discovered best practices, and learned how to troubleshoot effectively.</p>
+
+<p>This post documents that journey—failures, fixes, and all. If you’re building your own home lab or just want to see how a tech-savvy generalist tackles infrastructure from scratch, you’re in the right place.</p>
+
+<hr />
+
+<h2 id="-architecture-overview">🧱 Architecture Overview</h2>
+
+<p>Here is the high-level layout of my infrastructure:</p>
+
+<pre><code class="language-asciidoc">[Proxmox VE Host]
+|
+|-- pfSense (VM) ............. Firewall / DHCP / NAT
+|-- TrueNAS (VM) ............. Storage via USB HDD Enclosure
+|-- DockerVM (VM, IP: 192.168.68.111)
+|   |-- Portainer ............ Docker Management UI
+|   |-- Jellyfin ............. Media Server
+|   |-- Nextcloud ............ File Sync &amp; Share
+|   |-- n8n .................. Workflow Automation
+|   |-- cAdvisor ............. Docker monitoring
+|-- AdGuard Home (LXC) ....... DNS &amp; Ad Blocking
+|-- Tailscale (LXC + Host) ... Secure Remote Access
+|-- Samba Share (Host) ....... Shared Mount for Containers
+</code></pre>
+
+<hr />
+
+<h2 id="-dockervm-and-containerized-services">🐳 DockerVM and Containerized Services</h2>
+
+<p>To keep things organized and easily manageable, I use a dedicated <strong>Docker VM</strong> running Ubuntu. This VM acts as the backbone for containerized services. One of the first things I installed here was <strong><a href="https://docs.portainer.io/">Portainer</a></strong> — a simple but powerful web UI for managing Docker containers and volumes.</p>
+
+<h3 id="why-a-separate-docker-vm">Why a separate Docker VM?</h3>
+<ul>
+  <li>Isolates container workloads from the Proxmox host</li>
+  <li>Easy backups and restores</li>
+  <li>Easier resource monitoring via <code class="language-plaintext highlighter-rouge">htop</code>, <code class="language-plaintext highlighter-rouge">cAdvisor</code>, and Portainer</li>
+</ul>
+
+<h3 id="services-running-inside">Services Running Inside:</h3>
+<ul>
+  <li><strong><a href="https://jellyfin.org/docs/">Jellyfin</a></strong> — Media server for local content</li>
+  <li><strong><a href="https://docs.nextcloud.com/">Nextcloud</a></strong> — Self-hosted cloud storage and calendar</li>
+  <li><strong><a href="https://docs.n8n.io/">n8n</a></strong> — Automation platform similar to Zapier or Make</li>
+  <li><strong><a href="https://github.com/google/cadvisor">cAdvisor</a></strong> — Container-level resource usage and metrics</li>
+</ul>
+
+<p>Each container is mapped to a directory under <code class="language-plaintext highlighter-rouge">/mnt/media</code> (a bind mount from host), e.g.:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">volumes</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">/mnt/media/jellyfin:/config</span>
+  <span class="pi">-</span> <span class="s">/mnt/media/nextcloud:/var/www/html</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="️-adguard-setup-and-dns-conflicts">⚙️ AdGuard Setup and DNS Conflicts</h2>
+
+<p>AdGuard Home runs in an LXC container and is my DNS filtering solution. The process was smooth until I encountered one classic Linux pitfall:</p>
+
+<h3 id="issue">Issue:</h3>
+<p>AdGuard wouldn’t start because port 53 was already occupied by <code class="language-plaintext highlighter-rouge">systemd-resolved</code>.</p>
+
+<h3 id="fix">Fix:</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl stop systemd-resolved
+<span class="nb">sudo </span>systemctl disable systemd-resolved
+</code></pre></div></div>
+
+<p>Then restarted AdGuard:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl restart AdGuardHome
+</code></pre></div></div>
+
+<p>I also configured Proxmox and pfSense to use AdGuard as the primary DNS server.</p>
+
+<p>➡️ <a href="https://github.com/AdguardTeam/AdGuardHome/wiki">AdGuard Home Docs</a></p>
+
+<hr />
+
+<h2 id="-common-pitfalls--fixes">🧪 Common Pitfalls &amp; Fixes</h2>
+
+<h3 id="-jellyfin-chaos">🚧 Jellyfin Chaos</h3>
+
+<p>Problems:</p>
+<ul>
+  <li>Couldn’t log in even on a fresh install</li>
+  <li>Web client missing error (<code class="language-plaintext highlighter-rouge">jellyfin-web</code>)</li>
+  <li>Hanging boot times</li>
+</ul>
+
+<p>Solution:</p>
+<ul>
+  <li>Wiped old configs: <code class="language-plaintext highlighter-rouge">/mnt/media/jellyfin</code> and <code class="language-plaintext highlighter-rouge">.bak</code></li>
+  <li>Ensured correct permissions</li>
+  <li>Ignored harmless log noise about web client if UI was working</li>
+</ul>
+
+<h3 id="-lxc-full-disk--no-service">💥 LXC Full Disk = No Service</h3>
+
+<p>When an LXC container ran out of space, it failed hard.</p>
+
+<p>Fix:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pct resize 101 rootfs +10G
+</code></pre></div></div>
+<p>Bonus: wrote a cron script to auto-expand when disk free space &lt; 1 GB.</p>
+
+<h3 id="-port-53-taken-by-systemd-resolved">❌ Port 53 Taken by systemd-resolved</h3>
+
+<p>AdGuard wouldn’t start. Why? Port 53 already used by <code class="language-plaintext highlighter-rouge">systemd-resolved</code>.</p>
+
+<p>Fix:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl stop systemd-resolved
+<span class="nb">sudo </span>systemctl disable systemd-resolved
+</code></pre></div></div>
+
+<h3 id="️-samba-permissions">🗂️ Samba Permissions</h3>
+
+<p>Initial Samba mount worked, but Jellyfin couldn’t read media files.</p>
+
+<p>Fix:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mount <span class="nt">-t</span> cifs <span class="nt">-o</span> <span class="nv">credentials</span><span class="o">=</span>/etc/samba-credentials,file_mode<span class="o">=</span>0777,dir_mode<span class="o">=</span>0777 //server/share /mnt/sambashare
+</code></pre></div></div>
+
+<p>Also ensured UID/GID matched container permissions.</p>
+
+<hr />
+
+<h2 id="-tailscale--instant-vpn">🔐 Tailscale = Instant VPN</h2>
+
+<p>MagicDNS + ZeroConfig = game changer.</p>
+
+<ul>
+  <li>Remote access to Proxmox UI, AdGuard, SMB shares</li>
+  <li>No port forwarding</li>
+  <li>Works across devices</li>
+</ul>
+
+<p>➡️ <a href="https://tailscale.com/kb/">Tailscale Docs</a></p>
+
+<hr />
+
+<h2 id="-monitoring-planned">📊 Monitoring (Planned)</h2>
+
+<p>Coming soon:</p>
+<ul>
+  <li><strong>Prometheus + Grafana</strong> for full stack observability</li>
+  <li><strong>node-exporter</strong> on all VMs and LXC</li>
+  <li><strong>cAdvisor</strong> in Docker VM</li>
+</ul>
+
+<p>➡️ <a href="https://grafana.com/docs/">Grafana Docs</a>
+➡️ <a href="https://prometheus.io/docs/">Prometheus Docs</a></p>
+
+<hr />
+
+<h2 id="-key-takeaways">💡 Key Takeaways</h2>
+
+<ul>
+  <li>Start small and iterate</li>
+  <li>Separate responsibilities with LXC, VM, and Docker</li>
+  <li>Expect to break things (then fix them)</li>
+  <li>Automate disk management early</li>
+  <li>Tailscale rocks</li>
+</ul>
+
+<hr />
+
+<h2 id="-next-steps--github">🔗 Next Steps &amp; GitHub</h2>
+
+<p>Soon I’ll be publishing all YAMLs, Docker Compose files, and scripts used for:</p>
+<ul>
+  <li>Auto-resizing LXC disks</li>
+  <li>Monitoring setup</li>
+  <li>Container deployment</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>👉 <a href="https://matleszkiewicz.dev">matleszkiewicz.dev</a></td>
+      <td><a href="https://github.com/matleszkiewicz">GitHub</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="-meta-description">🧠 Meta Description</h2>
+
+<p>A hands-on walkthrough of building a self-hosted home lab using Proxmox, LXC, VMs, Docker, and Tailscale. Includes service architecture, DockerVM setup, common errors, and fixes. Great for learning system architecture and DevOps fundamentals.</p>]]></content><author><name>Mat Leszkiewicz</name></author><category term="Homelab" /><category term="Self-Hosting" /><category term="Proxmox" /><category term="Virtualization" /><category term="Projects" /><summary type="html"><![CDATA[“If it ain’t broke, you haven’t installed Jellyfin yet.”]]></summary></entry><entry><title type="html">How to Choose Your First Home Server Hardware: A Practical Guide</title><link href="http://localhost:4000/Homelab-Hardware-Choce/" rel="alternate" type="text/html" title="How to Choose Your First Home Server Hardware: A Practical Guide" /><published>2025-07-13T00:00:00+01:00</published><updated>2025-07-13T00:00:00+01:00</updated><id>http://localhost:4000/Homelab-Hardware-Choce</id><content type="html" xml:base="http://localhost:4000/Homelab-Hardware-Choce/"><![CDATA[<p>Choosing your first home server starts with understanding your needs, your budget, and how much room you want to leave for future upgrades. Whether you’re leaning toward a compact mini PC, a full-sized tower, or even a rackmount setup, your goal is to find the sweet spot between performance, efficiency, and expandability.</p>
+
+<h2 id="choosing-a-form-factor-what-fits-your-life">Choosing a Form Factor: What Fits Your Life?</h2>
+
+<h3 id="mini-pcs-1l-form-factor">Mini PCs (1L Form Factor)</h3>
+<p><strong>Great for:</strong> First-timers, low-power tasks, quiet home setups</p>
+
+<p>Mini PCs are small, quiet, and energy-efficient—perfect for starting out. Models like the Lenovo ThinkCentre M920q or HP EliteDesk 800 G5 Mini can be found second-hand for around €200-350 and pack surprising power into a tiny footprint.</p>
+
+<p><strong>Pros:</strong></p>
+<ul>
+  <li>Very low power usage (~10-35W idle)</li>
+  <li>Virtually silent</li>
+  <li>Affordable and easy to tuck away</li>
+  <li>Decent performance for most basic homelab tasks</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+<ul>
+  <li>Limited upgrade options</li>
+  <li>Not ideal for heavy virtualization or GPU tasks</li>
+  <li>Few expansion slots</li>
+</ul>
+
+<p><a href="https://acemagic.com/blogs/about-ace-mini-pc/best-mini-pc-for-homelab">Read more about Mini PCs for homelab</a></p>
+
+<h3 id="towerdesktop-systems">Tower/Desktop Systems</h3>
+<p><strong>Great for:</strong> Tinkerers, gamers, power users</p>
+
+<p>If you’re planning to build your own or upgrade over time, towers offer the most flexibility. You can choose every component yourself, upgrade as needed, and run just about any workload.</p>
+
+<p><strong>Pros:</strong></p>
+<ul>
+  <li>Full control over parts</li>
+  <li>Room for powerful CPUs, GPUs, and lots of storage</li>
+  <li>Easy to cool and maintain</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+<ul>
+  <li>Takes up space</li>
+  <li>Uses more power</li>
+  <li>Costs more upfront</li>
+</ul>
+
+<p><a href="https://g2digital.co.uk/rack-mounted-vs-tower-advantages-of-rack-mounted-pcs/">Compare tower and rack options</a></p>
+
+<h3 id="rack-servers">Rack Servers</h3>
+<p><strong>Great for:</strong> Advanced users, enterprise simulations, high-density labs</p>
+
+<p>Used rack servers like the Dell R720 or HP DL380 G9 offer a ton of power and features at a good price—but they’re noisy and power-hungry. They’re best suited for serious lab environments.</p>
+
+<p><strong>Pros:</strong></p>
+<ul>
+  <li>Lots of RAM, CPU cores, and storage capacity</li>
+  <li>Enterprise features like IPMI, hot-swap bays, and redundancy</li>
+  <li>Ideal for large-scale or 24/7 workloads</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+<ul>
+  <li>Loud</li>
+  <li>Heavy and large</li>
+  <li>Requires a rack and lots of cooling</li>
+</ul>
+
+<p><a href="https://www.fs.com/blog/comparing-blade-rack-and-tower-servers-for-optimal-deployment-2187.html">Deep dive into rack servers</a></p>
+
+<h3 id="arm-boards-raspberry-pi-orange-pi-etc">ARM Boards (Raspberry Pi, Orange Pi, etc.)</h3>
+<p><strong>Great for:</strong> Learning, hobby projects, ultra-low-power tasks</p>
+
+<p>If you’re experimenting or just want something super cheap and quiet, ARM boards like Raspberry Pi are fun and functional.</p>
+
+<p><strong>Pros:</strong></p>
+<ul>
+  <li>Extremely energy-efficient (~5-15€/year)</li>
+  <li>Affordable and silent</li>
+  <li>Great learning platform</li>
+</ul>
+
+<p><strong>Cons:</strong></p>
+<ul>
+  <li>Not very powerful</li>
+  <li>Not ideal for media servers or virtualization</li>
+  <li>Some software limitations</li>
+</ul>
+
+<p><a href="https://minipctech.com/build-a-home-lab-with-a-mini-pc/">ARM board homelab guide</a></p>
+
+<h2 id="the-real-cost-thinking-beyond-the-sticker-price">The Real Cost: Thinking Beyond the Sticker Price</h2>
+
+<h3 id="upfront-hardware-costs">Upfront Hardware Costs</h3>
+<ul>
+  <li><strong>Entry Level (€200-400):</strong> Used mini PCs, ARM boards, basic towers</li>
+  <li><strong>Mid-Range (€400-800):</strong> Newer mini PCs, DIY towers, refurbished rack servers</li>
+  <li><strong>High-End (€800+):</strong> Fully custom builds, enterprise rack servers, future-proof setups</li>
+</ul>
+
+<h3 id="annual-power-costs-at-025kwh">Annual Power Costs (at €0.25/kWh)</h3>
+<ul>
+  <li><strong>ARM (10W):</strong> ~€22</li>
+  <li><strong>Mini PC (25W):</strong> ~€55</li>
+  <li><strong>Tower (100W):</strong> ~€219</li>
+  <li><strong>Rack Server (300W):</strong> ~€657</li>
+</ul>
+
+<p><a href="https://www.bargainhardware.co.uk/blog/blog/how-much-power-does-a-server-use">Cost breakdown and calculator</a></p>
+
+<h2 id="matching-hardware-to-your-goals">Matching Hardware to Your Goals</h2>
+
+<h3 id="virtualization">Virtualization</h3>
+<p>Want to run multiple virtual machines? Tower systems and rack servers are your best bet thanks to higher core counts and more RAM. Newer mini PCs (with 8th gen Intel or better) can still run a handful of lightweight VMs well.</p>
+
+<p><a href="https://www.virtualizationhowto.com/2024/02/top-5-mini-pcs-for-home-server-in-early-2024/">Virtualization hardware comparisons</a></p>
+
+<h3 id="media-streaming-and-transcoding">Media Streaming and Transcoding</h3>
+<p>Transcoding for Jellyfin or Plex? Look for Intel integrated graphics (UHD 770/780) or dedicated GPUs like the Intel Arc A380. Intel still leads in this space, especially for HEVC content.</p>
+
+<p><a href="https://www.bitdoze.com/best-mini-pc-home-server/">Guide to media transcoding hardware</a></p>
+
+<h3 id="network-services-dns-vpn-etc">Network Services (DNS, VPN, etc.)</h3>
+<p>These are light tasks, and any modern system can handle them. Just make sure your server has enough Ethernet ports and possibly support for 2.5GbE or 10GbE if you’re thinking ahead.</p>
+
+<h2 id="how-much-can-you-grow">How Much Can You Grow?</h2>
+
+<h3 id="mini-pcs">Mini PCs</h3>
+<p>Upgrade RAM and SSDs, maybe even dual NVMe if you pick the right model like the Lenovo M920q. That said, don’t expect to add GPUs or more storage bays.</p>
+
+<h3 id="towers">Towers</h3>
+<p>Full upgrade freedom—CPU, GPU, drives, RAM. If you build smart, you won’t need to replace your system for years.</p>
+
+<h3 id="rack-servers-1">Rack Servers</h3>
+<p>Maximum expandability: multiple CPUs, lots of RAM, many storage bays. Ideal for big projects or shared setups.</p>
+
+<h2 id="best-choices-by-user-type">Best Choices by User Type</h2>
+
+<h3 id="new-to-homelabs">New to Homelabs?</h3>
+<ul>
+  <li><strong>Start With:</strong> Used mini PC (Lenovo M920q or HP G5 Mini)</li>
+  <li><strong>Why:</strong> Quiet, cheap, simple to set up, low risk</li>
+  <li><strong>Budget:</strong> €200-350</li>
+</ul>
+
+<h3 id="enthusiasts-and-diyers">Enthusiasts and DIYers</h3>
+<ul>
+  <li><strong>Start With:</strong> Custom AMD AM5 tower build</li>
+  <li><strong>Why:</strong> Control, upgradeability, and performance</li>
+  <li><strong>Budget:</strong> €500-800</li>
+</ul>
+
+<h3 id="simulating-businessenterprise-setups">Simulating Business/Enterprise Setups</h3>
+<ul>
+  <li><strong>Start With:</strong> Refurbished rack server (Dell R720)</li>
+  <li><strong>Why:</strong> Enterprise features, scale, realism</li>
+  <li><strong>Budget:</strong> €400-800 (plus space and cooling needs)</li>
+</ul>
+
+<h3 id="low-power--tinkerers">Low Power &amp; Tinkerers</h3>
+<ul>
+  <li><strong>Start With:</strong> Raspberry Pi 5 or Orange Pi 5</li>
+  <li><strong>Why:</strong> Super low energy use, great for learning</li>
+  <li><strong>Budget:</strong> €100-200</li>
+</ul>
+
+<h2 id="final-tips">Final Tips</h2>
+<ul>
+  <li><strong>Start small.</strong> You can always upgrade later.</li>
+  <li><strong>Mind the power bill.</strong> A little efficiency goes a long way.</li>
+  <li><strong>Pick something popular.</strong> It’s easier to get help from the community.</li>
+  <li><strong>Don’t chase raw power.</strong> Stability and reliability matter more.</li>
+  <li><strong>Think 2-3 years ahead.</strong> Plan for the long run.</li>
+</ul>
+
+<p>No matter which route you take, 2025 is a great year to dive into home servers. There’s affordable, powerful hardware at every level—just find what fits your goals and go for it.</p>]]></content><author><name>Mat Leszkiewicz</name></author><category term="homelab" /><category term="home server" /><category term="hardware guide" /><summary type="html"><![CDATA[A practical guide to help you choose your first home server, whether you're just starting out or scaling up.]]></summary></entry><entry><title type="html">Building Parallel CI/CD Pipelines with AWS at Fundrecs</title><link href="http://localhost:4000/Building-Parallel-CI-CD-Pipelines-with-AWS/" rel="alternate" type="text/html" title="Building Parallel CI/CD Pipelines with AWS at Fundrecs" /><published>2025-06-30T00:00:00+01:00</published><updated>2025-06-30T00:00:00+01:00</updated><id>http://localhost:4000/Building%20Parallel%20CI%20CD%20Pipelines%20with%20AWS</id><content type="html" xml:base="http://localhost:4000/Building-Parallel-CI-CD-Pipelines-with-AWS/"><![CDATA[<h2 id="-project-overview">🧩 Project Overview</h2>
+
+<p>As part of my industry placement with <strong>Fundrecs</strong>, I was tasked with designing and implementing two parallel <strong>CI/CD pipelines</strong> to modernize the deployment of the company’s Java-based Fusion application infrastructure. This effort involved the creation of reusable <strong>CloudFormation templates</strong>, seamless <strong>Bitbucket integration</strong>, and secure deployment workflows built entirely on <strong>AWS services</strong>.</p>
+
+<hr />
+
+<h2 id="-objectives">🎯 Objectives</h2>
+
+<p>The core objectives of the project were:</p>
+
+<ul>
+  <li>Design two <strong>parallel CI/CD pipelines</strong> using <strong>AWS CodePipeline</strong></li>
+  <li>Transition existing manual deployments into automated, version-controlled workflows</li>
+  <li>Integrate with <strong>Bitbucket</strong> to trigger builds on push events</li>
+  <li>Create secure and scalable <strong>CloudFormation templates</strong></li>
+  <li>Extend Fusion’s capabilities with a <strong>Landingzone module</strong> for cloud-based storage</li>
+</ul>
+
+<hr />
+
+<h2 id="️-infrastructure-design">🏗️ Infrastructure Design</h2>
+
+<h3 id="️-cicd-pipeline-architecture">☁️ CI/CD Pipeline Architecture</h3>
+
+<p>Each CI/CD pipeline includes:</p>
+
+<ul>
+  <li><strong>Source stage</strong>: Triggered by push events to a Bitbucket repository</li>
+  <li><strong>Build stage</strong>: Uses AWS CodeBuild to compile the Java app and create Docker images</li>
+  <li><strong>Deploy stage</strong>: Deploys to ECS using CloudFormation templates</li>
+</ul>
+
+<p>We employed a <strong>push-based trigger</strong> to reduce latency and eliminate bottlenecks caused by waiting for PRs to be merged. The process results in an efficient, automated path from commit to deployment.</p>
+
+<h3 id="-security-design">🔐 Security Design</h3>
+
+<ul>
+  <li>All secrets (MongoDB URI, Elastic APM tokens, etc.) are securely managed using <strong>AWS Secrets Manager</strong></li>
+  <li>IAM policies follow the <strong>principle of least privilege</strong></li>
+  <li>Build environments are isolated using distinct <strong>roles and security groups</strong></li>
+</ul>
+
+<hr />
+
+<h2 id="-cloudformation-strategy">🧪 CloudFormation Strategy</h2>
+
+<p>A modular approach to <strong>Infrastructure as Code</strong> (IaC) was used, consisting of:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">core-infra.yaml</code>: VPC, IAM roles, S3 buckets</li>
+  <li><code class="language-plaintext highlighter-rouge">application.yaml</code>: ECS service, task definitions, ECR image references</li>
+  <li><code class="language-plaintext highlighter-rouge">landingzone.yaml</code>: Defines a secure S3-backed storage module for Fusion outputs</li>
+</ul>
+
+<p>This setup enables rapid environment provisioning and clear separation of concerns between infrastructure components.</p>
+
+<hr />
+
+<h2 id="-the-landingzone-module">💡 The “Landingzone” Module</h2>
+
+<p>A critical innovation introduced during the project was the <strong>Landingzone module</strong> — a new component added to the Fusion tool that:</p>
+
+<ul>
+  <li>Automatically stores processed data outputs to a secure S3 bucket</li>
+  <li>Integrates with document and compliance workflows</li>
+  <li>Uses AWS SDK calls within application logic to route and timestamp files</li>
+</ul>
+
+<p>This significantly enhanced Fusion’s ability to meet data governance and cloud-first requirements.</p>
+
+<hr />
+
+<h2 id="-development-process">📈 Development Process</h2>
+
+<p>The project was delivered over <strong>six weekly sprints</strong> using Agile methodology. Key sprint deliverables included:</p>
+
+<ul>
+  <li>Sprint 1–2: CloudFormation core scaffolding + ECS setup</li>
+  <li>Sprint 3: CI/CD pipeline linking Bitbucket to CodeBuild</li>
+  <li>Sprint 4–5: Docker image automation + Landingzone integration</li>
+  <li>Sprint 6: Testing, logging integration, and documentation</li>
+</ul>
+
+<p>Code quality was maintained through peer reviews, static analysis, and isolated test deployments.</p>
+
+<hr />
+
+<h2 id="-key-learnings">🧠 Key Learnings</h2>
+
+<p>Throughout this project, I developed strong hands-on experience in:</p>
+
+<ul>
+  <li>Designing <strong>production-ready CI/CD pipelines</strong> with AWS</li>
+  <li>Implementing <strong>infrastructure-as-code (IaC)</strong> using CloudFormation</li>
+  <li>Managing <strong>multi-service AWS deployments</strong> with security best practices</li>
+  <li>Debugging ECS task deployments, container failures, and IAM permission errors</li>
+  <li>Understanding the full lifecycle of <strong>secure DevOps in a real-world setting</strong></li>
+</ul>
+
+<hr />
+
+<h2 id="-future-directions">🚀 Future Directions</h2>
+
+<p>The groundwork laid by this project enables future improvements:</p>
+
+<ul>
+  <li>Add <strong>automated secret rotation</strong></li>
+  <li>Support <strong>multi-environment pipelines</strong> (dev/stage/prod)</li>
+  <li>Integrate with AWS EventBridge for Slack alerts</li>
+  <li>Expand Landingzone to support real-time ingestion</li>
+</ul>
+
+<hr />
+
+<h2 id="-conclusion">🎓 Conclusion</h2>
+
+<p>This CI/CD infrastructure project was more than a technical implementation — it was a strategic shift in how software is built and deployed at Fundrecs. I’m proud to have delivered a robust, scalable, and maintainable DevOps solution that continues to support rapid product iteration and secure cloud-native practices.</p>
+
+<hr />
+<p><em>© 2025 Mat Leszkiewicz</em></p>]]></content><author><name>Mat Leszkiewicz</name></author><category term="CI/CD" /><category term="AWS" /><category term="DevOps" /><summary type="html"><![CDATA[🧩 Project Overview]]></summary></entry><entry><title type="html">Turning a Raspberry Pi into an RTSP Streaming Server</title><link href="http://localhost:4000/RaspberryPi-RTSB-server/" rel="alternate" type="text/html" title="Turning a Raspberry Pi into an RTSP Streaming Server" /><published>2025-06-29T00:00:00+01:00</published><updated>2025-06-29T00:00:00+01:00</updated><id>http://localhost:4000/RaspberryPi%20RTSB%20server</id><content type="html" xml:base="http://localhost:4000/RaspberryPi-RTSB-server/"><![CDATA[<p>As part of my academic and personal learning journey into system design, networking, and edge computing, I developed a lightweight <strong>RTSP (Real-Time Streaming Protocol) video server</strong> using a <strong>Raspberry Pi</strong>. The project focused on creating a low-cost, self-hosted solution to stream real-time video over a local network — ideal for CCTV-style setups or media streaming experiments.</p>
+
+<hr />
+
+<h2 id="-project-objective">🎯 Project Objective</h2>
+
+<p>To use a Raspberry Pi as a standalone <strong>RTSP server</strong> that captures live video from a camera module and broadcasts it over the network to compatible video players (e.g., VLC, ffmpeg, or NVR software).</p>
+
+<hr />
+
+<h2 id="-tools--technologies">🧰 Tools &amp; Technologies</h2>
+
+<ul>
+  <li><strong>Hardware</strong>: Raspberry Pi 3 Model B+</li>
+  <li><strong>Camera</strong>: Pi Camera Module v2</li>
+  <li><strong>OS</strong>: Raspberry Pi OS Lite</li>
+  <li><strong>Streaming Software</strong>: <code class="language-plaintext highlighter-rouge">v4l2loopback</code>, <code class="language-plaintext highlighter-rouge">ffmpeg</code>, <code class="language-plaintext highlighter-rouge">nginx</code> (optional for UI), <code class="language-plaintext highlighter-rouge">rpicam</code> utilities</li>
+  <li><strong>RTSP Protocol</strong>: For real-time video delivery</li>
+  <li><strong>SSH &amp; CLI tools</strong>: For headless setup and monitoring</li>
+</ul>
+
+<hr />
+
+<h2 id="️-implementation-steps">🛠️ Implementation Steps</h2>
+
+<ol>
+  <li>Installed <strong>Raspberry Pi OS Lite</strong> for headless setup</li>
+  <li>Enabled camera and SSH access</li>
+  <li>Installed required dependencies:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>ffmpeg v4l-utils v4l2loopback-dkms
+</code></pre></div>    </div>
+  </li>
+  <li>Used <strong>ffmpeg</strong> to stream Pi Camera output:
+    <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg <span class="nt">-f</span> video4linux2 <span class="nt">-i</span> /dev/video0 <span class="nt">-f</span> rtsp rtsp://&lt;ip-address&gt;:8554/live.stream
+</code></pre></div>    </div>
+  </li>
+  <li>Configured port forwarding and service autostart for continuous availability</li>
+</ol>
+
+<hr />
+
+<h2 id="-how-to-view-the-stream">📺 How to View the Stream</h2>
+
+<p>To access the live stream, use any RTSP-compatible client like:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vlc rtsp://&lt;raspberry-pi-ip&gt;:8554/live.stream
+</code></pre></div></div>
+
+<p>Or embed it in web platforms or dashboards for real-time monitoring.</p>
+
+<hr />
+
+<h2 id="-what-i-learned">🧠 What I Learned</h2>
+
+<ul>
+  <li>Configuring <strong>low-latency video streaming</strong> on Linux-based systems</li>
+  <li>Optimizing Raspberry Pi performance for real-time media processing</li>
+  <li>Managing <strong>system services</strong>, autostart, and headless device setup</li>
+  <li>Basics of <strong>network protocols</strong> like RTSP and how video is handled at the protocol level</li>
+</ul>
+
+<hr />
+
+<h2 id="-potential-improvements">🧩 Potential Improvements</h2>
+
+<ul>
+  <li>Add motion detection or event-based triggers</li>
+  <li>Secure stream with authentication or HTTPS proxying</li>
+  <li>Integrate video archiving functionality</li>
+  <li>Build a web dashboard for stream management</li>
+</ul>
+
+<hr />
+
+<h2 id="-github-repository">🔗 GitHub Repository</h2>
+
+<p>Explore the source code and setup guide here:<br />
+👉 <a href="https://github.com/matlesz/RaspberryPi-RTSP-Server">matlesz/RaspberryPi-RTSP-Server</a></p>
+
+<hr />
+
+<p>This project helped solidify my understanding of video streaming protocols, network configuration, and embedded system capabilities — all of which align with my broader goals of working in cybersecurity and infrastructure-level engineering.</p>]]></content><author><name>Mat Leszkiewicz</name></author><category term="RaspberryPi" /><category term="Networking" /><category term="Linux" /><category term="Projects" /><summary type="html"><![CDATA[As part of my academic and personal learning journey into system design, networking, and edge computing, I developed a lightweight RTSP (Real-Time Streaming Protocol) video server using a Raspberry Pi. The project focused on creating a low-cost, self-hosted solution to stream real-time video over a local network — ideal for CCTV-style setups or media streaming experiments.]]></summary></entry><entry><title type="html">MyGeekDB: An IMDB-Style Android App in Kotlin</title><link href="http://localhost:4000/MyGeekDB-Kotlin-app/" rel="alternate" type="text/html" title="MyGeekDB: An IMDB-Style Android App in Kotlin" /><published>2025-06-29T00:00:00+01:00</published><updated>2025-06-29T00:00:00+01:00</updated><id>http://localhost:4000/MyGeekDB%20Kotlin%20app</id><content type="html" xml:base="http://localhost:4000/MyGeekDB-Kotlin-app/"><![CDATA[<p>As part of my portfolio and continuous learning in full-stack and mobile development, I created <strong>MyGeekDB</strong> — an IMDB-style Android app built with Kotlin. The goal of this project was to combine clean architecture, real-time database handling, and modern Android development best practices into a lightweight but fully functional application.</p>
+
+<hr />
+
+<h2 id="-what-is-mygeekdb">📱 What Is MyGeekDB?</h2>
+
+<p>MyGeekDB is a simple movie catalog app that allows users to:</p>
+
+<ul>
+  <li>Browse a list of movies (with posters and metadata)</li>
+  <li>Add, update, and delete movies from the collection</li>
+  <li>View individual movie details</li>
+  <li>Store data in <strong>Firebase Firestore</strong>, making it scalable and real-time</li>
+</ul>
+
+<hr />
+
+<h2 id="-tech-stack">🧰 Tech Stack</h2>
+
+<p>Here’s what powers the app:</p>
+
+<ul>
+  <li><strong>Language</strong>: Kotlin</li>
+  <li><strong>Architecture</strong>: MVVM (Model-View-ViewModel)</li>
+  <li><strong>Database</strong>: Firebase Firestore</li>
+  <li><strong>UI</strong>: Jetpack components, RecyclerView</li>
+  <li><strong>Navigation</strong>: Jetpack Navigation component</li>
+  <li><strong>State Management</strong>: LiveData &amp; ViewModel</li>
+  <li><strong>IDE</strong>: Android Studio</li>
+</ul>
+
+<hr />
+
+<h2 id="-key-features">🎯 Key Features</h2>
+
+<ul>
+  <li>🔍 <strong>Search functionality</strong> for quick filtering</li>
+  <li>☁️ <strong>Real-time database</strong> syncing with Firebase</li>
+  <li>✅ <strong>Validation and input controls</strong> for adding/editing entries</li>
+  <li>🔄 <strong>CRUD operations</strong> (Create, Read, Update, Delete)</li>
+  <li>📱 <strong>Responsive UI</strong> for different screen sizes</li>
+</ul>
+
+<hr />
+
+<h2 id="-what-i-learned">🧪 What I Learned</h2>
+
+<p>This project helped solidify my skills in:</p>
+
+<ul>
+  <li>Kotlin best practices and idioms</li>
+  <li>Using Firebase as a backend-as-a-service</li>
+  <li>Structuring Android apps using MVVM</li>
+  <li>Managing real-time data updates with Firestore</li>
+  <li>Improving UI/UX using Jetpack libraries</li>
+</ul>
+
+<hr />
+
+<h2 id="-challenges--solutions">🧠 Challenges &amp; Solutions</h2>
+
+<ul>
+  <li><strong>State handling</strong> with asynchronous Firebase calls required carefully managing LiveData to avoid UI flickering.</li>
+  <li>Handling <strong>Firestore permissions</strong> and avoiding reads/writes from unauthenticated users needed tight security rule management.</li>
+  <li>I integrated simple user input validation to avoid malformed data in the database.</li>
+</ul>
+
+<hr />
+
+<h2 id="-whats-next">🚀 What’s Next?</h2>
+
+<p>Future improvements may include:</p>
+
+<ul>
+  <li>User authentication via Firebase Auth</li>
+  <li>Adding reviews/ratings and sorting features</li>
+  <li>Dark mode support</li>
+  <li>Offline caching using Room or local database fallback</li>
+</ul>
+
+<hr />
+
+<h2 id="-project-repository">🔗 Project Repository</h2>
+
+<p>Check out the full source code here:<br />
+👉 <a href="https://github.com/matlesz/MyGeekDB">MyGeekDB on GitHub</a></p>
+
+<hr />
+
+<h2 id="-video-walkthrough-of-the-project">📹 Video Walkthrough of the project</h2>
+<p>👉 <a href="https://www.youtube.com/watch?v=EW1q2XsieC0">Video</a></p>
+
+<p>This project was a stepping stone in my journey toward becoming a cybersecurity analyst with a solid understanding of system architecture, mobile ecosystems, and secure data handling. Stay tuned for more projects and blog posts!</p>]]></content><author><name>Mat Leszkiewicz</name></author><category term="Android" /><category term="Mobile Development" /><category term="Projects" /><summary type="html"><![CDATA[As part of my portfolio and continuous learning in full-stack and mobile development, I created MyGeekDB — an IMDB-style Android app built with Kotlin. The goal of this project was to combine clean architecture, real-time database handling, and modern Android development best practices into a lightweight but fully functional application.]]></summary></entry><entry><title type="html">geekDb: A Fullstack Movie Database Built with Next.js</title><link href="http://localhost:4000/myGeekDB-Next.JS-app/" rel="alternate" type="text/html" title="geekDb: A Fullstack Movie Database Built with Next.js" /><published>2025-06-29T00:00:00+01:00</published><updated>2025-06-29T00:00:00+01:00</updated><id>http://localhost:4000/myGeekDB-Next.JS%20app</id><content type="html" xml:base="http://localhost:4000/myGeekDB-Next.JS-app/"><![CDATA[<p><a href="https://geek-db.vercel.app/?genre=fetchNowPlaying"><strong>geekDb</strong></a> is a full-stack web application inspired by IMDB, developed as part of my journey to deepen my skills in frontend and backend web development using the modern <strong>Next.js framework</strong>. The project focuses on building a user-friendly, responsive interface with real-time CRUD operations connected to a MongoDB backend.</p>
+
+<hr />
+
+<h2 id="-project-goals">🎯 Project Goals</h2>
+
+<ul>
+  <li>Build a scalable full-stack web app with <strong>Next.js</strong> and <strong>MongoDB</strong></li>
+  <li>Practice <strong>server-side rendering (SSR)</strong> and <strong>API route handling</strong></li>
+  <li>Create a modern UI using <strong>Tailwind CSS</strong></li>
+  <li>Implement basic CRUD functionality for movie entries</li>
+</ul>
+
+<hr />
+
+<h2 id="️-tech-stack">⚙️ Tech Stack</h2>
+
+<ul>
+  <li><strong>Frontend</strong>: React, Next.js, TailwindCSS</li>
+  <li><strong>Backend</strong>: Next.js API Routes, MongoDB</li>
+  <li><strong>Database</strong>: MongoDB Atlas (cloud-hosted NoSQL)</li>
+  <li><strong>Authentication</strong>: Simple local routing (future version could use OAuth/Auth0)</li>
+</ul>
+
+<hr />
+
+<h2 id="-features">📦 Features</h2>
+
+<ul>
+  <li>📋 List of movies with title, genre, release year, and cover image</li>
+  <li>➕ Add new movie entries via a form</li>
+  <li>📝 Edit existing movies</li>
+  <li>❌ Delete movies</li>
+  <li>🔍 Client-side routing and clean navigation</li>
+</ul>
+
+<hr />
+
+<h2 id="-what-i-learned">🧠 What I Learned</h2>
+
+<ul>
+  <li>How to connect a Next.js frontend with a cloud-hosted MongoDB backend</li>
+  <li>Writing modular API endpoints inside the <code class="language-plaintext highlighter-rouge">/pages/api</code> directory</li>
+  <li>Styling modern UI layouts using Tailwind CSS utility classes</li>
+  <li>Handling dynamic routing and data fetching in SSR</li>
+</ul>
+
+<hr />
+
+<h2 id="-future-improvements">🚧 Future Improvements</h2>
+
+<ul>
+  <li>Add user authentication and protected routes</li>
+  <li>Implement search and filter capabilities</li>
+  <li>Add star ratings and user reviews</li>
+  <li>Optimize performance with ISR (Incremental Static Regeneration)</li>
+</ul>
+
+<hr />
+
+<h2 id="-source-code">🔗 Source Code</h2>
+
+<p>Check out the full repository here:<br />
+👉 <a href="https://github.com/matlesz/geekDb">github.com/matlesz/geekDb</a></p>
+
+<hr />
+
+<p>This project helped reinforce full-stack JavaScript concepts and prepare me for real-world development tasks that involve both UI design and backend API development. It’s a key part of my portfolio as I work toward a role in cybersecurity with a solid foundation in web technologies.</p>]]></content><author><name>Mat Leszkiewicz</name></author><category term="React" /><category term="Projects" /><summary type="html"><![CDATA[geekDb is a full-stack web application inspired by IMDB, developed as part of my journey to deepen my skills in frontend and backend web development using the modern Next.js framework. The project focuses on building a user-friendly, responsive interface with real-time CRUD operations connected to a MongoDB backend.]]></summary></entry></feed>

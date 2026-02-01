@@ -1,0 +1,804 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.3 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>How OpenCode + ChatGPT Accelerated My Homelab - ML Portfolio</title>
+<meta name="description" content="How I used OpenCode with ChatGPT to turn homelab chaos into a documented, repeatable workflow with dashboards, runbooks, and service snapshots.">
+
+
+  <meta name="author" content="Mat Leszkiewicz">
+  
+  <meta property="article:author" content="Mat Leszkiewicz">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ML Portfolio">
+<meta property="og:title" content="How OpenCode + ChatGPT Accelerated My Homelab">
+<meta property="og:url" content="http://localhost:4000/OpenCode-ChatGPT-Homelab-Workflow/">
+
+
+  <meta property="og:description" content="How I used OpenCode with ChatGPT to turn homelab chaos into a documented, repeatable workflow with dashboards, runbooks, and service snapshots.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2026-01-25T00:00:00+00:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/OpenCode-ChatGPT-Homelab-Workflow/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="ML Portfolio Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+/>
+
+<!-- Cookie Consent -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+<script>
+    window.addEventListener("load", function () {
+        window.cookieconsent.initialise({
+            palette: {
+                popup: { background: "#000" },
+                button: { background: "#f1d600" }
+            },
+            theme: "classic",
+            position: "bottom-right",
+            content: {
+                message: "This website uses cookies to ensure you get the best experience.",
+                dismiss: "Got it!",
+                link: "Learn more",
+                href: "/privacy-policy/"
+            }
+        });
+    });
+</script>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/favicon.svg" alt="ML"></a>
+        
+        <a class="site-title" href="/">
+          ML
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/posts/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/projects/"
+                
+                
+              >Projects</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/cv/"
+                
+                
+              >CV</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="http://localhost:4000/">
+        <img src="/assets/images/bio-photo.jpg" alt="Mat Leszkiewicz" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="http://localhost:4000/" itemprop="url">Mat Leszkiewicz</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>I’m a support engineer with a passion for cybersecurity and mission to help people be safer in the web.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://matleszkiewicz.dev" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-link" aria-hidden="true"></i><span class="label">Website</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/M_Leszkiewicz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span class="label">x.com</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/matlesz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/mat-leszkiewicz/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://tryhackme.com/p/matlesz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-hacker-news" aria-hidden="true"></i><span class="label">TryHackMe</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="How OpenCode + ChatGPT Accelerated My Homelab">
+    <meta itemprop="description" content="  “Homelab work is fun until you forget what you changed last night.”">
+    <meta itemprop="datePublished" content="2026-01-25T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="http://localhost:4000/OpenCode-ChatGPT-Homelab-Workflow/" itemprop="url">How OpenCode + ChatGPT Accelerated My Homelab
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <blockquote>
+  <p>“Homelab work is fun until you forget what you changed last night.”</p>
+</blockquote>
+
+<p>Running a homelab is equal parts experimentation and documentation debt. I wanted to move faster without losing track of what I changed, why I changed it, and how to undo it. The fix was to integrate <strong>OpenCode</strong> with <strong>ChatGPT</strong> and treat it as my infrastructure co-pilot.</p>
+
+<p>This post documents how I wired that workflow together and the concrete things it helped me ship.</p>
+
+<hr />
+
+<h2 id="-the-problem-context-rot-in-a-fast-moving-lab">🧭 The Problem: Context Rot in a Fast-Moving Lab</h2>
+
+<p>My setup has multiple layers—Proxmox, VMs, LXC containers, Docker Compose projects, and SMB mounts. Each change might touch several systems. Keeping mental notes wasn’t sustainable, and ad-hoc tweaks made it hard to reproduce or explain what I did.</p>
+
+<p>I needed:</p>
+<ul>
+  <li>A shared source of truth</li>
+  <li>Structured runbooks and plans</li>
+  <li>Safe, repeatable changes</li>
+  <li>A way to integrate new services fast without losing the plot</li>
+</ul>
+
+<hr />
+
+<h2 id="-the-workflow-opencode--chatgpt-as-a-co-pilot">🧠 The Workflow: OpenCode + ChatGPT as a Co-Pilot</h2>
+
+<p>OpenCode gave me an interactive CLI layer where ChatGPT could:</p>
+<ul>
+  <li>Read and update documentation</li>
+  <li>Run safe commands and capture outputs</li>
+  <li>Create service snapshots without leaking secrets</li>
+  <li>Build dashboards and validate endpoints</li>
+</ul>
+
+<p>Instead of asking it to “do everything,” I gave it a <strong>framework</strong>:</p>
+
+<h3 id="1-agent-guidance">1) Agent Guidance</h3>
+<p>I created an <code class="language-plaintext highlighter-rouge">AGENTS.md</code> file so the agent knows the house rules (no secrets, no destructive commands, keep changes scoped).</p>
+
+<h3 id="2-verified-context">2) Verified Context</h3>
+<p>The homelab state lives in a living document (<code class="language-plaintext highlighter-rouge">homelab_context.md</code>). When something changes, the agent updates it with real outputs, not guesses.</p>
+
+<h3 id="3-repo-structure-that-matches-reality">3) Repo Structure That Matches Reality</h3>
+<p>I organized the repo into <code class="language-plaintext highlighter-rouge">docs/</code>, <code class="language-plaintext highlighter-rouge">plans/</code>, <code class="language-plaintext highlighter-rouge">services/</code>, and <code class="language-plaintext highlighter-rouge">runbooks/</code>, so planning and execution stay separate but connected.</p>
+
+<hr />
+
+<h2 id="️-what-this-helped-me-ship">⚙️ What This Helped Me Ship</h2>
+
+<h3 id="-homepage-dashboard">✅ Homepage dashboard</h3>
+<p>The agent deployed a <strong>Homepage</strong> container, configured widgets, and wired all the service links. It also fixed the host validation error by setting allowed hosts in config and environment.</p>
+
+<p><img src="/assets/images/homelab-dashboard-2026-01.png" alt="Homelab dashboard screenshot" /></p>
+
+<p><em>Current dashboard layout while the setup is still evolving.</em></p>
+
+<h3 id="-service-snapshots-in-git">✅ Service snapshots in Git</h3>
+<p>We captured sanitized compose snapshots for:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">n8n</code></li>
+  <li><code class="language-plaintext highlighter-rouge">qBittorrent</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Portainer</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Home Assistant</code></li>
+  <li><code class="language-plaintext highlighter-rouge">Homepage</code></li>
+</ul>
+
+<h3 id="-runbooks-and-docs">✅ Runbooks and docs</h3>
+<p>Every service change ends up as a doc update—no more “future me will remember.”</p>
+
+<h3 id="-build-small-iterate-fast">✅ Build small, iterate fast</h3>
+<p>I’m deliberately building the smallest useful version of each piece first. It’s easy to get discouraged by gorgeous dashboards on Reddit, but shipping a simple, working layout beats waiting for perfection. The polish can come later.</p>
+
+<hr />
+
+<h2 id="-guardrails-that-kept-it-safe">🔒 Guardrails That Kept It Safe</h2>
+
+<p>To avoid security or stability mistakes, I enforced a few rules:</p>
+<ul>
+  <li><strong>Secrets never enter Git</strong></li>
+  <li><strong>env.example</strong> files instead of real <code class="language-plaintext highlighter-rouge">.env</code></li>
+  <li><strong>No destructive commands</strong> without explicit confirmation</li>
+  <li><strong>Every change documented</strong> in the homelab context or service snapshot</li>
+</ul>
+
+<hr />
+
+<h2 id="-example-snippets">🧪 Example Snippets</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Jump to Proxmox</span>
+ssh proxmox
+
+<span class="c"># Update Homepage</span>
+docker compose <span class="nt">-f</span> /opt/homepage/docker-compose.yml restart
+
+<span class="c"># List running containers</span>
+docker ps <span class="nt">--format</span> <span class="s2">"table {{.Names}}</span><span class="se">\t</span><span class="s2">{{.Status}}</span><span class="se">\t</span><span class="s2">{{.Ports}}"</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="-results-so-far">📈 Results So Far</h2>
+
+<ul>
+  <li>Faster iteration without losing context</li>
+  <li>A clean, navigable repo that mirrors the real lab</li>
+  <li>Dashboards and docs that stay in sync</li>
+  <li>Safer changes with explicit runbooks</li>
+</ul>
+
+<hr />
+
+<h2 id="-whats-next">🔜 What’s Next</h2>
+
+<ul>
+  <li>Add richer widgets (API-powered) for Jellyfin, Portainer, and qBittorrent</li>
+  <li>Automate backup snapshots for <code class="language-plaintext highlighter-rouge">/opt</code> configs</li>
+  <li>Add monitoring stack (Grafana + Prometheus)</li>
+</ul>
+
+<hr />
+
+<h2 id="-references">📚 References</h2>
+
+<ul>
+  <li><a href="https://pve.proxmox.com/pve-docs/">Proxmox VE Documentation</a></li>
+  <li><a href="https://docs.docker.com/compose/compose-file/">Docker Compose file reference</a></li>
+  <li><a href="https://docs.docker.com/engine/reference/commandline/ps/">Docker <code class="language-plaintext highlighter-rouge">ps</code> command reference</a></li>
+  <li><a href="https://gethomepage.dev/installation/docker/">Homepage Docker installation</a></li>
+  <li><a href="https://gethomepage.dev/configs/">Homepage configuration docs</a></li>
+  <li><a href="https://docs.portainer.io/">Portainer documentation</a></li>
+  <li><a href="https://www.home-assistant.io/docs/">Home Assistant documentation</a></li>
+  <li><a href="https://docs.n8n.io/">n8n documentation</a></li>
+  <li><a href="https://github.com/qbittorrent/qBittorrent/wiki/Installing-qBittorrent">Installing qBittorrent</a></li>
+</ul>
+
+<hr />
+
+<h2 id="-meta-description">🧠 Meta Description</h2>
+
+<p>How I used OpenCode with ChatGPT to turn homelab sprawl into a documented, repeatable workflow—deploying dashboards, runbooks, and service snapshots without losing track of changes.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#automation" class="page__taxonomy-item p-category" rel="tag">Automation</a><span class="sep">, </span>
+    
+      <a href="/tags/#chatgpt" class="page__taxonomy-item p-category" rel="tag">ChatGPT</a><span class="sep">, </span>
+    
+      <a href="/tags/#devops" class="page__taxonomy-item p-category" rel="tag">DevOps</a><span class="sep">, </span>
+    
+      <a href="/tags/#homelab" class="page__taxonomy-item p-category" rel="tag">Homelab</a><span class="sep">, </span>
+    
+      <a href="/tags/#opencode" class="page__taxonomy-item p-category" rel="tag">OpenCode</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2026-01-25T00:00:00+00:00">January 25, 2026</time></p>
+
+      </footer>
+
+      <div class="page__share">
+    <h4 class="page__share-title">Share on</h4>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://localhost:4000/OpenCode-ChatGPT-Homelab-Workflow/"
+        class="btn btn--linkedin"
+        onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+        title="Share on LinkedIn">
+        <i class="fab fa-linkedin" aria-hidden="true"></i><span> LinkedIn </span>
+    </a>
+    <br>
+    <a href="https://x.com/intent/tweet?text=How%20OpenCode%20+%20ChatGPT%20Accelerated%20My%20Homelab&url=http://localhost:4000/OpenCode-ChatGPT-Homelab-Workflow/"
+        class="btn btn--x"
+        onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+        title="Share on X.com">
+        <i class="fab fa-x-twitter" aria-hidden="true"></i><span> X.com (Twitter) </span>
+    </a>
+
+    <a href="https://www.reddit.com/submit?url=http%3A%2F%2Flocalhost%3A4000%2FOpenCode-ChatGPT-Homelab-Workflow%2F&title=How OpenCode + ChatGPT Accelerated My Homelab"
+        class="btn btn--reddit" title=" Reddit">
+        <i class="fab fa-fw fa-reddit" aria-hidden="true"></i><span> Reddit</span>
+    </a>
+</div>
+
+      
+  <nav class="pagination">
+    
+      <a href="/Building-My-HomeLab-From-Scratch-to-Self-Hosting/" class="pagination--pager" title="Building My HomeLab: From Scratch to Self-Hosting">Previous</a>
+    
+    
+      <a href="/Homelab-Update-Nextcloud-Music-Assistant/" class="pagination--pager" title="Homelab Update: Nextcloud + Music Assistant with Tailscale">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Homelab-Update-Nextcloud-Music-Assistant/" rel="permalink">Homelab Update: Nextcloud + Music Assistant with Tailscale
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  “Every new service adds value. Every new service adds a new place to forget a setting.”
+
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Building-My-HomeLab-From-Scratch-to-Self-Hosting/" rel="permalink">Building My HomeLab: From Scratch to Self-Hosting
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  “If it ain’t broke, you haven’t installed Jellyfin yet.”
+
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Homelab-Hardware-Choce/" rel="permalink">How to Choose Your First Home Server Hardware: A Practical Guide
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Choosing your first home server starts with understanding your needs, your budget, and how much room you want to leave for future upgrades. Whether you’re le...</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Building-Parallel-CI-CD-Pipelines-with-AWS/" rel="permalink">Building Parallel CI/CD Pipelines with AWS at Fundrecs
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">🧩 Project Overview
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+    <ul class="social-icons">
+        
+        
+        
+        <li><a href="https://x.com/M_Leszkiewicz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-x-twitter" aria-hidden="true"></i> x.com</a></li>
+        
+        
+        
+        <li><a href="https://github.com/matlesz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+        
+        
+        <li><a href="https://www.linkedin.com/in/mat-leszkiewicz/" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+        
+        
+    </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 ML Portfolio.</div>
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>

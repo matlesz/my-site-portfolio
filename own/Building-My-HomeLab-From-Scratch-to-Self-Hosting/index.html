@@ -1,0 +1,857 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.27.3 by Michael Rose
+  Copyright 2013-2025 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Building My HomeLab: From Scratch to Self-Hosting - ML Portfolio</title>
+<meta name="description" content="“If it ain’t broke, you haven’t installed Jellyfin yet.”">
+
+
+  <meta name="author" content="Mat Leszkiewicz">
+  
+  <meta property="article:author" content="Mat Leszkiewicz">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ML Portfolio">
+<meta property="og:title" content="Building My HomeLab: From Scratch to Self-Hosting">
+<meta property="og:url" content="http://localhost:4000/Building-My-HomeLab-From-Scratch-to-Self-Hosting/">
+
+
+  <meta property="og:description" content="“If it ain’t broke, you haven’t installed Jellyfin yet.”">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-07-23T00:00:00+01:00">
+
+
+
+
+
+
+<link rel="canonical" href="http://localhost:4000/Building-My-HomeLab-From-Scratch-to-Self-Hosting/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="ML Portfolio Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+/>
+
+<!-- Cookie Consent -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+<script>
+    window.addEventListener("load", function () {
+        window.cookieconsent.initialise({
+            palette: {
+                popup: { background: "#000" },
+                button: { background: "#f1d600" }
+            },
+            theme: "classic",
+            position: "bottom-right",
+            content: {
+                message: "This website uses cookies to ensure you get the best experience.",
+                dismiss: "Got it!",
+                link: "Learn more",
+                href: "/privacy-policy/"
+            }
+        });
+    });
+</script>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+          <a class="site-logo" href="/"><img src="/favicon.svg" alt="ML"></a>
+        
+        <a class="site-title" href="/">
+          ML
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/posts/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/projects/"
+                
+                
+              >Projects</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/cv/"
+                
+                
+              >CV</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="http://localhost:4000/">
+        <img src="/assets/images/bio-photo.jpg" alt="Mat Leszkiewicz" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="http://localhost:4000/" itemprop="url">Mat Leszkiewicz</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>I’m a support engineer with a passion for cybersecurity and mission to help people be safer in the web.</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://matleszkiewicz.dev" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-link" aria-hidden="true"></i><span class="label">Website</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/M_Leszkiewicz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span class="label">x.com</span></a></li>
+          
+        
+          
+            <li><a href="https://github.com/matlesz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/mat-leszkiewicz/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://tryhackme.com/p/matlesz" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-hacker-news" aria-hidden="true"></i><span class="label">TryHackMe</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Building My HomeLab: From Scratch to Self-Hosting">
+    <meta itemprop="description" content="  “If it ain’t broke, you haven’t installed Jellyfin yet.”">
+    <meta itemprop="datePublished" content="2025-07-23T00:00:00+01:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="http://localhost:4000/Building-My-HomeLab-From-Scratch-to-Self-Hosting/" itemprop="url">Building My HomeLab: From Scratch to Self-Hosting
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <blockquote>
+  <p>“If it ain’t broke, you haven’t installed Jellyfin yet.”</p>
+</blockquote>
+
+<p>Over the last few months, I’ve been on a mission to build a full-featured home lab. What started as a simple curiosity about self-hosting quickly turned into an exciting project where I learned more than any tutorial could teach.</p>
+
+<p>My goal? Host essential services like file storage, media streaming, DNS filtering, automation, and remote access using <strong>Proxmox</strong> as the foundation. Along the way, I made plenty of wrong turns (some hilariously frustrating), discovered best practices, and learned how to troubleshoot effectively.</p>
+
+<p>This post documents that journey—failures, fixes, and all. If you’re building your own home lab or just want to see how a tech-savvy generalist tackles infrastructure from scratch, you’re in the right place.</p>
+
+<hr />
+
+<h2 id="-architecture-overview">🧱 Architecture Overview</h2>
+
+<p>Here is the high-level layout of my infrastructure:</p>
+
+<pre><code class="language-asciidoc">[Proxmox VE Host]
+|
+|-- pfSense (VM) ............. Firewall / DHCP / NAT
+|-- TrueNAS (VM) ............. Storage via USB HDD Enclosure
+|-- DockerVM (VM, IP: 192.168.68.111)
+|   |-- Portainer ............ Docker Management UI
+|   |-- Jellyfin ............. Media Server
+|   |-- Nextcloud ............ File Sync &amp; Share
+|   |-- n8n .................. Workflow Automation
+|   |-- cAdvisor ............. Docker monitoring
+|-- AdGuard Home (LXC) ....... DNS &amp; Ad Blocking
+|-- Tailscale (LXC + Host) ... Secure Remote Access
+|-- Samba Share (Host) ....... Shared Mount for Containers
+</code></pre>
+
+<hr />
+
+<h2 id="-dockervm-and-containerized-services">🐳 DockerVM and Containerized Services</h2>
+
+<p>To keep things organized and easily manageable, I use a dedicated <strong>Docker VM</strong> running Ubuntu. This VM acts as the backbone for containerized services. One of the first things I installed here was <strong><a href="https://docs.portainer.io/">Portainer</a></strong> — a simple but powerful web UI for managing Docker containers and volumes.</p>
+
+<h3 id="why-a-separate-docker-vm">Why a separate Docker VM?</h3>
+<ul>
+  <li>Isolates container workloads from the Proxmox host</li>
+  <li>Easy backups and restores</li>
+  <li>Easier resource monitoring via <code class="language-plaintext highlighter-rouge">htop</code>, <code class="language-plaintext highlighter-rouge">cAdvisor</code>, and Portainer</li>
+</ul>
+
+<h3 id="services-running-inside">Services Running Inside:</h3>
+<ul>
+  <li><strong><a href="https://jellyfin.org/docs/">Jellyfin</a></strong> — Media server for local content</li>
+  <li><strong><a href="https://docs.nextcloud.com/">Nextcloud</a></strong> — Self-hosted cloud storage and calendar</li>
+  <li><strong><a href="https://docs.n8n.io/">n8n</a></strong> — Automation platform similar to Zapier or Make</li>
+  <li><strong><a href="https://github.com/google/cadvisor">cAdvisor</a></strong> — Container-level resource usage and metrics</li>
+</ul>
+
+<p>Each container is mapped to a directory under <code class="language-plaintext highlighter-rouge">/mnt/media</code> (a bind mount from host), e.g.:</p>
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">volumes</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">/mnt/media/jellyfin:/config</span>
+  <span class="pi">-</span> <span class="s">/mnt/media/nextcloud:/var/www/html</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="️-adguard-setup-and-dns-conflicts">⚙️ AdGuard Setup and DNS Conflicts</h2>
+
+<p>AdGuard Home runs in an LXC container and is my DNS filtering solution. The process was smooth until I encountered one classic Linux pitfall:</p>
+
+<h3 id="issue">Issue:</h3>
+<p>AdGuard wouldn’t start because port 53 was already occupied by <code class="language-plaintext highlighter-rouge">systemd-resolved</code>.</p>
+
+<h3 id="fix">Fix:</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl stop systemd-resolved
+<span class="nb">sudo </span>systemctl disable systemd-resolved
+</code></pre></div></div>
+
+<p>Then restarted AdGuard:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl restart AdGuardHome
+</code></pre></div></div>
+
+<p>I also configured Proxmox and pfSense to use AdGuard as the primary DNS server.</p>
+
+<p>➡️ <a href="https://github.com/AdguardTeam/AdGuardHome/wiki">AdGuard Home Docs</a></p>
+
+<hr />
+
+<h2 id="-common-pitfalls--fixes">🧪 Common Pitfalls &amp; Fixes</h2>
+
+<h3 id="-jellyfin-chaos">🚧 Jellyfin Chaos</h3>
+
+<p>Problems:</p>
+<ul>
+  <li>Couldn’t log in even on a fresh install</li>
+  <li>Web client missing error (<code class="language-plaintext highlighter-rouge">jellyfin-web</code>)</li>
+  <li>Hanging boot times</li>
+</ul>
+
+<p>Solution:</p>
+<ul>
+  <li>Wiped old configs: <code class="language-plaintext highlighter-rouge">/mnt/media/jellyfin</code> and <code class="language-plaintext highlighter-rouge">.bak</code></li>
+  <li>Ensured correct permissions</li>
+  <li>Ignored harmless log noise about web client if UI was working</li>
+</ul>
+
+<h3 id="-lxc-full-disk--no-service">💥 LXC Full Disk = No Service</h3>
+
+<p>When an LXC container ran out of space, it failed hard.</p>
+
+<p>Fix:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pct resize 101 rootfs +10G
+</code></pre></div></div>
+<p>Bonus: wrote a cron script to auto-expand when disk free space &lt; 1 GB.</p>
+
+<h3 id="-port-53-taken-by-systemd-resolved">❌ Port 53 Taken by systemd-resolved</h3>
+
+<p>AdGuard wouldn’t start. Why? Port 53 already used by <code class="language-plaintext highlighter-rouge">systemd-resolved</code>.</p>
+
+<p>Fix:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>systemctl stop systemd-resolved
+<span class="nb">sudo </span>systemctl disable systemd-resolved
+</code></pre></div></div>
+
+<h3 id="️-samba-permissions">🗂️ Samba Permissions</h3>
+
+<p>Initial Samba mount worked, but Jellyfin couldn’t read media files.</p>
+
+<p>Fix:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mount <span class="nt">-t</span> cifs <span class="nt">-o</span> <span class="nv">credentials</span><span class="o">=</span>/etc/samba-credentials,file_mode<span class="o">=</span>0777,dir_mode<span class="o">=</span>0777 //server/share /mnt/sambashare
+</code></pre></div></div>
+
+<p>Also ensured UID/GID matched container permissions.</p>
+
+<hr />
+
+<h2 id="-tailscale--instant-vpn">🔐 Tailscale = Instant VPN</h2>
+
+<p>MagicDNS + ZeroConfig = game changer.</p>
+
+<ul>
+  <li>Remote access to Proxmox UI, AdGuard, SMB shares</li>
+  <li>No port forwarding</li>
+  <li>Works across devices</li>
+</ul>
+
+<p>➡️ <a href="https://tailscale.com/kb/">Tailscale Docs</a></p>
+
+<hr />
+
+<h2 id="-monitoring-planned">📊 Monitoring (Planned)</h2>
+
+<p>Coming soon:</p>
+<ul>
+  <li><strong>Prometheus + Grafana</strong> for full stack observability</li>
+  <li><strong>node-exporter</strong> on all VMs and LXC</li>
+  <li><strong>cAdvisor</strong> in Docker VM</li>
+</ul>
+
+<p>➡️ <a href="https://grafana.com/docs/">Grafana Docs</a>
+➡️ <a href="https://prometheus.io/docs/">Prometheus Docs</a></p>
+
+<hr />
+
+<h2 id="-key-takeaways">💡 Key Takeaways</h2>
+
+<ul>
+  <li>Start small and iterate</li>
+  <li>Separate responsibilities with LXC, VM, and Docker</li>
+  <li>Expect to break things (then fix them)</li>
+  <li>Automate disk management early</li>
+  <li>Tailscale rocks</li>
+</ul>
+
+<hr />
+
+<h2 id="-next-steps--github">🔗 Next Steps &amp; GitHub</h2>
+
+<p>Soon I’ll be publishing all YAMLs, Docker Compose files, and scripts used for:</p>
+<ul>
+  <li>Auto-resizing LXC disks</li>
+  <li>Monitoring setup</li>
+  <li>Container deployment</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>👉 <a href="https://matleszkiewicz.dev">matleszkiewicz.dev</a></td>
+      <td><a href="https://github.com/matleszkiewicz">GitHub</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h2 id="-meta-description">🧠 Meta Description</h2>
+
+<p>A hands-on walkthrough of building a self-hosted home lab using Proxmox, LXC, VMs, Docker, and Tailscale. Includes service architecture, DockerVM setup, common errors, and fixes. Great for learning system architecture and DevOps fundamentals.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#homelab" class="page__taxonomy-item p-category" rel="tag">Homelab</a><span class="sep">, </span>
+    
+      <a href="/tags/#projects" class="page__taxonomy-item p-category" rel="tag">Projects</a><span class="sep">, </span>
+    
+      <a href="/tags/#proxmox" class="page__taxonomy-item p-category" rel="tag">Proxmox</a><span class="sep">, </span>
+    
+      <a href="/tags/#self-hosting" class="page__taxonomy-item p-category" rel="tag">Self-Hosting</a><span class="sep">, </span>
+    
+      <a href="/tags/#virtualization" class="page__taxonomy-item p-category" rel="tag">Virtualization</a>
+    
+    </span>
+  </p>
+
+
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2025-07-23T00:00:00+01:00">July 23, 2025</time></p>
+
+      </footer>
+
+      <div class="page__share">
+    <h4 class="page__share-title">Share on</h4>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url=http://localhost:4000/Building-My-HomeLab-From-Scratch-to-Self-Hosting/"
+        class="btn btn--linkedin"
+        onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+        title="Share on LinkedIn">
+        <i class="fab fa-linkedin" aria-hidden="true"></i><span> LinkedIn </span>
+    </a>
+    <br>
+    <a href="https://x.com/intent/tweet?text=Building%20My%20HomeLab:%20From%20Scratch%20to%20Self-Hosting&url=http://localhost:4000/Building-My-HomeLab-From-Scratch-to-Self-Hosting/"
+        class="btn btn--x"
+        onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+        title="Share on X.com">
+        <i class="fab fa-x-twitter" aria-hidden="true"></i><span> X.com (Twitter) </span>
+    </a>
+
+    <a href="https://www.reddit.com/submit?url=http%3A%2F%2Flocalhost%3A4000%2FBuilding-My-HomeLab-From-Scratch-to-Self-Hosting%2F&title=Building My HomeLab: From Scratch to Self-Hosting"
+        class="btn btn--reddit" title=" Reddit">
+        <i class="fab fa-fw fa-reddit" aria-hidden="true"></i><span> Reddit</span>
+    </a>
+</div>
+
+      
+  <nav class="pagination">
+    
+      <a href="/Homelab-Hardware-Choce/" class="pagination--pager" title="How to Choose Your First Home Server Hardware: A Practical Guide">Previous</a>
+    
+    
+      <a href="/OpenCode-ChatGPT-Homelab-Workflow/" class="pagination--pager" title="How OpenCode + ChatGPT Accelerated My Homelab">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Homelab-Update-Nextcloud-Music-Assistant/" rel="permalink">Homelab Update: Nextcloud + Music Assistant with Tailscale
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  “Every new service adds value. Every new service adds a new place to forget a setting.”
+
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/OpenCode-ChatGPT-Homelab-Workflow/" rel="permalink">How OpenCode + ChatGPT Accelerated My Homelab
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">
+  “Homelab work is fun until you forget what you changed last night.”
+
+
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Homelab-Hardware-Choce/" rel="permalink">How to Choose Your First Home Server Hardware: A Practical Guide
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Choosing your first home server starts with understanding your needs, your budget, and how much room you want to leave for future upgrades. Whether you’re le...</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/Building-Parallel-CI-CD-Pipelines-with-AWS/" rel="permalink">Building Parallel CI/CD Pipelines with AWS at Fundrecs
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">🧩 Project Overview
+
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+    <ul class="social-icons">
+        
+        
+        
+        <li><a href="https://x.com/M_Leszkiewicz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-x-twitter" aria-hidden="true"></i> x.com</a></li>
+        
+        
+        
+        <li><a href="https://github.com/matlesz" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+        
+        
+        <li><a href="https://www.linkedin.com/in/mat-leszkiewicz/" rel="nofollow noopener noreferrer"><i
+                    class="fab fa-fw fa-linkedin" aria-hidden="true"></i> LinkedIn</a></li>
+        
+        
+        
+    </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2026 ML Portfolio.</div>
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/assets/js/lunr/lunr.min.js"></script>
+<script src="/assets/js/lunr/lunr-store.js"></script>
+<script src="/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+  </body>
+</html>
