@@ -14,7 +14,6 @@ description: "A detailed walkthrough of my Tailscale edge migration, webhook iso
 
 Today was a networking focused homelab sprint. I moved the edge toward a single Caddy entry point, kept webhooks safe, and finished a peer relay setup on AWS after an OCI attempt struggled with timeouts. This is the longer, more practical version of the story. It is the walkthrough I wish I had before I started.
 
-Note: This post does not expose internal IPs, private hostnames, or Tailscale DNS names. I use placeholders like `<TAILNET_DOMAIN>` and `<HOMELAB_DOMAIN>` on purpose.
 
 ## Why I changed it
 
