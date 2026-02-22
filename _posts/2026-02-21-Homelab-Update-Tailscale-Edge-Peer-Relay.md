@@ -6,82 +6,62 @@ author_profile: true
 read_time: true
 share: true
 related: true
-tags: [Homelab, Tailscale, Caddy, Networking, OCI, PlatformEngineering]
-description: "A walkthrough of today's Tailscale edge migration work and peer relay attempt, plus the gotchas that slowed me down."
+tags: [Homelab, Tailscale, Caddy, Networking, AWS, PlatformEngineering]
+description: "A detailed walkthrough of my Tailscale edge migration, webhook isolation, and AWS peer relay setup, plus the gotchas that slowed me down."
 ---
 
 > "The network is the product when the product is the network."
 
-Today was a **networking-focused homelab sprint**: I pushed forward on the Tailscale edge migration, kept the webhook ingress safe, and started the OCI peer relay build. This post is a walkthrough of what changed and the real-world gotchas that surfaced.
+Today was a networking focused homelab sprint. I moved the edge toward a single Caddy entry point, kept webhooks safe, and finished a peer relay setup on AWS after an OCI attempt struggled with timeouts. This is the longer, more practical version of the story. It is the walkthrough I wish I had before I started.
 
-Note: This post **does not expose internal IPs, private hostnames, or Tailscale DNS names**. I use placeholders like `<TAILNET_DOMAIN>` and `<HOMELAB_DOMAIN>` on purpose.
+Note: This post does not expose internal IPs, private hostnames, or Tailscale DNS names. I use placeholders like `<TAILNET_DOMAIN>` and `<HOMELAB_DOMAIN>` on purpose.
 
----
+## Why I changed it
 
-## 🤔 Why this change
+I wanted one consistent HTTPS entry point for every internal service instead of scattered Tailscale Serve configs. A free custom domain plus a wildcard SSL certificate keeps internal URLs clean and production-like without paying for per service certs. Centralizing routing reduces port conflicts and makes reboots less fragile. Webhooks still need public ingress, so Funnel stays, but only for a webhook-only proxy. Finally, a peer relay helps throughput when direct peer to peer connections are not available, which matters for streaming.
 
-- I want one consistent HTTPS entry point for every internal service, instead of per-service Tailscale Serve config.
-- A free custom domain plus a wildcard SSL cert keeps internal URLs clean and production-like without paying for certs per service.
-- Centralizing routing reduces port conflicts and makes reboots less fragile.
-- Webhooks still need public ingress, so Funnel stays, but only for a webhook-only proxy.
-- A peer relay improves throughput when direct peer-to-peer connections are not possible.
+## Edge Caddy migration walkthrough
 
-## ✅ What I Progressed Today
+This is the path I took so far, with the steps that matter in practice.
 
-### 1) Edge Caddy tailnet migration (walkthrough)
-Goal: centralize HTTPS on an edge node and route everything through a single Caddy instance.
+1. Picking an internal domain and keeping it tailnet only. I use `https://<service>.<HOMELAB_DOMAIN>` for everything that should stay private.
 
-Walkthrough:
-- Confirmed the edge node plan and the custom domain pattern for internal services (`https://<service>.<HOMELAB_DOMAIN>`).
-- Locked in a free custom domain for internal services and planned a wildcard DNS record.
-- Validated the migration path: keep the current Tailscale Serve config on the Docker VM until edge cutover is complete.
-- Documented the steps for wildcard TLS via DNS-01 so Caddy can terminate `*.<HOMELAB_DOMAIN>` cleanly.
-- Updated internal docs to reflect the in-progress state (so future me doesn’t forget what’s live and what’s planned).
+2. Joining the edge node to the tailnet and capturing its tailnet IP. I bind the proxy to that interface so the LAN never sees it.
 
-### 2) Webhook ingress stays on Funnel (for now)
-I kept the webhook-only proxy behind Tailscale Funnel on `<TAILNET_DOMAIN>`. This lets public webhooks flow without exposing the main app UI.
+3. Adding a wildcard DNS record for `*.<HOMELAB_DOMAIN>` that points to the edge tailnet IP.
 
-### 3) OCI peer relay build (in progress)
-I created the OCI Free Tier VM and opened the relay port, but SSH connections are **hanging during banner exchange**. The instance also got stuck in a “Stopping” state in the console. That blocks the relay setup until the VM stabilizes or gets rebuilt.
+4. Issuing a wildcard certificate with ACME DNS 01. HTTP 01 cannot validate a tailnet only host, so DNS 01 is the reliable path.
 
----
+5. Adding explicit routes in Caddy for each service and keeping them tailnet only.
 
-## 🔧 Setup details (high level)
+Example Caddy site block with placeholders:
 
-1) **Free domain + DNS**
-   - Registered a free domain for internal services.
-   - Pointed a wildcard record (`*.<HOMELAB_DOMAIN>`) at the tailnet edge address.
+```bash
+caddy
 
-2) **Edge node**
-   - Joined the edge host to the tailnet.
-   - Installed Caddy and bound it to the tailnet interface (not `0.0.0.0`).
+https://homeassistant.<HOMELAB_DOMAIN> {
+    bind <EDGE_TAILNET_IP>
+    reverse_proxy http://<LAN_SERVICE_HOST>:8123
+}
+```
 
-3) **Wildcard SSL cert**
-   - Issued a wildcard certificate using ACME DNS-01.
-   - Stored the cert/key on the edge host and referenced them in the Caddy config.
+If an upstream uses a self signed cert, add a transport block with `tls_insecure_skip_verify` in that site block. I keep those in a separate snippet to avoid repeating myself.
 
-4) **Caddy routing**
-   - Added reverse-proxy routes for each internal service:
-     `https://<service>.<HOMELAB_DOMAIN> -> <LAN_SERVICE_URL>`.
+## Webhook ingress for n8n
 
-5) **Keep Serve during migration**
-   - Left existing Tailscale Serve entries in place until edge cutover is complete.
+The goal here is simple. Keep the n8n UI private, but still accept public webhooks.
 
-6) **Webhook-only ingress**
-   - Funnel stays on `<TAILNET_DOMAIN>` and targets a proxy that only allows webhook paths.
+**Step 1** Running a small webhook-only reverse proxy on dockervm.
 
----
+**Step 2** Pointing Funnel at that proxy so only `/webhook` and `/webhook-test` are reachable.
 
-## 🔌 n8n + webhooks (detail)
+**Step 3** Setting explicit base URLs in n8n so generated links and callbacks are correct.
 
-The goal is simple: **keep the n8n UI private**, but still accept public webhooks.
+Webhook-only proxy example:
 
-- Internal UI: `https://n8n.<HOMELAB_DOMAIN>` (tailnet-only)
-- Public webhooks: `https://<TAILNET_DOMAIN>/webhook/*`
+```bash
+caddy
 
-I use a webhook-only reverse proxy so Funnel never exposes the full n8n UI:
-
-```caddy
 :<WEBHOOK_PROXY_PORT> {
     @webhooks path /webhook/* /webhook-test/*
     reverse_proxy @webhooks <N8N_LOCAL_URL>
@@ -89,108 +69,116 @@ I use a webhook-only reverse proxy so Funnel never exposes the full n8n UI:
 }
 ```
 
-Then Funnel only points at that proxy:
+Funnel command:
 
 ```bash
 tailscale funnel --https=443 --bg --yes http://localhost:<WEBHOOK_PROXY_PORT>
 ```
 
-Finally, n8n gets explicit base URLs so links and callbacks are correct:
+n8n environment:
 
-```env
+```bash
+env
+
 N8N_EDITOR_BASE_URL=https://n8n.<HOMELAB_DOMAIN>
 WEBHOOK_URL=https://<TAILNET_DOMAIN>
 ```
 
----
-
-## 🧭 Current Architecture (Simplified)
+## Current architecture (simplified)
 
 ```
-      Internet (webhooks)
-             |
-             v
-      Tailscale Funnel
-             |
-      webhook-only proxy
-             |
-             v
-           n8n
+Internet (webhooks)
+    |
+    v
+Tailscale Funnel
+    |
+    v
+Webhook-only proxy
+    |
+    v
+n8n
 
-   Tailnet clients
-         |
-         v
-   Edge Caddy (in progress)
-         |
-         v
-   Internal services on LAN
+Tailnet clients
+    |
+    v
+Edge Caddy
+    |
+    v
+Internal services on LAN
 ```
 
----
+## Peer relay, why and how
 
-## 🧨 Gotchas (And What Actually Helped)
+Tailscale peer relays are designed to improve performance when direct peer to peer links cannot be established. The Tailscale team explains the motivation and tradeoffs clearly in their peer relay launch post. The short version is that a well placed relay can offer lower latency and higher throughput than the default DERP fallback. That matters for sustained streams like Jellyfin. Here is the reference I used while planning the move: https://tailscale.com/blog/peer-relays-ga/
 
-### 1) Funnel hostnames are locked to `*.ts.net`
-**Gotcha:** Funnel doesn’t support custom domains. You can’t funnel traffic through `<HOMELAB_DOMAIN>`.
+Here is how I set it up on AWS with Ubuntu 22.04 and no internal IPs.
 
-**What helped:** Accept Funnel on `<TAILNET_DOMAIN>` and route only webhooks through it, while everything else lives behind edge Caddy.
+**Step 1**
+Launching an EC2 instance with a small Ubuntu image. I open TCP 22 and UDP 40000 in the security group.
 
----
+**Step 2** 
+Installing Tailscale and joining the tailnet with a tagged auth key.
 
-### 2) Tailscale Serve can steal host ports
-**Gotcha:** Serve can bind ports before Docker does, which makes containers look “up” but unreachable.
+**Step 3** 
+Enabling the relay port and confirming that tailscaled is listening.
 
-**What helped:** Keep Serve active only where it’s needed and leave edge cutover for later. I also keep a boot workflow that temporarily disables Serve during container startup.
+```bash
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo systemctl enable --now tailscaled
+sudo tailscale up --authkey=TSKEY-NEW --advertise-tags=tag:peer-relay
+sudo tailscale set --relay-server-port=40000
+```
 
----
+Verification commands:
 
-### 3) Wildcard TLS needs DNS-01
-**Gotcha:** If you want `*. <HOMELAB_DOMAIN>` certificates for a tailnet-only host, HTTP-01 won’t work.
+```bash
+tailscale status
+sudo ss -u -lpn | grep 40000
+```
 
-**What helped:** Use DNS-01 with an API-capable DNS provider and let Caddy load the cert files directly.
+## Oracle Free Tier detour and why AWS was easier
 
----
+I tried OCI first because the free tier is attractive. The reality was a string of timeouts, SSH sessions hanging during banner exchange, and repeated OOM kills while installing packages. I spent more time fighting the VM than working on the relay. That was the signal to stop.
 
-### 4) Caddy should bind to the tailnet interface
-**Gotcha:** Binding to `0.0.0.0` exposes the edge proxy on the LAN, which I don’t want.
+AWS was the opposite. Ubuntu came up cleanly, the package install was stable, and the relay was listening on UDP 40000 within minutes. It cost a bit more, but it saved hours of uncertainty.
 
-**What helped:** Bind Caddy explicitly to the tailnet interface IP and keep the service tailnet-only.
+## How I validate it works
 
----
+First I check that the relay port is open and tailscaled is listening. Then I run `tailscale ping --verbose <target>` from a client to see whether the path goes through a relay. Finally I stream a known Jellyfin title and compare startup time and buffering versus a direct path.
 
-### 5) OCI VM stuck in “Stopping” state
-**Gotcha:** The VM won’t complete stop/start cycles and SSH hangs during banner exchange.
+## Gotchas I hit and the fixes
 
-**What helped:** Documenting the state and preparing a fallback plan to rebuild the VM if it doesn’t recover. Sometimes the fastest fix is a clean rebuild.
+Funnel hostnames are locked to `*.ts.net`, so the public webhook URL must stay on `<TAILNET_DOMAIN>`.
 
----
+I only funnel the webhook proxy and keep everything else behind the edge.
 
-## ✅ Results So Far
+Tailscale Serve can steal host ports before Docker binds them. 
+
+The fix was to remove Serve bindings and let edge Caddy handle HTTPS, leaving only Funnel for webhooks.
+
+Wildcard TLS needs DNS 01. HTTP 01 does not work for tailnet only hosts, so DNS 01 is the reliable path.
+
+OCI had repeated timeouts and OOM kills, so I moved the relay to AWS to finish the setup.
+
+## Results so far
 
 - The edge migration path is clear and documented.
 - Webhooks remain safe and isolated behind Funnel.
-- The peer relay plan is in place, with a known blocker tracked for recovery.
+- The peer relay is live on AWS and ready for real world Jellyfin testing.
 
----
+## Next up
 
-## 🔜 Next Up
+- Tune Jellyfin streaming quality with real world relay data.
 
-- Finish edge cutover and remove per-service Tailscale Serve on the Docker VM.
-- Re-attempt OCI peer relay once the VM is stable (or rebuild if needed).
-- Validate that all tailnet HTTPS routes resolve correctly post-migration.
+## References
 
----
+- [Tailscale Serve](https://tailscale.com/kb/1112/serve), 
+- [Tailscale Funnel](https://tailscale.com/kb/1223/funnel), 
+- [Tailscale peer relays GA](https://tailscale.com/blog/peer-relays-ga/),
+- [Caddy documentation](https://caddyserver.com/docs/)
+- [ACME DNS 01 challenge](https://letsencrypt.org/docs/challenge-types/#dns-01-challenge),
+- [Amazon EC2](https://aws.amazon.com/ec2/)
 
-## 📚 References
+## Meta Description
 
-- [Tailscale Serve](https://tailscale.com/kb/1112/serve)
-- [Tailscale Funnel](https://tailscale.com/kb/1223/funnel)
-- [Caddy docs](https://caddyserver.com/docs/)
-- [ACME DNS-01 challenge](https://letsencrypt.org/docs/challenge-types/#dns-01-challenge)
-- [Oracle Cloud Free Tier](https://www.oracle.com/cloud/free/)
-
----
-
-## 🧠 Meta Description
-
-Today’s homelab update focuses on the Tailscale edge migration and an OCI peer relay attempt. This walkthrough captures the steps taken, the gotchas encountered, and what’s next.
+This homelab update covers a detailed Tailscale edge migration, webhook isolation for n8n, and an AWS based peer relay setup, with practical steps, Oracle Free Tier lessons, and real world gotchas.

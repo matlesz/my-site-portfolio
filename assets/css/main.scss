@@ -173,6 +173,18 @@ h6,
     margin-bottom: 0.6rem;
 }
 
+.page__share-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.page__share .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
 .layout--single .page__title,
 .layout--single .page__content h1,
 .layout--single .page__content h2,
