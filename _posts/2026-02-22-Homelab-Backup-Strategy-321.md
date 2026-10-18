@@ -10,58 +10,39 @@ tags: [Homelab, Backup, Proxmox, TrueNAS, Restic, Jottacloud, RaspberryPi, Backr
 description: "A deep dive into my 3-2-1 backup design for Proxmox and TrueNAS, with PBS for fast restores, restic for offsite, Backrest as the UI, and the gotchas that mattered in practice."
 ---
 
-> "Homelab without a backup is a like a car witout a seatbelts, it is safe until the first crash."
+> “A homelab without a backup is like a car without a seatbelt: safe until the first crash.”
 
-This is the detailed write-up of the backup strategy I just implemented for my homelab. I wanted a 3-2-1 design, fast local restores, and offsite storage that stays lean. I also wanted a system I could explain to myself six months from now without rediscovering the same mistakes. This post captures the decisions, the stack, the final layout, and the real-world gotchas I hit while doing it.
+On February 22, 2026, I documented how I was backing up the important parts of my homelab. I wanted quick local VM restores, encrypted offsite copies for irreplaceable data, and a clear rule for what did not need to leave the house. The design used TrueNAS snapshots and a Proxmox Backup Server datastore, with Restic sending selected data to Jottacloud.
 
-Note: I do not include internal IPs, private hostnames, or Tailscale DNS names. I use placeholders like `<HOMELAB_DOMAIN>` and `<LAN_IP>` on purpose.
+This was a design with working scheduled jobs, but not every part of the 3-2-1 plan was complete. The additional Raspberry Pi SFTP target was still waiting on a disk migration, and the PBS datastore shared the TrueNAS storage system with primary data. I describe those as gaps rather than count them as independent backup copies.
 
 ## Goals and constraints
 
-The key goals were:
+I wanted fast local restores for VMs, offsite copies of critical files, encryption at rest, and a data set small enough to keep backup operations manageable. Nextcloud was the source of truth for user files. Time Machine stayed local, and I left Jellyfin movies, series, and downloads out of offsite backup because they could be reacquired.
 
-- 3-2-1 for critical data.
-- Fast local restores for VMs and services.
-- Offsite storage that is deduplicated and minimal.
-- Avoid backing up re-downloadable media.
-- Keep Nextcloud as the single source of truth for user files.
-- Keep Time Machine local only.
+I also wanted to keep using one regular SMB share from Macs and other devices. Under that share, I separated the data into TrueNAS datasets so snapshots and storage properties could be controlled separately. Time Machine used its own SMB share.
 
-The constraints were:
+## The stack and its status
 
-- I already had a single SMB share mounted on multiple hosts.
-- I wanted to keep that share for convenience on Mac and iPhone.
-- I wanted encryption at rest for all storage.
+| Role | Component | Status in this February 22 snapshot |
+| --- | --- | --- |
+| Primary storage | TrueNAS, ZFS datasets and snapshots | In use |
+| VM and LXC backups | PBS VM on Proxmox; datastore on TrueNAS over NFS | Nightly, snapshot mode; retention 7 daily / 4 weekly / 6 monthly |
+| Offsite file backup | Restic through rclone to Jottacloud | Active for Tier 1 data, scheduled by Backrest |
+| Second Restic target | SFTP repository on Raspberry Pi | Planned; disk migration pending |
+| Backup scheduling and checks | Backrest | Managing Restic backup, check, and prune jobs |
+| Backup heartbeat | Healthchecks.io | Active |
+| Service uptime alerting | Uptime Kuma on EC2 | Planned |
 
-The biggest design choice was to split datasets for control and snapshots, but keep one SMB share so day-to-day usage stayed simple. The second big choice was deciding what *not* to back up. Movies and series are easy to re-download, and backups should be boring and small, so that content stayed onsite only.
+The local PBS datastore gave me a Proxmox-integrated restore path, while Restic sent selected files offsite. There is an important failure-domain limitation: the primary datasets and PBS datastore both lived on the same TrueNAS system. That PBS copy is useful for local recovery, but it does not protect against losing the TrueNAS pool or host. Jottacloud was the active offsite copy; the Pi target had not been brought online yet.
 
-## The final stack
-
-**Primary storage and snapshots**
-- TrueNAS with ZFS datasets and snapshots.
-- ZFS native encryption with auto-unlock.
-
-**VM backups**
-- Proxmox Backup Server (PBS) running on Proxmox.
-- PBS datastore on TrueNAS via NFS.
-- Snapshot mode, nightly schedule, retention 7 daily / 4 weekly / 6 monthly.
-
-**Offsite backups (Tier 1 only)**
-- Restic + rclone to Jottacloud.
-- Restic + SFTP to Raspberry Pi (planned, disk migration pending).
-
-**Backup UI**
-- Backrest on the Docker VM to manage restic schedules and check/prune jobs.
-
-**Monitoring**
-- Healthchecks.io for backup heartbeats.
-- Planned: Uptime Kuma on EC2 for service uptime alerts.
+I therefore treat this as a **3-2-1 design in progress**, not proof that every Tier 1 dataset already had three independent copies on two media with one offsite. ZFS snapshots are useful for rollback, but they share the storage pool and are not an independent backup. The article also does not record a full restore drill, so scheduled jobs should not be confused with tested recovery.
 
 ## Data tiers
 
 I split the backup scope into tiers so only the right data goes offsite.
 
-**Tier 1 (3-2-1)**
+**Tier 1 (selected for offsite backup)**
 - Nextcloud data
 - Photos dataset (mounted into Nextcloud)
 - Calibre library
@@ -80,7 +61,7 @@ I split the backup scope into tiers so only the right data goes offsite.
 
 ## Storage layout decisions
 
-I kept a **single SMB share** for convenience but split the pool into **separate datasets** for control and policy.
+I kept one regular SMB share for day-to-day files, but split the ZFS pool into **separate datasets** for snapshot and storage policy. Time Machine was the exception: it used its own dataset and a separate SMB share.
 
 Flattened layout under `/mnt/media`:
 
@@ -91,14 +72,14 @@ Flattened layout under `/mnt/media`:
 - `jellyfin/series/`
 - `jellyfin/downloads/`
 - `backups/` (nextcloud, n8n, ha, proxmox-config, pbs)
-- `timemachine/` (separate SMB share)
+- `timemachine/` (exported as its own SMB share)
 
 Why this shape:
 
 - Separate datasets allow different snapshot schedules and ZFS properties.
 - Jellyfin and downloads stay in the **same dataset** to preserve hardlinks.
 - Photos are a separate dataset but mounted into Nextcloud as external storage.
-- Time Machine uses its own dataset and SMB share.
+- The regular user-data share stays simple, while Time Machine has its own dataset and SMB share.
 
 ## Encryption approach
 
@@ -114,7 +95,7 @@ Auto-unlock is enabled for convenience. Keys are stored in 1Password.
 - Datastore lives on TrueNAS via NFS.
 - Proxmox backup job uses snapshot mode and excludes the TrueNAS VM.
 
-This gives me one-click restores in Proxmox without offsite storage bloat.
+This let me start a VM restore from the Proxmox interface without pulling the data back from cloud storage. I had the nightly jobs enabled, but this post does not record a full restore drill; I should treat the restore path as configured, not disaster-tested.
 
 ### Restic (Backrest)
 
@@ -145,26 +126,26 @@ Homepage now links to Healthchecks and Backrest.
 This is the part that saved me the most time. If you want to copy this setup, read this section first.
 
 **1) PBS auth and datastore errors**
-- Using `root@pbs` failed with 401. PBS expects `root@pam` or a local `@pbs` user.
-- A trailing space in the datastore name caused `Cannot find datastore` errors.
-- Datastore creation on NFS can take a long time. It looks stuck but is not.
+- Using `root@pbs` returned 401. The PBS client defaults to `root@pam`; other identities must exist in the realm named in the login, such as a configured user in the PBS realm. I needed to use an identity that actually existed rather than assume a `root@pbs` account.
+- A trailing space in the datastore name caused `Cannot find datastore` errors. I re-entered the name carefully rather than changing the underlying storage.
+- Creating the datastore on my NFS-backed path took long enough to look stuck. That is what happened in this setup, not a guarantee that a slow datastore task is healthy. Check the task log, storage responsiveness, and available space before retrying. The PBS documentation describes datastores as directories on a filesystem; verify current support and performance requirements before choosing a network-backed path.
 
 **2) Rclone + Jottacloud**
-- `trashed_only=true` made the repo invisible.
-- A revoked token breaks updates silently. Regenerate the token and re-auth.
-- Restic repo initialized with an empty password by accident; re-init fixed it.
+- I had `trashed_only=true` in the remote settings, which made the normal repository contents invisible. That option is for listing items in the trash, not a general view of the remote.
+- Jottacloud refresh-token handling caused an authentication failure after the token was revoked or reused. I had to reconnect the remote. Keep each active rclone installation's credentials under control and use rclone's reconnect flow when its logs report an invalid grant.
+- I accidentally initialized a Restic repository with an empty password and recreated it. The notes do not say whether the old snapshots were retained, so I do not count that as a successful recovery. Restic requires the repository password to decrypt its data; current versions treat an empty-password repository as an explicit insecure mode. Set and store the password before initializing a repo, then verify that it can open and restore data.
 
 **3) Backrest vs systemd**
-- If Backrest manages restic schedules, systemd restic timers must be disabled.
-- Backrest shows the restic password in JSON config; avoid sharing screenshots.
+- Backrest managed the Restic schedule, so I disabled the separate systemd Restic timers to avoid running two schedulers for the same repository.
+- Backrest configuration or diagnostic exports may contain repository credentials. I keep those files and screenshots private and redact them before sharing.
 
 **4) Media path migration**
-- Radarr/Sonarr hardlinks require downloads and library in the same dataset.
-- Old `media/media` needed a rename after migration to prevent accidental use.
+- Radarr/Sonarr hardlinks require downloads and library files to be on the same filesystem. I kept those paths in the same dataset so they shared that filesystem.
+- An old `media/media` path remained after migration, so I renamed it to avoid services using the wrong location.
 
 **5) Nextcloud maintenance**
-- The LSIO Nextcloud container uses `occ` at `/app/www/public/occ` and user `abc`.
-- If you use the wrong path, backups silently fail.
+- In the LinuxServer image layout I used, `occ` was at `/app/www/public/occ` and ran as `abc`. Container paths can change; check the image documentation for the version you deploy.
+- A backup that calls `occ` from the wrong path may fail. I added the path and user to the runbook rather than assuming the command worked.
 
 **6) Registry outages**
 - Docker image pulls failed intermittently (ghcr.io, lscr.io, Docker Hub).
@@ -183,24 +164,27 @@ This is the part that saved me the most time. If you want to copy this setup, re
 
 ## What I would do differently next time
 
-- Set the restic password first and record it in a password manager.
 - Use a dedicated PBS user from the start.
 - Keep a single migration checklist to avoid missing path updates.
+- Test restores on a schedule, including at least one offsite restore, instead of treating a green backup job as proof of recoverability.
 
 ## Resources
 
 These are the docs I used or wish I had open while doing this:
 
-- [Proxmox Backup Server docs](https://pbs.proxmox.com/docs/)
+- [Proxmox Backup Server storage and datastore docs](https://pbs.proxmox.com/docs/storage.html)
+- [Proxmox Backup Server authentication realms](https://pbs.proxmox.com/docs/user-management.html#authentication-realms)
+- [Proxmox Backup Server backup client](https://pbs.proxmox.com/docs/backup-client.html)
 - [Proxmox VE backup/restore docs](https://pve.proxmox.com/wiki/Backup_and_Restore)
 - [Restic documentation](https://restic.readthedocs.io/en/stable/)
+- [Preparing a Restic repository](https://restic.readthedocs.io/en/stable/030_preparing_a_new_repo.html)
 - [rclone Jottacloud backend](https://rclone.org/jottacloud/)
 - [Backrest (restic UI)](https://github.com/garethgeorge/backrest)
 - [Healthchecks docs](https://healthchecks.io/docs/)
 - [TrueNAS SCALE docs](https://www.truenas.com/docs/scale/)
 - [Jottacloud](https://www.jottacloud.com/)
 
-## Final architecture (simplified)
+## Architecture at the time of writing
 
 ```
 TrueNAS (ZFS, encrypted, snapshots)
