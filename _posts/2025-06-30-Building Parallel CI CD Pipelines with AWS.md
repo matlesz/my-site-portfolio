@@ -9,108 +9,48 @@ related: true
 tags: ["CI/CD", AWS, DevOps]
 ---
 
-## 🧩 Project Overview
+During my software developer internship at **FundRecs**, I worked on two CI/CD pipelines for the Java-based Fusion application. The goal was to replace manual deployment steps with a version-controlled path from a Bitbucket change through an AWS build and into ECS. Alongside the pipelines, I worked on CloudFormation infrastructure and a Landingzone feature for sending application outputs to S3.
 
-As part of my industry placement with **Fundrecs**, I was tasked with designing and implementing two parallel **CI/CD pipelines** to modernize the deployment of the company's Java-based Fusion application infrastructure. This effort involved the creation of reusable **CloudFormation templates**, seamless **Bitbucket integration**, and secure deployment workflows built entirely on **AWS services**.
+My public [CV](https://matleszkiewicz.dev/cv/) describes the internship as work on two AWS CI/CD pipelines and infrastructure for product features. The technical details below come from my project notes; the company repository and deployment environment are not linked here, so I’m keeping the walkthrough at the architecture level and leaving out account-specific configuration.
 
----
+## From Bitbucket to ECS
 
-## 🎯 Objectives
+The project used two parallel pipelines built with AWS CodePipeline. In each flow, a push to Bitbucket started the source stage. AWS CodeBuild handled the build work, including compiling the Java application and producing a Docker image. The deployment stage used CloudFormation to update the application running in ECS, with ECR providing the image reference.
 
-The core objectives of the project were:
+That sequence connected a source change to a repeatable deployment process:
 
-- Design two **parallel CI/CD pipelines** using **AWS CodePipeline**
-- Transition existing manual deployments into automated, version-controlled workflows
-- Integrate with **Bitbucket** to trigger builds on push events
-- Create secure and scalable **CloudFormation templates**
-- Extend Fusion’s capabilities with a **Landingzone module** for cloud-based storage
+```text
+Bitbucket push → CodePipeline → CodeBuild → container image → ECS deployment
+```
 
----
+The earlier process relied on manual deployment. Automating the handoffs meant the build and deployment steps could be represented in version-controlled infrastructure rather than repeated by hand. The notes describe two parallel pipelines, but do not document the exact difference between their triggers or targets; I have not guessed at that split here.
 
-## 🏗️ Infrastructure Design
+## CloudFormation as the infrastructure boundary
 
-### ☁️ CI/CD Pipeline Architecture
+CloudFormation was used to describe both shared infrastructure and application resources. The project notes group the templates into three areas:
 
-Each CI/CD pipeline includes:
+- Core infrastructure such as the VPC, IAM roles, and S3 buckets.
+- Application resources such as the ECS service, task definitions, and ECR image references.
+- The Landingzone storage module for application outputs.
 
-- **Source stage**: Triggered by push events to a Bitbucket repository
-- **Build stage**: Uses AWS CodeBuild to compile the Java app and create Docker images
-- **Deploy stage**: Deploys to ECS using CloudFormation templates
+Keeping those concerns in separate templates made the deployment easier to reason about: network and account resources were distinct from the service definition, and the storage integration had its own place. My CV records broader work creating CloudFormation scripts during the internship, while this article focuses on the infrastructure pieces relevant to the pipeline and Landingzone work.
 
-We employed a **push-based trigger** to reduce latency and eliminate bottlenecks caused by waiting for PRs to be merged. The process results in an efficient, automated path from commit to deployment.
+## The Landingzone feature
 
-### 🔐 Security Design
+Fusion needed a destination for processed outputs. The Landingzone work added an S3-backed storage path, with application code using the AWS SDK to route and timestamp files. That brought cloud storage into the application workflow rather than leaving it as a manual step after processing.
 
-- All secrets (MongoDB URI, Elastic APM tokens, etc.) are securely managed using **AWS Secrets Manager**
-- IAM policies follow the **principle of least privilege**
-- Build environments are isolated using distinct **roles and security groups**
+The earlier draft described this as an improvement to compliance and data governance. Those are reasonable goals for controlled storage, but the project notes do not provide a specific compliance control or validation result, so I am not claiming that the module itself established compliance. The useful technical point is narrower: the application could send its outputs to a configured S3 destination through AWS APIs.
 
----
+## Delivery and security considerations
 
-## 🧪 CloudFormation Strategy
+The notes describe the work across six weekly sprints: initial CloudFormation and ECS scaffolding, connecting Bitbucket to CodeBuild, automating Docker image creation, integrating Landingzone, then testing, logging, and documentation. That sequence shows how the infrastructure and application feature developed together instead of treating CI/CD as a separate final step.
 
-A modular approach to **Infrastructure as Code** (IaC) was used, consisting of:
+Secrets and access were also part of the design. The project used AWS Secrets Manager for application credentials and IAM roles to control what build and deployment components could access. The original write-up called out least-privilege policies and isolated build environments. I have kept those at the design level here rather than publish secret names, policy documents, or environment details from a company system.
 
-- `core-infra.yaml`: VPC, IAM roles, S3 buckets
-- `application.yaml`: ECS service, task definitions, ECR image references
-- `landingzone.yaml`: Defines a secure S3-backed storage module for Fusion outputs
+The main lesson for me was how many boundaries a deployment pipeline crosses: source control, build permissions, image storage, infrastructure changes, and a running service. CloudFormation and CodePipeline made those boundaries explicit, but they still needed careful permissions and a way to inspect failed builds or deployments. The project notes mention testing, logging, and debugging ECS tasks as part of the work; they do not include specific incident examples or measured deployment-time improvements.
 
-This setup enables rapid environment provisioning and clear separation of concerns between infrastructure components.
+## What I would extend
 
----
+The original plan listed automated secret rotation, separate development/staging/production environments, deployment notifications, and broader Landingzone ingestion as future work. I would still start with environment separation and clear deployment feedback: those make it easier to validate a change before it reaches a production service. Secret rotation and additional ingestion paths would need to be designed around the application's actual credential and data requirements.
 
-## 💡 The "Landingzone" Module
-
-A critical innovation introduced during the project was the **Landingzone module** — a new component added to the Fusion tool that:
-
-- Automatically stores processed data outputs to a secure S3 bucket
-- Integrates with document and compliance workflows
-- Uses AWS SDK calls within application logic to route and timestamp files
-
-This significantly enhanced Fusion’s ability to meet data governance and cloud-first requirements.
-
----
-
-## 📈 Development Process
-
-The project was delivered over **six weekly sprints** using Agile methodology. Key sprint deliverables included:
-
-- Sprint 1–2: CloudFormation core scaffolding + ECS setup
-- Sprint 3: CI/CD pipeline linking Bitbucket to CodeBuild
-- Sprint 4–5: Docker image automation + Landingzone integration
-- Sprint 6: Testing, logging integration, and documentation
-
-Code quality was maintained through peer reviews, static analysis, and isolated test deployments.
-
----
-
-## 🧠 Key Learnings
-
-Throughout this project, I developed strong hands-on experience in:
-
-- Designing **production-ready CI/CD pipelines** with AWS
-- Implementing **infrastructure-as-code (IaC)** using CloudFormation
-- Managing **multi-service AWS deployments** with security best practices
-- Debugging ECS task deployments, container failures, and IAM permission errors
-- Understanding the full lifecycle of **secure DevOps in a real-world setting**
-
----
-
-## 🚀 Future Directions
-
-The groundwork laid by this project enables future improvements:
-
-- Add **automated secret rotation**
-- Support **multi-environment pipelines** (dev/stage/prod)
-- Integrate with AWS EventBridge for Slack alerts
-- Expand Landingzone to support real-time ingestion
-
----
-
-## 🎓 Conclusion
-
-This CI/CD infrastructure project was more than a technical implementation — it was a strategic shift in how software is built and deployed at Fundrecs. I’m proud to have delivered a robust, scalable, and maintainable DevOps solution that continues to support rapid product iteration and secure cloud-native practices.
-
-
----
-*© 2025 Mat Leszkiewicz*
+This internship project gave me practical experience connecting application delivery to AWS infrastructure. The important part was not just creating a pipeline, but making the build, image, deployment, storage, and permissions fit together as one system.
