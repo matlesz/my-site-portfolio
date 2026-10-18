@@ -6,15 +6,13 @@ author_profile: true
 classes: about-page
 ---
 
-Hi, I'm **Mat Leszkiewicz** — a cybersecurity enthusiast with a background in computer science, DevOps, and technical support engineering. After completing a Higher Diploma in Computer Science at South East Technological University, I’ve focused my learning and professional development on cybersecurity, threat intelligence, and Security Operations Center (SoC) methodologies.
+Hi, I’m **Mat Leszkiewicz**, a Support Engineer at [n8n](https://n8n.io/) since June 2026. My background spans computer science, software support, and DevOps, with a continuing interest in how systems work and how they can be secured.
 
-Currently, I work as a Technical Support Engineer at Intercom, where I debug complex issues, build internal tools, and contribute to incident response. My past experience also includes a DevOps internship at FundRecs, where I developed AWS CI/CD pipelines and security infrastructure, and earlier roles at TikTok and Accenture in model optimization and content moderation.
+I completed a Higher Diploma in Computer Science at South East Technological University. Before joining n8n, I worked in product and technical support at Intercom and completed a software developer internship in FundRecs’ DevOps department, where I worked on AWS CI/CD pipelines and infrastructure. Earlier roles at TikTok and Accenture focused on model optimization and content moderation.
 
-With hands-on experience in Python, Java, JavaScript, cloud services like AWS, and tools like Elasticsearch, Git, and Docker, I aim to bridge the gap between engineering and security.
+My technical experience includes Python, Java, JavaScript, AWS, Elasticsearch, Git, and Docker. I continue to develop my knowledge of cybersecurity, threat intelligence, and Security Operations Center (SOC) practices alongside my work in support engineering.
 
-I'm passionate about learning, resilient in challenges, and always curious about how systems work—and how they can be secured. My goal is to transition into a full-time **cybersecurity analyst** role, where I can apply my skills to detect, respond to, and prevent real-world threats.
-
-When I'm not working or learning, I enjoy hiking, traveling, and diving deep into psychology and social engineering topics.
+Outside work, I enjoy hiking, traveling, and learning about psychology and social engineering. You can find more about my background on my [CV](/cv/) and read about my [projects](/projects/).
 
 <div class="tryhackme-embed">
     <iframe class="tryhackme-embed__frame" src="https://tryhackme.com/api/v2/badges/public-profile?userPublicId=4282750" title="TryHackMe public profile badge" loading="lazy"></iframe>

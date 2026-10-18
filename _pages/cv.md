@@ -52,7 +52,13 @@ title: "Curriculum Vitae"
 
 ## Work Experience
 
-**01/26–Present | Intercom**  
+**06/26–Present | n8n**
+*Support Engineer*
+- Investigate customer issues across workflow execution, APIs, integrations, networking, and self-hosted deployments using logs and reproducible cases.
+- Partner with Product and Engineering on escalations, supplying technical context and distinguishing configuration, integration, infrastructure, and product issues.
+- Improve troubleshooting documentation, runbooks, support processes, and automation; share debugging practices with teammates and the n8n community.
+
+**01/26–06/26 | Intercom**
 *Product Support Engineer, Ireland*
 - Embedded with the Email team, focused on keeping the GitHub issues backlog healthy, accelerating triage, and ensuring Customer Support and Sales have clear, accurate updates through Intercom.
 - Owned day-to-day triage for Email-related issues (inbound reports + internal escalations), investigating symptoms, validating against production signals, and clarifying next steps.
