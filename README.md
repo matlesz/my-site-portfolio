@@ -16,6 +16,23 @@ Contains basic configuration to get you a site with:
 
 Replace sample content with your own and [configure as necessary](https://mmistakes.github.io/minimal-mistakes/docs/configuration/).
 
+## Local preview on this Mac
+
+This site uses the GitHub Pages/Jekyll 3 bundle. The default Homebrew Ruby 4
+does not run its older gems. Use the installed rbenv Ruby 3.2.2 and Bundler
+2.4.10 instead:
+
+```bash
+./scripts/site.sh build
+./scripts/site.sh serve
+```
+
+Open <http://127.0.0.1:4000> after starting the server. The wrapper selects
+Ruby 3.2.2 and uses gems in `~/.local/share/my-site-portfolio/gems`, outside
+the iCloud-synced checkout. On another machine, install that Ruby/Bundler and
+the `Gemfile` dependencies before running the wrapper. `Gemfile.lock` and
+`vendor/bundle/` are local, ignored files; do not commit them or `_site/`.
+
 ---
 
 ## Troubleshooting

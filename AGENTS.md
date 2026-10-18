@@ -22,10 +22,12 @@
 - Install dependencies with `bundle install`.
 
 ## Build and dev commands
+- On this Mac use `./scripts/site.sh` (rbenv Ruby 3.2.2 and the local gem home outside iCloud) for the commands below.
 - Dev server: `bundle exec jekyll serve`
 - Dev server with drafts: `bundle exec jekyll serve --drafts`
 - Dev server with live reload: `bundle exec jekyll serve --livereload`
 - Build static site: `bundle exec jekyll build`
+- Local preview/build: `./scripts/site.sh serve` / `./scripts/site.sh build`.
 - Clean generated files: `bundle exec jekyll clean`
 - If you change `_config.yml`, restart the dev server.
 
@@ -155,7 +157,7 @@
 - No Copilot instructions found (`.github/copilot-instructions.md`).
 
 ## Quick checks before commit
-- Run `bundle exec jekyll build` to verify the site compiles.
+- Run `./scripts/site.sh build` to verify the site compiles on this Mac (or `bundle exec jekyll build` with another compatible Ruby environment).
 - Ensure new posts render correctly in the dev server.
 - Check links and embeds manually since no automated link checker exists.
 - Avoid committing secrets; the repo is public-facing content.

@@ -32,9 +32,14 @@ sign-offs, word caps, or external reviewers.
 - Keep the technical mechanism intact. A useful passage tells a reader what
   changed, why an alternative lost, what happened when tested, and what remains
   unfinished. Concrete details beat a polished summary.
+- **Do not compress an article into a support reply.** There is no target or
+  maximum word count. Preserve useful sections, examples, tradeoffs, technical
+  steps, lessons, and links; expand them when the source supports more detail.
+  Editing out filler must not mean editing out the story or replacing a
+  walkthrough with a handful of summary sentences.
 - Use headings, lists, code blocks, and links when they help someone follow a
-  longer article. Blog posts are not short support emails: there is no fixed
-  word count, mandatory warm opening, or required closing question.
+  longer article. Blog posts are not short support emails: there is no
+  mandatory warm opening or required closing question.
 - Match the post's actual stage. Say "I plan to" for unfinished work, not "I
   built"; acknowledge uncertainty only where it exists. Link external sources
   you actually used, without fabricating citations.
@@ -43,7 +48,7 @@ sign-offs, word caps, or external reviewers.
 
 Write the plain version first, then edit it once for voice:
 
-1. **Remove connective wrappers that carry no information.** Cut throat-clearing
+1. **Remove connective wrappers that carry no information, not substance.** Cut throat-clearing
    ("It's worth noting that"), scene-setting ("In today's fast-paced world"),
    self-commentary ("This highlights the importance of..."), and a sentence
    announcing a point the next sentence already makes. Let the fact start the
@@ -67,7 +72,9 @@ Write the plain version first, then edit it once for voice:
 Compare the revised draft with its source once more. Every technical fact,
 status, link, command, and author claim must still match. A cleaner sentence
 that loses a version number or changes a plan into a completed deployment is
-worse than the original.
+worse than the original. For an existing article, check that each section's
+purpose and concrete detail survive; if the rewrite has become much shorter,
+account for what was removed and put useful material back.
 
 ### Quick example
 
