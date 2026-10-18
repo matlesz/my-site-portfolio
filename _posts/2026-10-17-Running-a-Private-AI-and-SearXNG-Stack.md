@@ -21,6 +21,10 @@ The stack now has four important pieces:
 
 I also connected the local OpenCode client to the authenticated OpenAI-compatible API. That gives me a local model option for coding and tool-use work without changing the default model for every OpenCode session.
 
+![Open WebUI with the local Qwen3 14B model selected](/assets/images/open-webui-qwen3-14b.svg)
+
+*Open WebUI showing the local Qwen3 14B model selected.*
+
 ## The architecture
 
 The GPU VM owns inference. Open WebUI and llama-swap share a private Docker network, while the edge Caddy instance exposes the user-facing HTTPS routes only through the tailnet:

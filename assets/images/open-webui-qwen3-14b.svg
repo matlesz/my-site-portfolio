@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" role="img" aria-labelledby="title desc">
+  <title id="title">Open WebUI with the Qwen3 14B local model selected</title>
+  <desc id="desc">Dark Open WebUI-style screen showing Qwen3 14B selected above a chat input.</desc>
+  <rect width="960" height="360" fill="#000"/>
+  <g fill="#f2f2f2" font-family="Arial, Helvetica, sans-serif">
+    <rect x="382" y="50" width="42" height="42" rx="10" fill="#fff"/>
+    <text x="393" y="79" fill="#111" font-size="23" font-weight="700">oi</text>
+    <text x="444" y="80" font-size="30" font-weight="600">Qwen3 14B</text>
+    <rect x="16" y="158" width="928" height="108" rx="32" fill="#080808" stroke="#252525" stroke-width="1"/>
+    <text x="34" y="198" font-size="20" fill="#d8d8d8">How are you today?</text>
+    <text x="38" y="245" font-size="28" fill="#eee">+</text>
+    <text x="84" y="245" font-size="25" fill="#eee">◇</text>
+    <text x="738" y="239" font-size="16" fill="#d0d0d0">Qwen3 14B</text>
+    <text x="836" y="239" font-size="18" fill="#aaa">⌄</text>
+    <text x="874" y="244" font-size="23" fill="#ccc">♩</text>
+    <circle cx="925" cy="212" r="20" fill="#fff"/>
+    <path d="M925 222v-20m0 0-8 8m8-8 8 8" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="410" y="315" font-size="15" fill="#aaa">Open WebUI · v0.12.3</text>
+  </g>
+</svg>
