@@ -10,145 +10,84 @@ tags: [Homelab, Observability, Grafana, Prometheus, Loki, Promtail, Monitoring, 
 description: "A platform-engineer style recap of wiring a full observability stack for my homelab, with metrics, logs, and dashboards that stay useful after reboot day."
 ---
 
-> "If it isn’t observable, it’s a rumor." 
+On February 2, 2026, I spent a homelab session on a different kind of feature: **observability**. I wanted one place to check whether services were responding, which host or container was busy, and what the logs said when something failed. I connected Prometheus metrics and Loki logs to Grafana, then built dashboards around the questions I wanted to answer.
 
-Today’s homelab sprint wasn’t about new apps. It was about **confidence**.
-I wanted a single place to answer: _What’s healthy, what’s noisy, and what’s about to fail?_ So I built a full observability stack around **Grafana + Prometheus + Loki** and wired in node, container, log, and probe signals.
-
-Note: This post **does not expose internal IPs or Tailscale DNS names**. Any references to hosts are intentionally generic.
+This is a snapshot of the stack I documented that day. It does not include internal IPs or Tailscale DNS names. Some choices—especially Promtail—have since changed status, so I call out what I would do differently for a new deployment today.
 
 ---
 
-## ✅ What I Shipped
+## The data paths
 
-### Metrics pipeline
-- **Prometheus** scrapes host and container metrics.
-- **Node Exporter** feeds CPU, memory, disk, network, uptime.
-- **cAdvisor** adds per-container metrics.
-- **Blackbox Exporter** probes HTTP service health.
+The stack had two main paths. Prometheus scraped numeric metrics from exporters and probes. Promtail collected log lines and sent them to Loki. Grafana queried both systems so I could move from a service status or resource graph to related logs.
 
-### Logs pipeline
-- **Promtail** ships container + system logs.
-- **Loki** stores and indexes logs.
-- **Grafana** overlays metrics + logs in one view.
-
-### Dashboards
-- **Homelab Overview** (status, CPU/memory by node, top containers, errors)
-- **Services Overview** (CPU, memory, disk, network, uptime, status per node/service)
-- **TrueNAS Netdata Overview** (Netdata metrics)
-- **Router Overview** (Wi-Fi + router stats)
-- **Jellyfin Overview** (service health + host metrics)
-
----
-
-## 🧭 Architecture (ASCII)
-
-```
-                   +--------------------+
-                   |      Grafana       |
-                   |  Dashboards + UX   |
-                   +---------+----------+
-                             |
-                             | queries
-          +------------------+------------------+
-          |                                     |
-  +-------+-------+                     +-------+-------+
-  |  Prometheus   |                     |     Loki      |
-  |  Metrics DB   |                     |   Logs DB     |
-  +-------+-------+                     +-------+-------+
-          |                                     |
-  +-------+-------+                     +-------+-------+
-  | Node Exporter |                     |   Promtail    |
-  | Host Metrics  |                     | Log Shipper   |
-  +-------+-------+                     +-------+-------+
-          |
-  +-------+-------+     +------------------------+
-  |  cAdvisor     |     | Blackbox Exporter      |
-  | Container CPU |     | HTTP/TCP Probes        |
-  +---------------+     +------------------------+
+```text
+Hosts and containers ──> Node Exporter / cAdvisor ──┐
+Services             ──> Blackbox Exporter          ├──> Prometheus ──┐
+TrueNAS              ──> Netdata Prometheus output ─┘                 │
+                                                                       ├──> Grafana dashboards
+Containers and system logs ──> Promtail ──> Loki ─────────────────────┘
 ```
 
-In short: **metrics flow into Prometheus**, **logs flow into Loki**, and **Grafana sits above both**.
+Node Exporter provided host-level CPU, memory, disk, network, and uptime metrics. cAdvisor added per-container resource data. Blackbox Exporter checked HTTP endpoints from outside the services themselves; that distinction helped separate “the host is up” from “the web service answered.”
+
+Promtail shipped container and system logs into Loki. Grafana then gave me one interface for both metrics and log queries. This did not make the stack a full incident-management system, but it gave me a better starting point than opening each service and host separately.
+
+## Adapting exporters to the lab
+
+I added readable service labels to Prometheus targets so dashboard legends showed names instead of raw URLs. That made the charts easier to scan and let me group panels around services rather than endpoint strings.
+
+TrueNAS needed a different path. I could not expose Node Exporter there in the way I wanted, so I ran Netdata and scraped its Prometheus-compatible metrics. The TrueNAS dashboard showed CPU and other system measurements from that source. For the OpenWrt router, I used node-exporter Lua modules to collect Wi-Fi signal, bitrate, and connected-station metrics, then kept those panels on a separate router dashboard.
+
+The dashboards each had a job:
+
+- **Homelab Overview:** service status, node CPU and memory, top containers, and errors.
+- **Services Overview:** CPU, memory, disk, network, uptime, and status by service or node.
+- **TrueNAS Netdata Overview:** metrics collected through Netdata.
+- **Router Overview:** Wi-Fi and router statistics.
+- **Jellyfin Overview:** service health and host metrics.
 
 ---
 
-## 🖼️ Snapshot (Dashboard excerpt)
+## The dashboard snapshot
 
-![Homelab observability dashboard excerpt](/assets/images/homelab-observability-2026-02.png)
+This excerpt shows the kinds of measurements I had connected: CPU usage across nodes, TrueNAS CPU via Netdata, and CPU for individual containers. The graph labels identify the series, but the screenshot is only a point-in-time view; it is not a performance benchmark or proof that every host had complete coverage.
 
----
+![Homelab observability dashboard excerpt from February 2026](/assets/images/homelab-observability-2026-02.png)
 
-## ⚙️ Implementation Highlights
+I embedded the Homelab Overview in Homepage using an iframe. To get past a Grafana login loop, I enabled iframe embedding and anonymous Viewer access, and corrected Grafana's root URL and cookie settings. Anonymous access removes the login prompt; it does not authenticate the viewer. I only wanted this view inside my trusted network, so this configuration must be paired with network access controls and should not be exposed publicly. For a shared or internet-facing dashboard, use an authenticated arrangement or a deliberately public dashboard instead.
 
-### 1) Service labels for readable graphs
-I added **service labels** in Prometheus targets so dashboards show friendly names rather than raw URLs. That one change made every legend and table readable at a glance.
+## The problems that took time
 
-### 2) Netdata for TrueNAS
-TrueNAS didn’t expose node-exporter easily, so I deployed **Netdata** and scraped its Prometheus output instead. It cleanly feeds CPU, RAM, disk, and network with zero hacks.
+The dashboard exposed integration problems of its own:
 
-### 3) Router metrics (OpenWrt)
-OpenWrt node-exporter Lua modules give me **Wi-Fi signal, bitrate, and stations**. I kept those on a dedicated Router Overview dashboard to avoid noise.
+- **cAdvisor could not talk to Docker.** Updating cAdvisor to a version compatible with the Docker API resolved the connection issue. I did not record the exact version in this post, so I am not guessing one here.
+- **Prometheus and Loki could not write their data.** Their container processes needed ownership of the mounted data directories. I changed the directory ownership to match the IDs used by the images rather than loosening permissions broadly.
+- **The OpenWrt exporter only listened on loopback.** Prometheus on another host could not scrape it. I changed the listener to an address reachable on the LAN and kept the endpoint within the trusted network.
+- **Homepage was reachable only on its LAN address.** Tailscale Serve on another host needed to proxy to the address reachable from that host, not its own `localhost`.
 
-### 4) Kiosk-style Overview embedded in Homepage
-I enabled Grafana anonymous viewer mode and embedded the Homelab Overview via an iframe. That makes the homepage feel like a real NOC wall without needing a login.
+The iframe setup also needed careful treatment. `GF_SECURITY_ALLOW_EMBEDDING` controls whether Grafana can be framed; anonymous Viewer access controls who can see the dashboard without logging in. They solve different parts of the problem and neither should be enabled without deciding who can reach Grafana.
 
----
+## What I could answer afterward
 
-## 🧨 Gotchas (And Fixes That Worked)
+With the dashboards and probes in place, I could check whether a core HTTP service answered, compare CPU and memory across nodes, see which container was using resources, and search Loki when logs became noisy. That made troubleshooting more directed, but the telemetry still needed interpretation. A probe can say that a URL responded; it cannot tell me that the application returned the data I expected.
 
-- **Grafana iframe login loop**
-  - Fix: enable `GF_SECURITY_ALLOW_EMBEDDING`, anonymous viewer, and proper `GF_SERVER_ROOT_URL` with `SameSite=None` + `Secure` cookies.
+As of February 2, I still planned alerting channels, optional Proxmox exporter metrics, and panels for slow API endpoints. Alerting was not part of the shipped result in this post.
 
-- **cAdvisor couldn’t talk to Docker**
-  - Fix: bump cAdvisor to a newer version that supports the current Docker API.
+## Promtail status today
 
-- **Prometheus/Loki permissions**
-  - Fix: set ownership of data directories to the UID used by the container images.
+When I wrote this in February, Promtail was the log shipper in the deployed stack. **Grafana declared Promtail end-of-life on March 2, 2026** and says future development is in Grafana Alloy. That happened after this post's date. A new Loki deployment should use a supported log-collection path; an existing Promtail setup should be migrated and tested rather than assumed to work unchanged forever.
 
-- **Router exporter only bound to loopback**
-  - Fix: change the OpenWrt exporter to listen on LAN (not `127.0.0.1`).
+Grafana provides an Alloy conversion tool for Promtail configurations, but its documentation calls the conversion best-effort and warns that metrics, dashboards, alerts, or behavior may need changes. The source config should be reviewed and the new pipeline tested before replacing the running collector. I have not claimed that this migration is complete in this article.
 
-- **Homepage bound to LAN only**
-  - Fix: ensure Tailscale Serve proxies to the LAN IP, not localhost.
+## References
 
-These are the little operational details that turn dashboards from “demo” into “reliable.”
-
----
-
-## ✅ Results
-
-What I can answer instantly now:
-- Are core services responding? (blackbox)
-- Which node is hot or memory-bound? (node-exporter)
-- Which container is noisy? (cAdvisor)
-- What’s spamming logs? (Loki)
-
-That’s the difference between **reactive firefighting** and **proactive ops**.
-
----
-
-## 🔜 Next Up
-
-- Add alerting channels (email or chat)
-- Optional: add Proxmox export metrics
-- Add top slow endpoints for services with APIs
-
----
-
-## 📚 References
-
-- [Grafana](https://grafana.com/)
-- [Prometheus](https://prometheus.io/)
-- [Loki](https://grafana.com/oss/loki/)
-- [Promtail](https://grafana.com/docs/loki/latest/clients/promtail/)
+- [Prometheus documentation](https://prometheus.io/docs/)
+- [Grafana Loki documentation](https://grafana.com/docs/loki/latest/)
+- [Promtail documentation and end-of-life notice](https://grafana.com/docs/loki/latest/send-data/promtail/)
+- [Migrate from Promtail to Grafana Alloy](https://grafana.com/docs/alloy/latest/set-up/migrate/from-promtail/)
 - [Node Exporter](https://github.com/prometheus/node_exporter)
 - [cAdvisor](https://github.com/google/cadvisor)
 - [Blackbox Exporter](https://github.com/prometheus/blackbox_exporter)
-- [Netdata](https://www.netdata.cloud/)
-- [Homepage iFrame widget](https://gethomepage.dev/widgets/services/iframe/)
-
----
-
-## 🧠 Meta Description
-
-Built a homelab observability stack with Grafana, Prometheus, Loki, and Promtail. This post documents the architecture, dashboards, and real-world fixes needed to make the system reliable.
+- [Netdata Prometheus exporter](https://learn.netdata.cloud/docs/exporting-metrics/prometheus)
+- [Grafana anonymous authentication](https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-authentication/anonymous-auth/)
+- [Homepage iframe widget](https://gethomepage.dev/widgets/services/iframe/)
