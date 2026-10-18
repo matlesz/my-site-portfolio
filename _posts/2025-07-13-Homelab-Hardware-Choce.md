@@ -10,148 +10,77 @@ tags: ["homelab", "home server", "hardware guide"]
 description: "A practical guide to help you choose your first home server, whether you're just starting out or scaling up."
 ---
 
-Choosing your first home server starts with understanding your needs, your budget, and how much room you want to leave for future upgrades. Whether you're leaning toward a compact mini PC, a full-sized tower, or even a rackmount setup, your goal is to find the sweet spot between performance, efficiency, and expandability.
+The best first home server is the smallest, quietest, least expensive machine that can run the services you actually want. That sounds obvious, but it is easy to shop by CPU model or a tempting used-server price and only later discover the box is loud, short on memory, or expensive to leave on all year.
 
+I would choose hardware in this order: list the workloads, decide what must run at the same time, check storage and network needs, then compare the complete cost of suitable systems. A homelab for DNS filtering and a few containers has different requirements from a Proxmox host running several VMs, a NAS, or a media server that must transcode video.
 
-## Choosing a Form Factor: What Fits Your Life?
+## Start with the workload
 
-### Mini PCs (1L Form Factor)
-**Great for:** First-timers, low-power tasks, quiet home setups
+Write down what you want the machine to do and whether each service needs its own VM, can run in a container, or needs direct access to disks or a GPU. Then estimate the memory and storage those services need together, with room for the host and future experiments.
 
-Mini PCs are small, quiet, and energy-efficient—perfect for starting out. Models like the Lenovo ThinkCentre M920q or HP EliteDesk 800 G5 Mini can be found second-hand for around €200-350 and pack surprising power into a tiny footprint.
+For virtualization, check that the processor and motherboard support the hypervisor features you plan to use. Proxmox VE's [hardware requirements](https://www.proxmox.com/en/products/proxmox-virtual-environment/requirements) distinguish memory for the host from memory for guest VMs and containers, and call for additional headroom for ZFS or Ceph. The evaluation minimum is not a sensible sizing target for a multi-service host. Plan from the guests you intend to run, not the smallest number that lets the installer boot.
 
-**Pros:**
-- Very low power usage (~10-35W idle)
-- Virtually silent
-- Affordable and easy to tuck away
-- Decent performance for most basic homelab tasks
+Storage is another early decision. A compact system with one SSD may be enough for containers and test VMs; a growing media library or NAS needs drive bays, controller compatibility, and a plan for replacing failed disks. A mirror or RAID can improve availability, but it is not a backup. Check how many drives fit, whether they can be replaced easily, and how you will back up important data before buying.
 
-**Cons:**
-- Limited upgrade options
-- Not ideal for heavy virtualization or GPU tasks
-- Few expansion slots
+## Pick a form factor that fits the room
 
-[Read more about Mini PCs for homelab](https://acemagic.com/blogs/about-ace-mini-pc/best-mini-pc-for-homelab)
+### Mini PC
 
-### Tower/Desktop Systems
-**Great for:** Tinkerers, gamers, power users
+A used business mini PC, such as a ThinkCentre Tiny or EliteDesk Mini, can make a tidy first hypervisor or container host. These systems take little space and often run quietly, but expansion is constrained by the exact model: memory, storage slots, network ports, and cooling vary by SKU. Treat product families as starting points for research, not guarantees. Check the manufacturer's specification for the exact machine and price in memory or storage upgrades before comparing listings.
 
-If you're planning to build your own or upgrade over time, towers offer the most flexibility. You can choose every component yourself, upgrade as needed, and run just about any workload.
+Mini PCs suit small services and lightweight virtualization when the RAM and CPU fit the plan. They are a poor match if the design depends on several internal drives, full-size PCIe cards, or easy GPU upgrades.
 
-**Pros:**
-- Full control over parts
-- Room for powerful CPUs, GPUs, and lots of storage
-- Easy to cool and maintain
+### Tower or desktop
 
-**Cons:**
-- Takes up space
-- Uses more power
-- Costs more upfront
+A desktop tower gives you more room for memory, disks, and add-in cards. That makes it a flexible option for a home NAS, a virtualization host with several drives, or a media server where you want a supported GPU. It also occupies more floor or desk space, and a powerful configuration can consume more electricity. Check how many SATA ports and drive bays are available, the power supply's capacity and age, and whether the case has useful airflow.
 
-[Compare tower and rack options](https://g2digital.co.uk/rack-mounted-vs-tower-advantages-of-rack-mounted-pcs/)
+### Rack server
 
-### Rack Servers
-**Great for:** Advanced users, enterprise simulations, high-density labs
+Rack servers can be useful when you specifically want server-management features, multiple drive bays, or enterprise hardware to learn on. Used equipment can have a low purchase price, but that is only one part of its cost. Measure idle power, consider fan noise and heat, and include the rack, rails, and any replacement parts. A deep, loud 2U server is not automatically a good fit for a home office just because it has many CPU cores.
 
-Used rack servers like the Dell R720 or HP DL380 G9 offer a ton of power and features at a good price—but they’re noisy and power-hungry. They’re best suited for serious lab environments.
+### ARM single-board computer
 
-**Pros:**
-- Lots of RAM, CPU cores, and storage capacity
-- Enterprise features like IPMI, hot-swap bays, and redundancy
-- Ideal for large-scale or 24/7 workloads
+A Raspberry Pi or another ARM board is a good fit for a focused, low-power service or an experiment that supports its software architecture. Before making it the center of a larger lab, verify that the hypervisor, applications, storage adapters, and container images you need support that exact board and processor architecture.
 
-**Cons:**
-- Loud
-- Heavy and large
-- Requires a rack and lots of cooling
+Media transcoding is a good example of why workload details matter. Jellyfin can use supported integrated or discrete GPUs for hardware acceleration, but codec support depends on the GPU, operating system, drivers, and transcoding pipeline. Its [hardware acceleration documentation](https://jellyfin.org/docs/general/post-install/transcoding/hardware-acceleration/) notes that some stages can still fall back to software. The current docs also say the Raspberry Pi 5 lacks hardware video encoders and that Raspberry Pi V4L2 acceleration is deprecated. A Pi can still serve media that clients can play directly, but I would not choose one assuming it will handle every transcode. Check the format your clients need and verify the device's current support first.
 
-[Deep dive into rack servers](https://www.fs.com/blog/comparing-blade-rack-and-tower-servers-for-optimal-deployment-2187.html)
+## Work out the 24/7 power cost
 
-### ARM Boards (Raspberry Pi, Orange Pi, etc.)
-**Great for:** Learning, hobby projects, ultra-low-power tasks
+The electricity estimate depends on average draw at the wall, not the processor's TDP or the power supply's rated wattage. For a machine running all year:
 
-If you’re experimenting or just want something super cheap and quiet, ARM boards like Raspberry Pi are fun and functional.
+```text
+annual cost = average watts ÷ 1,000 × 8,760 hours × price per kWh
+```
 
-**Pros:**
-- Extremely energy-efficient (~5-15€/year)
-- Affordable and silent
-- Great learning platform
+At an illustrative €0.25 per kWh, the arithmetic looks like this:
 
-**Cons:**
-- Not very powerful
-- Not ideal for media servers or virtualization
-- Some software limitations
+| Average draw | Energy per year | Example annual cost |
+| ---: | ---: | ---: |
+| 10 W | 87.6 kWh | €21.90 |
+| 25 W | 219 kWh | €54.75 |
+| 100 W | 876 kWh | €219.00 |
+| 300 W | 2,628 kWh | €657.00 |
 
-[ARM board homelab guide](https://minipctech.com/build-a-home-lab-with-a-mini-pc/)
+These are example power levels, not promises about what a Pi, mini PC, tower, or rack server will draw. The real number changes with the processor, disks, memory, peripherals, workload, and power settings. If 24/7 operation matters, borrow or buy a wall meter and measure the actual system at idle and under a representative workload. Recalculate with your own electricity rate.
 
-## The Real Cost: Thinking Beyond the Sticker Price
+## A short buying checklist
 
-### Upfront Hardware Costs
-- **Entry Level (€200-400):** Used mini PCs, ARM boards, basic towers
-- **Mid-Range (€400-800):** Newer mini PCs, DIY towers, refurbished rack servers
-- **High-End (€800+):** Fully custom builds, enterprise rack servers, future-proof setups
+Before paying, I would check:
 
-### Annual Power Costs (at €0.25/kWh)
-- **ARM (10W):** ~€22
-- **Mini PC (25W):** ~€55
-- **Tower (100W):** ~€219
-- **Rack Server (300W):** ~€657
+- **Workload:** What services and VMs will run together? Does anything need GPU passthrough or direct disk access?
+- **Memory:** How much do the guests need, and can this exact model be upgraded?
+- **Storage:** How many drives fit? Are the controller and drive interfaces supported by the OS or hypervisor?
+- **Networking:** Is one gigabit Ethernet connection enough, or do storage and other hosts justify faster networking?
+- **Media:** Will clients direct-play your files, or must the server transcode? Check current codec and hardware-acceleration support.
+- **Ownership cost:** What will the full build, storage, upgrades, and measured annual electricity cost?
+- **Living space:** Can you tolerate the system's fan noise, heat, size, and location?
+- **Recovery:** How will you back up the data and restore services if the machine or a disk fails?
 
-[Cost breakdown and calculator](https://www.bargainhardware.co.uk/blog/blog/how-much-power-does-a-server-use)
+You do not need a rack to start a homelab. A mini PC is a reasonable first step for modest services; a tower makes sense when drives and cards matter; rack hardware is worth considering when its specific features justify the space and power. Start with a clear workload, leave room for the services you expect to add, and avoid paying for expansion you will never use.
 
-## Matching Hardware to Your Goals
+## References
 
-### Virtualization
-Want to run multiple virtual machines? Tower systems and rack servers are your best bet thanks to higher core counts and more RAM. Newer mini PCs (with 8th gen Intel or better) can still run a handful of lightweight VMs well.
-
-[Virtualization hardware comparisons](https://www.virtualizationhowto.com/2024/02/top-5-mini-pcs-for-home-server-in-early-2024/)
-
-### Media Streaming and Transcoding
-Transcoding for Jellyfin or Plex? Look for Intel integrated graphics (UHD 770/780) or dedicated GPUs like the Intel Arc A380. Intel still leads in this space, especially for HEVC content.
-
-[Guide to media transcoding hardware](https://www.bitdoze.com/best-mini-pc-home-server/)
-
-### Network Services (DNS, VPN, etc.)
-These are light tasks, and any modern system can handle them. Just make sure your server has enough Ethernet ports and possibly support for 2.5GbE or 10GbE if you're thinking ahead.
-
-## How Much Can You Grow?
-
-### Mini PCs
-Upgrade RAM and SSDs, maybe even dual NVMe if you pick the right model like the Lenovo M920q. That said, don’t expect to add GPUs or more storage bays.
-
-### Towers
-Full upgrade freedom—CPU, GPU, drives, RAM. If you build smart, you won’t need to replace your system for years.
-
-### Rack Servers
-Maximum expandability: multiple CPUs, lots of RAM, many storage bays. Ideal for big projects or shared setups.
-
-## Best Choices by User Type
-
-### New to Homelabs?
-- **Start With:** Used mini PC (Lenovo M920q or HP G5 Mini)
-- **Why:** Quiet, cheap, simple to set up, low risk
-- **Budget:** €200-350
-
-### Enthusiasts and DIYers
-- **Start With:** Custom AMD AM5 tower build
-- **Why:** Control, upgradeability, and performance
-- **Budget:** €500-800
-
-### Simulating Business/Enterprise Setups
-- **Start With:** Refurbished rack server (Dell R720)
-- **Why:** Enterprise features, scale, realism
-- **Budget:** €400-800 (plus space and cooling needs)
-
-### Low Power & Tinkerers
-- **Start With:** Raspberry Pi 5 or Orange Pi 5
-- **Why:** Super low energy use, great for learning
-- **Budget:** €100-200
-
-## Final Tips
-- **Start small.** You can always upgrade later.
-- **Mind the power bill.** A little efficiency goes a long way.
-- **Pick something popular.** It’s easier to get help from the community.
-- **Don’t chase raw power.** Stability and reliability matter more.
-- **Think 2-3 years ahead.** Plan for the long run.
-
-No matter which route you take, 2025 is a great year to dive into home servers. There’s affordable, powerful hardware at every level—just find what fits your goals and go for it.
+- [Proxmox VE hardware requirements](https://www.proxmox.com/en/products/proxmox-virtual-environment/requirements)
+- [Jellyfin hardware acceleration](https://jellyfin.org/docs/general/post-install/transcoding/hardware-acceleration/)
+- [Jellyfin hardware selection](https://jellyfin.org/docs/general/administration/hardware-selection/)
+- [Raspberry Pi 5 specifications](https://www.raspberrypi.com/products/raspberry-pi-5/)
