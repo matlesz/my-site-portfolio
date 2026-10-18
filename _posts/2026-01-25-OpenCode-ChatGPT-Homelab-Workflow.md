@@ -10,130 +10,85 @@ tags: [Homelab, Automation, ChatGPT, OpenCode, DevOps]
 description: "How I used OpenCode with ChatGPT to turn homelab chaos into a documented, repeatable workflow with dashboards, runbooks, and service snapshots."
 ---
 
-> "Homelab work is fun until you forget what you changed last night."
+Running a homelab means making small changes across Proxmox, VMs, LXC containers, Docker Compose projects, and shared storage. I wanted help working through those changes without relying on chat history or my memory as the only record of what the lab looked like. In January 2026, I started using **OpenCode** with **ChatGPT** alongside a repository of service definitions, plans, and runbooks.
 
-Running a homelab is equal parts experimentation and documentation debt. I wanted to move faster without losing track of what I changed, why I changed it, and how to undo it. The fix was to integrate **OpenCode** with **ChatGPT** and treat it as my infrastructure co-pilot.
+The goal was not to hand over the homelab to an agent. I wanted a repeatable loop: give the assistant the relevant project context, verify the live state before changing anything, make a small edit, inspect the diff and command output, then update the documentation. This post is a snapshot of that workflow and the Homepage dashboard work documented on January 25, 2026.
 
-This post documents how I wired that workflow together and the concrete things it helped me ship.
+## The lab needed a source of truth
 
----
+The lab had multiple layers. A change to a Docker service could depend on a VM, an SMB mount, a firewall rule, or a DNS entry. If I made a change in a chat and did not record it in the repository, the next session had no reliable way to know what was actually deployed.
 
-## 🧭 The Problem: Context Rot in a Fast-Moving Lab
+I organized the repository around how I operated the lab:
 
-My setup has multiple layers—Proxmox, VMs, LXC containers, Docker Compose projects, and SMB mounts. Each change might touch several systems. Keeping mental notes wasn’t sustainable, and ad-hoc tweaks made it hard to reproduce or explain what I did.
+- `docs/` for architecture, inventory, and current context
+- `plans/` for proposed work that had not yet shipped
+- `services/` for service-specific Compose files and configuration
+- `runbooks/` for repeatable recovery and operational steps
 
-I needed:
-- A shared source of truth
-- Structured runbooks and plans
-- Safe, repeatable changes
-- A way to integrate new services fast without losing the plot
+An `AGENTS.md` supplied repository-specific guidance, including keeping changes scoped, avoiding secrets, and asking before destructive operations. I also kept a living homelab context note with observations from the actual environment. That distinction mattered: a plan describes what I intend to do; a service file describes what I checked into Git; command output is evidence about the live system at that moment.
 
----
+## How I used OpenCode and ChatGPT
 
-## 🧠 The Workflow: OpenCode + ChatGPT as a Co-Pilot
+The post calls the workflow “OpenCode + ChatGPT.” OpenCode was the interface to the project files and tools; ChatGPT provided the model assistance. I am not documenting a particular authentication method here, and this is not a claim that the ChatGPT application itself directly manages the homelab. The important part of the workflow was keeping the model's suggestions close to the repository and checking them against the system before treating them as fact.
 
-OpenCode gave me an interactive CLI layer where ChatGPT could:
-- Read and update documentation
-- Run safe commands and capture outputs
-- Create service snapshots without leaking secrets
-- Build dashboards and validate endpoints
+For a service change, the process I aimed for was:
 
-Instead of asking it to “do everything,” I gave it a **framework**:
+1. Read the service definition, its documentation, and the relevant current-state notes.
+2. Check the running service or endpoint when the task depends on live behavior.
+3. Make one scoped change rather than asking for a broad rebuild of the lab.
+4. Review the diff and the output from any commands before proceeding.
+5. Record the final state, decision, and any follow-up work in the repository.
 
-### 1) Agent Guidance
-I created an `AGENTS.md` file so the agent knows the house rules (no secrets, no destructive commands, keep changes scoped).
+The model could help draft a Compose change, inspect files, or suggest a validation command. It could not make an unverified result true: a successful file edit did not prove that a container started, and a plan did not mean the change had been deployed. I kept those states separate in the notes.
 
-### 2) Verified Context
-The homelab state lives in a living document (`homelab_context.md`). When something changes, the agent updates it with real outputs, not guesses.
+## The Homepage dashboard
 
-### 3) Repo Structure That Matches Reality
-I organized the repo into `docs/`, `plans/`, `services/`, and `runbooks/`, so planning and execution stay separate but connected.
+One concrete result was a **Homepage** dashboard for the lab. I deployed the container, configured service links and widgets, and corrected a host-validation error by adding the allowed host values to the relevant configuration and environment. The screenshot below shows the layout on January 25: resource bars at the top and separate infrastructure, application, and other service cards.
 
----
+![Homelab Homepage dashboard on January 25, 2026](/assets/images/homelab-dashboard-2026-01.png)
 
-## ⚙️ What This Helped Me Ship
+This dashboard was useful as a starting point, not a full monitoring system. It put links and a few status indicators in one place, but deeper metrics and logs were still on the plan. I did not treat a green service check as proof that its data was backed up or that every feature worked.
 
-### ✅ Homepage dashboard
-The agent deployed a **Homepage** container, configured widgets, and wired all the service links. It also fixed the host validation error by setting allowed hosts in config and environment.
+## Keep the repository useful—and sanitized
 
-![Homelab dashboard screenshot](/assets/images/homelab-dashboard-2026-01.png)
+I added selected Compose snapshots for `n8n`, `qBittorrent`, Portainer, Home Assistant, and Homepage. The purpose was to keep the deployment definitions reviewable and recoverable in Git. The snapshots had to be sanitized: `.env.example` files can document required variable names, but real credentials, tokens, private URLs, and rendered command output do not belong in a public or shared repository.
 
-*Current dashboard layout while the setup is still evolving.*
+The runbooks and context notes were meant to close the loop after an operational change. I wanted to capture what was changed, how I checked it, and how to recover—not just paste a command into a transcript. That was an operating rule I was building toward, rather than a guarantee that every change had already been documented perfectly.
 
-### ✅ Service snapshots in Git
-We captured sanitized compose snapshots for:
-- `n8n`
-- `qBittorrent`
-- `Portainer`
-- `Home Assistant`
-- `Homepage`
+## Guardrails are instructions, not a sandbox
 
-### ✅ Runbooks and docs
-Every service change ends up as a doc update—no more “future me will remember.”
+My project guidance said to keep secrets out of Git, avoid destructive commands without confirmation, and keep work narrowly scoped. Those rules helped make expectations visible to the assistant, but they did not make every command safe. OpenCode tools operate with the permissions of the environment where they run; command output can also contain sensitive values. I still needed to review proposed commands, inspect diffs, redact outputs, and verify that a change affected the intended service.
 
-### ✅ Build small, iterate fast
-I’m deliberately building the smallest useful version of each piece first. It’s easy to get discouraged by gorgeous dashboards on Reddit, but shipping a simple, working layout beats waiting for perfection. The polish can come later.
+Current [OpenCode V2 permissions documentation](https://opencode.ai/v2/docs/permissions) describes `allow`, `ask`, and `deny` rules for tools. The precise interface and provider setup can change between versions, so I would use the documentation for the installed version rather than copy authentication steps from an older post. This article records the workflow I described in January 2026, not a current setup guide.
 
----
-
-## 🔒 Guardrails That Kept It Safe
-
-To avoid security or stability mistakes, I enforced a few rules:
-- **Secrets never enter Git**
-- **env.example** files instead of real `.env`
-- **No destructive commands** without explicit confirmation
-- **Every change documented** in the homelab context or service snapshot
-
----
-
-## 🧪 Example Snippets
+For small operational checks, I used commands such as:
 
 {% raw %}
 ```bash
-# Jump to Proxmox
-ssh proxmox
-
-# Update Homepage
+# Restart the Homepage Compose project
 docker compose -f /opt/homepage/docker-compose.yml restart
 
-# List running containers
+# Review running container status and published ports
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
 ```
 {% endraw %}
 
----
+These examples assume you are on the Docker host and have confirmed the correct project and Compose file. A command that restarts a service still changes the live system; the fact that it is short does not make it risk-free.
 
-## 📈 Results So Far
+## What changed after this snapshot
 
-- Faster iteration without losing context
-- A clean, navigable repo that mirrors the real lab
-- Dashboards and docs that stay in sync
-- Safer changes with explicit runbooks
+At the end of the January post, I listed API-backed Homepage widgets, automated snapshots for `/opt` configuration, and Grafana plus Prometheus as future work. The monitoring stack was documented shortly afterward in [a separate observability post](/Homelab-Observability-Grafana-Stack/), where I described Prometheus, Grafana, Loki, exporters, and probes. That later build should not be read back into the January dashboard snapshot.
 
----
+The broader lesson was that an AI assistant is most useful when it works against a maintained record of the system. A file tree, current-state notes, a plan, and a runbook each answer different questions. Keeping them distinct helped me move faster without confusing a suggested command with a deployed change.
 
-## 🔜 What’s Next
+## References
 
-- Add richer widgets (API-powered) for Jellyfin, Portainer, and qBittorrent
-- Automate backup snapshots for `/opt` configs
-- Add monitoring stack (Grafana + Prometheus)
-
----
-
-## 📚 References
-
-- [Proxmox VE Documentation](https://pve.proxmox.com/pve-docs/)
+- [OpenCode V2 documentation](https://opencode.ai/v2/docs/)
+- [OpenCode providers](https://opencode.ai/v2/docs/providers)
+- [OpenCode tools](https://opencode.ai/v2/docs/tools)
+- [OpenCode permissions](https://opencode.ai/v2/docs/permissions)
 - [Docker Compose file reference](https://docs.docker.com/compose/compose-file/)
-- [Docker `ps` command reference](https://docs.docker.com/engine/reference/commandline/ps/)
+- [Docker `ps` command reference](https://docs.docker.com/reference/cli/docker/container/ls/)
 - [Homepage Docker installation](https://gethomepage.dev/installation/docker/)
-- [Homepage configuration docs](https://gethomepage.dev/configs/)
-- [Portainer documentation](https://docs.portainer.io/)
-- [Home Assistant documentation](https://www.home-assistant.io/docs/)
-- [n8n documentation](https://docs.n8n.io/)
-- [Installing qBittorrent](https://github.com/qbittorrent/qBittorrent/wiki/Installing-qBittorrent)
-
----
-
-## 🧠 Meta Description
-
-How I used OpenCode with ChatGPT to turn homelab sprawl into a documented, repeatable workflow—deploying dashboards, runbooks, and service snapshots without losing track of changes.
+- [Homepage configuration](https://gethomepage.dev/configs/)
+- [Proxmox VE documentation](https://pve.proxmox.com/pve-docs/)
