@@ -35,6 +35,9 @@
 - Single-test command: not applicable (no test suite).
 
 ## Content conventions
+- For drafting or revising portfolio articles, load the project-local
+  `portfolio-human-voice` skill. It adapts the humaniser for long-form posts
+  without support-email rules.
 - All pages and posts start with YAML front matter in `---` blocks.
 - Use `layout: single` unless another layout is required.
 - Prefer explicit `permalink` for pages in `_pages`.
