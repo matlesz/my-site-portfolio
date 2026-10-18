@@ -35,7 +35,7 @@ This page highlights the projects and lab work that represent the way I approach
         <h2 class="home-section__title">Other project</h2>
         <span class="home-section__rule" aria-hidden="true"></span>
     </div>
-    {% assign project_featured_titles = "geekDb: A Fullstack Movie Database Built with Next.js|Turning a Raspberry Pi into an RTSP Streaming Server" | split: "|" %}
+    {% assign project_featured_titles = "geekDb: Exploring TMDB with Next.js|Turning a Raspberry Pi into an RTSP Streaming Server" | split: "|" %}
     <div class="entries-list">
         {% for project_title in project_featured_titles %}
         {% assign project_post = site.posts | where: "title", project_title | first %}
