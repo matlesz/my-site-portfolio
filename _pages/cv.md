@@ -53,7 +53,7 @@ title: "Curriculum Vitae"
 ## Work Experience
 
 **06/26–Present | n8n**
-*Support Engineer*
+*Support Engineer, Poland*
 - Investigate customer issues across workflow execution, APIs, integrations, networking, and self-hosted deployments using logs and reproducible cases.
 - Partner with Product and Engineering on escalations, supplying technical context and distinguishing configuration, integration, infrastructure, and product issues.
 - Improve troubleshooting documentation, runbooks, support processes, and automation; share debugging practices with teammates and the n8n community.

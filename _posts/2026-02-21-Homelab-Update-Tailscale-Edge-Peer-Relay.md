@@ -10,78 +10,50 @@ tags: [Homelab, Tailscale, Caddy, Networking, AWS, PlatformEngineering]
 description: "A detailed walkthrough of my Tailscale edge migration, webhook isolation, and AWS peer relay setup, plus the gotchas that slowed me down."
 ---
 
-> "The network is the product when the product is the network."
+> “The network is the product when the product is the network.”
 
-Today was a networking focused homelab sprint. I moved the edge toward a single Caddy entry point, kept webhooks safe, and finished a peer relay setup on AWS after an OCI attempt struggled with timeouts. This is the longer, more practical version of the story. It is the walkthrough I wish I had before I started.
+On February 21, 2026, I worked on three related network changes: bringing internal HTTPS routing toward a single Caddy edge, exposing only n8n webhook paths through Tailscale Funnel, and setting up an AWS peer relay. The edge and webhook work was a migration in progress. I configured the relay node, but real Jellyfin streaming tests were still on my list, so I do not claim a measured throughput improvement.
 
+## One private HTTPS entry point
 
-## Why I changed it
+I wanted a consistent URL pattern for services that should only be reachable from my tailnet, instead of configuring Tailscale Serve separately on each service host. The plan was to run Caddy on an edge node joined to Tailscale, bind Caddy to that node's tailnet address, and proxy requests to services on the LAN. The private names and addresses remain placeholders here.
 
-I wanted one consistent HTTPS entry point for every internal service instead of scattered Tailscale Serve configs. A free custom domain plus a wildcard SSL certificate keeps internal URLs clean and production-like without paying for per service certs. Centralizing routing reduces port conflicts and makes reboots less fragile. Webhooks still need public ingress, so Funnel stays, but only for a webhook-only proxy. Finally, a peer relay helps throughput when direct peer to peer connections are not available, which matters for streaming.
+The Caddy site block in my notes shows the routing shape:
 
-## Edge Caddy migration walkthrough
-
-This is the path I took so far, with the steps that matter in practice.
-
-1. Picking an internal domain and keeping it tailnet only. I use `https://<service>.<HOMELAB_DOMAIN>` for everything that should stay private.
-
-2. Joining the edge node to the tailnet and capturing its tailnet IP. I bind the proxy to that interface so the LAN never sees it.
-
-3. Adding a wildcard DNS record for `*.<HOMELAB_DOMAIN>` that points to the edge tailnet IP.
-
-4. Issuing a wildcard certificate with ACME DNS 01. HTTP 01 cannot validate a tailnet only host, so DNS 01 is the reliable path.
-
-5. Adding explicit routes in Caddy for each service and keeping them tailnet only.
-
-Example Caddy site block with placeholders:
-
-```bash
-caddy
-
+```caddyfile
 https://homeassistant.<HOMELAB_DOMAIN> {
     bind <EDGE_TAILNET_IP>
     reverse_proxy http://<LAN_SERVICE_HOST>:8123
 }
 ```
 
-If an upstream uses a self signed cert, add a transport block with `tls_insecure_skip_verify` in that site block. I keep those in a separate snippet to avoid repeating myself.
+That is a route example, not a complete certificate configuration. The February migration plan used `acme.sh` with DNS-01 to issue the wildcard certificate, then configured Caddy to load the certificate and key from files. Let’s Encrypt’s DNS-01 challenge can validate a public domain without exposing the web server publicly, and it is required for wildcard certificates. The domain must be one I control through a DNS provider that supports the required TXT updates. Keep the provider credential narrowly scoped and outside Git; the actual certificate and key paths are intentionally omitted here.
 
-## Webhook ingress for n8n
+The original notes suggested disabling upstream certificate verification for a self-signed backend. That bypasses an important TLS check and is not a safe default. For a lasting setup, configure Caddy to trust the internal CA or use a valid certificate rather than leave verification disabled. I have not included the bypass configuration as a recipe.
 
-The goal here is simple. Keep the n8n UI private, but still accept public webhooks.
+## Public webhooks, private n8n UI
 
-**Step 1** Running a small webhook-only reverse proxy on dockervm.
+n8n needed to receive callbacks from services on the public internet, but I did not want its editor UI publicly reachable. I put a small Caddy proxy in front of n8n and routed Tailscale Funnel to that proxy. The proxy was intended to pass only the webhook paths and return 404 for everything else:
 
-**Step 2** Pointing Funnel at that proxy so only `/webhook` and `/webhook-test` are reachable.
-
-**Step 3** Setting explicit base URLs in n8n so generated links and callbacks are correct.
-
-Webhook-only proxy example:
-
-```bash
-caddy
-
+```caddyfile
 :<WEBHOOK_PROXY_PORT> {
-    @webhooks path /webhook/* /webhook-test/*
+    @webhooks path /webhook /webhook/* /webhook-test /webhook-test/*
     reverse_proxy @webhooks <N8N_LOCAL_URL>
     respond 404
 }
 ```
 
-Funnel command:
+The Funnel target in my notes was the proxy on the local machine, with HTTPS on port 443:
 
 ```bash
-tailscale funnel --https=443 --bg --yes http://localhost:<WEBHOOK_PROXY_PORT>
+tailscale funnel --https=443 --bg http://127.0.0.1:<WEBHOOK_PROXY_PORT>
 ```
 
-n8n environment:
+Funnel makes that endpoint reachable from the public internet. The Caddy path filter limits which n8n routes it forwards, but it does not authenticate webhook requests. Each workflow still needs whatever request verification, credentials, or signatures are appropriate for the service calling it. I kept the editor URL on the private side and set explicit n8n editor and webhook base URLs so generated links used the intended destinations.
 
-```bash
-env
+The tracked February proxy used Docker host networking and Caddy listened on `:8088`, while Funnel forwarded to `127.0.0.1:8088`. That means the local Funnel target was correct, but the proxy port was not automatically loopback-only. A firewall rule was needed to prevent LAN clients from bypassing the intended public path filter. Treat a host-networked listener as reachable until the firewall configuration proves otherwise.
 
-N8N_EDITOR_BASE_URL=https://n8n.<HOMELAB_DOMAIN>
-WEBHOOK_URL=https://<TAILNET_DOMAIN>
-```
+The commands and environment variable names in the original notes reflect the versions I was using then. Current n8n documentation deprecates `WEBHOOK_URL` in favor of `N8N_WEBHOOK_URL` in newer releases and calls for `N8N_PROXY_HOPS` when running behind a reverse proxy. Tailscale also changed Serve and Funnel CLI syntax in client version 1.52; check the docs for the installed version before copying old configuration.
 
 ## Current architecture (simplified)
 
@@ -106,78 +78,59 @@ Edge Caddy
 Internal services on LAN
 ```
 
-## Peer relay, why and how
+## A peer relay for connections that cannot go direct
 
-Tailscale peer relays are designed to improve performance when direct peer to peer links cannot be established. The Tailscale team explains the motivation and tradeoffs clearly in their peer relay launch post. The short version is that a well placed relay can offer lower latency and higher throughput than the default DERP fallback. That matters for sustained streams like Jellyfin. Here is the reference I used while planning the move: https://tailscale.com/blog/peer-relays-ga/
+Tailscale first tries to establish a direct device-to-device connection. If that fails, it can relay traffic through a peer relay in the same tailnet, and use DERP when no suitable peer relay is available. A peer relay can perform better than DERP for some paths, but it adds a hop and is not faster than a direct connection by definition. Tailscale announced peer relays generally available on February 18, three days before this post. I wanted to test it for longer Jellyfin streams, not assume the benefit in advance.
 
-Here is how I set it up on AWS with Ubuntu 22.04 and no internal IPs.
+I set up a small EC2 instance running Ubuntu 22.04 and configured Tailscale to listen for relay traffic on UDP port `40000`. The security group needed that UDP port reachable by intended peers. I also enabled SSH for administration; that inbound rule should be limited to an administrator source rather than opened broadly.
 
-**Step 1**
-Launching an EC2 instance with a small Ubuntu image. I open TCP 22 and UDP 40000 in the security group.
-
-**Step 2** 
-Installing Tailscale and joining the tailnet with a tagged auth key.
-
-**Step 3** 
-Enabling the relay port and confirming that tailscaled is listening.
+I joined the instance to my tailnet using a tagged auth key, then configured its relay port. I am not including the enrollment key or a command that could expose it in shell history. The relay-port setting itself looks like this:
 
 ```bash
-curl -fsSL https://tailscale.com/install.sh | sh
-sudo systemctl enable --now tailscaled
-sudo tailscale up --authkey=TSKEY-NEW --advertise-tags=tag:peer-relay
 sudo tailscale set --relay-server-port=40000
 ```
 
-Verification commands:
+Configuring the node is only one part of enabling a peer relay. Tailscale's current documentation also requires an access-policy grant using `tailscale.com/cap/relay` for the devices allowed to use it. I did not include that policy in the original notes, so this article is not a complete copy-and-paste deployment guide.
+
+I used status and socket checks to inspect the relay setup:
 
 ```bash
 tailscale status
 sudo ss -u -lpn | grep 40000
 ```
 
-## Oracle Free Tier detour and why AWS was easier
+Those checks show the daemon and UDP listener state, but they do not prove another peer selected the relay. The validation step I still had planned was to use `tailscale ping --verbose <target>` and look for a `peer-relay` path, then stream a known Jellyfin title and compare it with a direct connection. The post does not contain those results, so I cannot claim the relay improved playback.
 
-I tried OCI first because the free tier is attractive. The reality was a string of timeouts, SSH sessions hanging during banner exchange, and repeated OOM kills while installing packages. I spent more time fighting the VM than working on the relay. That was the signal to stop.
+## The OCI detour
 
-AWS was the opposite. Ubuntu came up cleanly, the package install was stable, and the relay was listening on UDP 40000 within minutes. It cost a bit more, but it saved hours of uncertainty.
-
-## How I validate it works
-
-First I check that the relay port is open and tailscaled is listening. Then I run `tailscale ping --verbose <target>` from a client to see whether the path goes through a relay. Finally I stream a known Jellyfin title and compare startup time and buffering versus a direct path.
-
-## Gotchas I hit and the fixes
-
-Funnel hostnames are locked to `*.ts.net`, so the public webhook URL must stay on `<TAILNET_DOMAIN>`.
-
-I only funnel the webhook proxy and keep everything else behind the edge.
-
-Tailscale Serve can steal host ports before Docker binds them. 
-
-The fix was to remove Serve bindings and let edge Caddy handle HTTPS, leaving only Funnel for webhooks.
-
-Wildcard TLS needs DNS 01. HTTP 01 does not work for tailnet only hosts, so DNS 01 is the reliable path.
-
-OCI had repeated timeouts and OOM kills, so I moved the relay to AWS to finish the setup.
+I tried Oracle Cloud Infrastructure first because its free tier looked attractive. In that attempt, SSH sessions repeatedly stalled during the banner exchange, package installation hit out-of-memory kills, and I spent more time getting a usable VM than configuring the relay. I stopped that attempt and used an AWS EC2 instance instead. The Ubuntu VM came up and installed the required packages reliably for me; that is what happened in this project, not a general comparison of the two cloud providers.
 
 ## Results so far
 
-- The edge migration path is clear and documented.
-- Webhooks remain safe and isolated behind Funnel.
-- The peer relay is live on AWS and ready for real world Jellyfin testing.
+- I had a Caddy-based path documented for internal HTTPS, but this post does not prove that every service had migrated.
+- Funnel was configured to point at a webhook-only proxy. That limits routed paths; the endpoints still need appropriate n8n request validation.
+- The peer relay node was configured on AWS, but I had not yet verified that a client used it or compared Jellyfin playback.
 
-## Next up
+## Current documentation notes
 
-- Tune Jellyfin streaming quality with real world relay data.
+Tailscale's current peer-relay docs require more than setting a UDP port: a tailnet grant must allow the intended devices to use the `tailscale.com/cap/relay` capability. My original article does not include that policy, so readers should not treat its setup steps alone as a complete deployment. Peer-relay status should be checked from a client, not inferred from an open UDP listener.
+
+The public webhook design also needs to be treated as public ingress. Funnel forwards requests from the internet to the configured target; routing only `/webhook` and `/webhook-test` does not authenticate the caller. Keep n8n's editor private and use per-workflow credentials or signature validation where the source supports it.
+
+Current Caddy docs confirm wildcard certificates require DNS-01 plus a DNS provider module. They also warn that `insecure_skip_verify` disables upstream TLS verification. I have described both as constraints rather than recommendations because my source notes do not document the provider-specific DNS setup or a trusted internal CA.
+
+n8n's current reverse-proxy docs use `N8N_WEBHOOK_URL` (with `N8N_PROXY_HOPS`) instead of the older `WEBHOOK_URL` in newer releases. Check the documentation for the n8n version you run before applying this older configuration.
 
 ## References
 
-- [Tailscale Serve](https://tailscale.com/kb/1112/serve), 
-- [Tailscale Funnel](https://tailscale.com/kb/1223/funnel), 
-- [Tailscale peer relays GA](https://tailscale.com/blog/peer-relays-ga/),
-- [Caddy documentation](https://caddyserver.com/docs/)
-- [ACME DNS 01 challenge](https://letsencrypt.org/docs/challenge-types/#dns-01-challenge),
-- [Amazon EC2](https://aws.amazon.com/ec2/)
-
-## Meta Description
-
-This homelab update covers a detailed Tailscale edge migration, webhook isolation for n8n, and an AWS based peer relay setup, with practical steps, Oracle Free Tier lessons, and real world gotchas.
+- [Tailscale Peer Relays documentation](https://tailscale.com/docs/features/peer-relay/)
+- [Tailscale Peer Relays GA announcement](https://tailscale.com/blog/peer-relays-ga/)
+- [Tailscale connection types](https://tailscale.com/docs/reference/connection-types)
+- [Tailscale Funnel](https://tailscale.com/docs/features/tailscale-funnel)
+- [Tailscale Funnel CLI](https://tailscale.com/docs/reference/tailscale-cli/funnel)
+- [Tailscale Serve CLI](https://tailscale.com/docs/reference/tailscale-cli/serve)
+- [Caddy automatic HTTPS](https://caddyserver.com/docs/automatic-https)
+- [Caddy TLS DNS challenge](https://caddyserver.com/docs/caddyfile/directives/tls#dns-challenge)
+- [Let's Encrypt challenge types](https://letsencrypt.org/docs/challenge-types/)
+- [n8n webhook URLs behind a reverse proxy](https://docs.n8n.io/hosting/configuration/configuration-examples/configure-webhook-urls-with-reverse-proxy/)
+- [AWS security group rules](https://docs.aws.amazon.com/vpc/latest/userguide/security-group-rules.html)
