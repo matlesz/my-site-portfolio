@@ -1,5 +1,5 @@
 ---
-title: "MyGeekDB: An IMDB-Style Android App in Kotlin"
+title: "MyGeekDB: A Kotlin Movie and TV App"
 date: 2025-06-29
 layout: single
 author_profile: true
@@ -9,84 +9,48 @@ related: true
 tags: [Android, Mobile Development, Projects]
 ---
 
-As part of my portfolio and continuous learning in full-stack and mobile development, I created **MyGeekDB** — an IMDB-style Android app built with Kotlin. The goal of this project was to combine clean architecture, real-time database handling, and modern Android development best practices into a lightweight but fully functional application.
+I built **MyGeekDB** to explore Android development with Kotlin. The app brings movie and TV information into one place: I can browse recommendations, search for something specific, open its details, and save favorites to my account. The screen is built with Jetpack Compose, movie and series information comes from TMDB, and Firebase handles sign-in and the data tied to each user.
 
----
+That distinction matters. An earlier description of the project made it sound like Firestore was the movie database and users could add or edit catalog entries. Looking at the code, neither is how this version works. TMDB supplies the catalog; Firestore stores profiles and favorites. The add-and-remove flow applies to favorites, not to the movies themselves.
 
-## 📱 What Is MyGeekDB?
+## Finding something to watch
 
-MyGeekDB is a simple movie catalog app that allows users to:
+The home screen has separate movie and TV sections. `MovieViewModel` requests movie recommendations from TMDB, while `SeriesViewModel` loads popular TV series. The app reads titles, overviews, posters, vote averages, vote counts, and popularity from the responses. Poster images are loaded into Compose components with Coil.
 
-- Browse a list of movies (with posters and metadata)
-- Add, update, and delete movies from the collection
-- View individual movie details
-- Store data in **Firebase Firestore**, making it scalable and real-time
+Search has the same split. When I type a query, the movie view model calls TMDB's movie-search endpoint; the series view model uses its TV-search endpoint. The home screen lets me switch which type I am searching. Selecting a result opens a detail screen with its poster, overview, and rating information. There is a fallback image when a TMDB result has no poster.
 
----
+This was a useful part of building the app because the UI has to handle two kinds of media without pretending they are the same Kotlin model. `Movie` and `Series` each carry their own fields, and the screens decide which details to show for the item I selected.
 
-## 🧰 Tech Stack
+## Favorites belong to the signed-in user
 
-Here’s what powers the app:
+I used Firebase Authentication for email/password accounts and Google Sign-In. The login flow also includes registration and a password-reset request. Once signed in, the user's ID determines where favorites are stored in Firestore:
 
-- **Language**: Kotlin
-- **Architecture**: MVVM (Model-View-ViewModel)
-- **Database**: Firebase Firestore
-- **UI**: Jetpack components, RecyclerView
-- **Navigation**: Jetpack Navigation component
-- **State Management**: LiveData & ViewModel
-- **IDE**: Android Studio
+```text
+users/{uid}/favoriteMovies/{movieId}
+users/{uid}/favoriteSeries/{seriesId}
+```
 
----
+Tapping a favorite control updates the list held by the view model and writes the change to the corresponding Firestore document. The view models also listen for changes to those collections, so saved favorites can flow back into the UI. In the favorites screen, I can switch between movies and series and swipe an item away to remove it. This is different from editing TMDB's catalog: the saved item is a copy of the movie or series information associated with my account.
 
-## 🎯 Key Features
+The repository README includes example Firestore rules that restrict access to a user's own documents. The app code also checks for a current Firebase user before it reads or writes favorites. Those are important boundaries for account data, although the repository alone cannot tell me whether the same rules are deployed in a particular Firebase project.
 
-- 🔍 **Search functionality** for quick filtering
-- ☁️ **Real-time database** syncing with Firebase
-- ✅ **Validation and input controls** for adding/editing entries
-- 🔄 **CRUD operations** (Create, Read, Update, Delete)
-- 📱 **Responsive UI** for different screen sizes
+## Putting Compose and Firebase together
 
----
+MyGeekDB uses MVVM: the view models do the network and Firestore work, and the Compose screens observe their `LiveData`. `MainActivity` sets up the Compose UI, while the home screen manages the drawer, search, media tabs, details, and favorites. I used Material 3 components for the interface. The app's theme already follows the device's light or dark setting, with dynamic colors on supported Android versions.
 
-## 🧪 What I Learned
+Profile editing is another place where the pieces meet. A signed-in user can change their display name and pick a profile image. The image-upload path writes the file to Firebase Storage, obtains its download URL, then updates the profile record. That is more involved than a local form field: the UI has to wait for the upload and show an error if it fails.
 
-This project helped solidify my skills in:
+The hardest part for me was keeping asynchronous work and UI state understandable. A Firestore listener can update favorites after a network change, while TMDB search results arrive on a different path. Keeping those results in view models and observing them from Compose gave me a clearer place to handle updates than putting every request directly inside a screen.
 
-- Kotlin best practices and idioms
-- Using Firebase as a backend-as-a-service
-- Structuring Android apps using MVVM
-- Managing real-time data updates with Firestore
-- Improving UI/UX using Jetpack libraries
+## What I would improve
 
----
+There are rough edges in this version. In the home screen, the search-loading flag is cleared immediately after an asynchronous search starts, before the response necessarily arrives. I would tie that flag to the request's completion so it reflects what the screen is actually waiting for. The movie-recommendations request also uses a fixed TMDB account identifier in the code; I would revisit that before treating recommendations as personal to each signed-in user.
 
-## 🧠 Challenges & Solutions
+The features I originally listed as future work still include reviews, ratings written by users, sorting, and offline caching with Room or another local store. TMDB ratings are already *displayed*, which is not the same as letting someone write a review. Authentication and system-driven dark mode are already in the code, so they do not belong on the future-features list.
 
-- **State handling** with asynchronous Firebase calls required carefully managing LiveData to avoid UI flickering.
-- Handling **Firestore permissions** and avoiding reads/writes from unauthenticated users needed tight security rule management.
-- I integrated simple user input validation to avoid malformed data in the database.
+Building MyGeekDB helped me practice Kotlin, Compose state, and the boundary between a public catalog API and private, account-specific data. The linked repository shows the implementation; the walkthrough shows the app's screens.
 
----
+## Code and walkthrough
 
-## 🚀 What's Next?
-
-Future improvements may include:
-
-- User authentication via Firebase Auth
-- Adding reviews/ratings and sorting features
-- Dark mode support
-- Offline caching using Room or local database fallback
-
----
-
-## 🔗 Project Repository
-
-Check out the full source code here:  
-👉 [MyGeekDB on GitHub](https://github.com/matlesz/MyGeekDB)
-
----
-
-## 📹 Video Walkthrough of the project
-👉 [Video](https://www.youtube.com/watch?v=EW1q2XsieC0)
-
-This project was a stepping stone in my journey toward becoming a cybersecurity analyst with a solid understanding of system architecture, mobile ecosystems, and secure data handling. Stay tuned for more projects and blog posts!
+- [MyGeekDB source on GitHub](https://github.com/matlesz/MyGeekDB)
+- [Video walkthrough](https://www.youtube.com/watch?v=EW1q2XsieC0)
