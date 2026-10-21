@@ -52,13 +52,10 @@ SearXNG runs separately on the Docker VM:
 
 ```text
 Open WebUI search tool
-        |
         v
 SearXNG JSON endpoint
-        |
         v
 SearXNG + gluetun VPN network namespace
-        |
         v
 Search engines through the VPN egress
 ```
