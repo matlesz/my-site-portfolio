@@ -7,7 +7,13 @@ classes: about-page
 eyebrow: "About me"
 ---
 
-Hi, I’m **Mat Leszkiewicz**, a Support Engineer at [n8n](https://n8n.io/) since June 2026. My background spans computer science, software support, and DevOps, with a continuing interest in how systems work and how they can be secured.
+<div class="about-profile">
+    <img src="/assets/images/bio-photo.jpg" alt="Portrait of Mat Leszkiewicz">
+    <div>
+        <p class="portfolio-eyebrow">Support engineering · DevOps · Cybersecurity</p>
+        <p>Hi, I’m <strong>Mat Leszkiewicz</strong>, a Support Engineer at [n8n](https://n8n.io/) since June 2026. My background spans computer science, software support, and DevOps, with a continuing interest in how systems work and how they can be secured.</p>
+    </div>
+</div>
 
 I completed a Higher Diploma in Computer Science at South East Technological University. Before joining n8n, I worked in product and technical support at Intercom and completed a software developer internship in FundRecs’ DevOps department, where I worked on AWS CI/CD pipelines and infrastructure. Earlier roles at TikTok and Accenture focused on model optimization and content moderation.
 

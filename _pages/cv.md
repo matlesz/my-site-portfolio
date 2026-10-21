@@ -6,7 +6,7 @@ classes: cv-page
 eyebrow: "Experience and background"
 ---
 
-## Lanuages
+## Languages
 
 **Polish Native** | **English Fluent**
 
