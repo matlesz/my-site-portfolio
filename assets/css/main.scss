@@ -2239,3 +2239,29 @@ blockquote {
         border-color: var(--portfolio-accent);
     }
 }
+
+.cv-page .portfolio-prose > h2 {
+    margin-top: 2rem;
+}
+
+.cv-page .portfolio-prose > h2:first-child {
+    margin-top: 0;
+}
+
+.cv-page .portfolio-prose blockquote {
+    background: var(--portfolio-surface);
+    border-left: 3px solid var(--portfolio-accent);
+    border-radius: 12px;
+    font-style: normal;
+    margin: 1rem 0 2rem;
+    padding: 1rem 1.25rem;
+}
+
+.cv-page .portfolio-prose blockquote p {
+    font-style: normal;
+    margin: 0 0 0.8rem;
+}
+
+.cv-page .portfolio-prose blockquote p:last-child {
+    margin-bottom: 0;
+}
