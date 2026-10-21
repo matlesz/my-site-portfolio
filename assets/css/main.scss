@@ -2578,3 +2578,11 @@ blockquote {
 .portfolio-home-page .home-intro__copy > .portfolio-eyebrow {
     margin-bottom: 1rem;
 }
+
+.cv-page .portfolio-prose > h2:first-child {
+    font-size: 1.8rem;
+}
+
+.cv-page .portfolio-prose > hr:first-of-type {
+    display: none;
+}
