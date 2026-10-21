@@ -2484,3 +2484,24 @@ blockquote {
     border-left: 3px solid var(--portfolio-accent);
     padding-left: 1.25rem;
 }
+
+@media (max-width: 480px) {
+    .portfolio-nav a {
+        border: 0;
+        font-size: 0.62rem;
+        letter-spacing: 0.02em;
+        padding-left: 0.1rem;
+        padding-right: 0.1rem;
+    }
+
+    .portfolio-header__contact {
+        font-size: 0.62rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .portfolio-nav a,
+    .portfolio-header__contact {
+        font-size: 0.58rem;
+    }
+}
