@@ -2560,3 +2560,30 @@ blockquote {
 .tryhackme-embed__frame {
     flex-shrink: 0;
 }
+
+.tryhackme-embed {
+    background: #050806;
+}
+
+.tryhackme-embed__frame {
+    width: 435px;
+}
+
+@media (max-width: 600px) {
+    .tryhackme-embed__frame {
+        transform: scale(0.85);
+        width: 435px;
+    }
+}
+
+@media (max-width: 400px) {
+    .tryhackme-embed__frame {
+        transform: scale(0.8);
+    }
+}
+
+@media (max-width: 380px) {
+    .tryhackme-embed__frame {
+        transform: scale(0.75);
+    }
+}
