@@ -9,6 +9,6 @@
             <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
             {% endfor %}
         </nav>
-        <a class="portfolio-header__contact" href="mailto:{{ site.email }}">Contact <span aria-hidden="true">↗</span></a>
+        <a class="portfolio-header__contact" href="{{ '/contact/' | relative_url }}">Contact <span aria-hidden="true">↗</span></a>
     </div>
 </header>
