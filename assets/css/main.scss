@@ -2184,3 +2184,10 @@ blockquote {
         order: -1;
     }
 }
+
+@media (max-width: 600px) {
+    .portfolio-article .portfolio-prose p {
+        text-align: justify;
+        text-justify: inter-word;
+    }
+}
