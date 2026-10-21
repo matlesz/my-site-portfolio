@@ -24,3 +24,5 @@ jobs:
           bundler-cache: true
       - name: Build site
         run: bundle exec jekyll build
+      - name: Check internal links
+        run: python3 scripts/check-links.py _site
