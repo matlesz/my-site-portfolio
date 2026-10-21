@@ -26,7 +26,3 @@ excerpt: "The easiest way to reach me without publishing my email address."
         <span>Best for project discussions, code, and open-source work.</span>
     </a>
 </div>
-
-<h2>Before you reach out</h2>
-
-<p>For questions about a specific article or project, including the relevant link helps me respond with useful context. I usually reply through the platform where you contacted me.</p>
