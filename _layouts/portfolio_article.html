@@ -12,7 +12,8 @@
             <header class="portfolio-article__header">
                 <p class="portfolio-eyebrow">{{ page.date | date: "%d.%m.%Y" }}{% if page.read_time %} · {{ page.read_time }} min read{% endif %}</p>
                 <h1>{{ page.title }}</h1>
-                {% if page.excerpt %}<p class="portfolio-article__dek">{{ page.excerpt }}</p>{% endif %}
+                {% assign article_summary = page.excerpt | default: page.description %}
+                {% if article_summary %}<p class="portfolio-article__dek">{{ article_summary }}</p>{% endif %}
                 {% if page.tags %}<div class="portfolio-tags" aria-label="Tags">{% for tag in page.tags %}<span>{{ tag }}</span>{% endfor %}</div>{% endif %}
             </header>
             <div class="portfolio-prose">{{ content }}</div>

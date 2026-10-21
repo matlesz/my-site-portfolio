@@ -2205,3 +2205,15 @@ blockquote {
         text-justify: inter-word;
     }
 }
+
+@media (max-width: 600px) {
+    .portfolio-article .portfolio-prose p {
+        line-height: 1.8 !important;
+    }
+
+    .portfolio-article__dek {
+        line-height: 2 !important;
+        text-align: justify;
+        text-justify: inter-word;
+    }
+}
