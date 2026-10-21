@@ -1749,3 +1749,109 @@ blockquote {
     font-size: 1rem;
     margin: 0;
 }
+
+/* Dark mode is the default; light mode remains available from the header toggle. */
+:root {
+    color-scheme: dark;
+    --portfolio-bg: #050806;
+    --portfolio-surface: #0b110d;
+    --portfolio-text: #d9f7df;
+    --portfolio-muted: #8fae96;
+    --portfolio-border: #1d3423;
+    --portfolio-accent: #39ff88;
+    --portfolio-accent-soft: #0b2715;
+    --portfolio-radius: 14px;
+}
+
+:root[data-theme="light"] {
+    color-scheme: light;
+    --portfolio-bg: #fbfbfa;
+    --portfolio-surface: #ffffff;
+    --portfolio-text: #171717;
+    --portfolio-muted: #686868;
+    --portfolio-border: #e5e5e2;
+    --portfolio-accent: #285943;
+    --portfolio-accent-soft: #edf4ef;
+}
+
+.portfolio-header {
+    background: color-mix(in srgb, var(--portfolio-bg) 94%, transparent);
+    border-bottom-color: var(--portfolio-border);
+}
+
+.portfolio-brand__mark {
+    background: var(--portfolio-accent);
+    color: var(--portfolio-bg);
+}
+
+.portfolio-header__actions {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+}
+
+.portfolio-theme-toggle {
+    background: transparent;
+    border: 0;
+    color: var(--portfolio-muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    padding: 0.35rem 0;
+    text-transform: uppercase;
+}
+
+.portfolio-theme-toggle:hover,
+.portfolio-theme-toggle:focus {
+    color: var(--portfolio-accent);
+}
+
+.portfolio-button {
+    border-color: var(--portfolio-border);
+    color: var(--portfolio-text);
+}
+
+.portfolio-button--solid {
+    background: var(--portfolio-accent);
+    border-color: var(--portfolio-accent);
+    color: var(--portfolio-bg);
+}
+
+.portfolio-button--solid:hover,
+.portfolio-button--solid:focus {
+    background: var(--portfolio-text);
+    border-color: var(--portfolio-text);
+    color: var(--portfolio-bg);
+}
+
+.portfolio-skip-link {
+    background: var(--portfolio-accent);
+    color: var(--portfolio-bg);
+}
+
+.portfolio-skip-link:focus {
+    color: var(--portfolio-bg);
+}
+
+.portfolio-prose code,
+.portfolio-prose pre {
+    background: var(--portfolio-surface);
+    border: 1px solid var(--portfolio-border);
+    color: var(--portfolio-text);
+}
+
+.portfolio-prose blockquote {
+    background: var(--portfolio-accent-soft);
+    border-left-color: var(--portfolio-accent);
+}
+
+@media (max-width: 700px) {
+    .portfolio-header__actions {
+        gap: 0.6rem;
+    }
+
+    .portfolio-theme-toggle {
+        font-size: 0.58rem;
+    }
+}
