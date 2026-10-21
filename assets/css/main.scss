@@ -2101,3 +2101,28 @@ blockquote {
     margin-right: auto;
     max-width: 100%;
 }
+
+.article-navigation a {
+    text-align: left;
+}
+
+.article-navigation a:last-child {
+    text-align: right;
+}
+
+.portfolio-article .portfolio-prose p,
+.portfolio-article .portfolio-prose li {
+    line-height: 1.95;
+}
+
+@media (max-width: 600px) {
+    .article-navigation a,
+    .article-navigation a:last-child {
+        text-align: left;
+    }
+
+    .portfolio-article .portfolio-prose p,
+    .portfolio-article .portfolio-prose li {
+        line-height: 1.8;
+    }
+}
