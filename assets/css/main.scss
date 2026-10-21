@@ -2136,3 +2136,23 @@ blockquote {
         margin-right: auto;
     }
 }
+
+@media (max-width: 700px) {
+    .about-profile {
+        align-items: center;
+    }
+
+    .portfolio-header__contact {
+        display: inline-flex;
+        font-size: 0.58rem;
+        white-space: nowrap;
+    }
+
+    .portfolio-header__inner {
+        gap: 0.45rem;
+    }
+
+    .portfolio-nav {
+        gap: 0.55rem;
+    }
+}
