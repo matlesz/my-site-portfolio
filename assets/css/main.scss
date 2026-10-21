@@ -2265,3 +2265,18 @@ blockquote {
 .cv-page .portfolio-prose blockquote p:last-child {
     margin-bottom: 0;
 }
+
+.cv-page .portfolio-prose blockquote {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.cv-page .cv-skills-heading + p {
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .cv-page .portfolio-prose blockquote {
+        text-align: justify;
+    }
+}

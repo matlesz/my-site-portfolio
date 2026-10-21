@@ -91,6 +91,7 @@ eyebrow: "Experience and background"
 ---
 
 ## Technology Skills
+{: .cv-skills-heading}
 
 **Network Architecture** • **Docker** • **AWS** • **Elastic Stack** • **Honeycomb** • **Git** • **HTML5** • **CSS3** • **Python** • **Linux** • **Bash** • **Raspberry Pi** • **JavaScript** • **Ruby** • **Java** • **SQL** • **NoSQL** • **Application architecture** • **Full Stack** • **Web API** • **NodeJS** • **Atlassian Stack** • **Heroku** • **Next.JS** • **Kotlin** • **AWS** • **AI Automation** • **Code Analysis** • **Kibana** • **Honeycomb** • **Log Analysis** • **Incident Response**
 
