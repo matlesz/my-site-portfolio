@@ -10,7 +10,7 @@
             {% endfor %}
         </nav>
         <div class="portfolio-header__actions">
-            <button class="portfolio-theme-toggle" type="button" aria-label="Switch to light mode" data-theme-toggle>Light mode</button>
+            <button class="portfolio-theme-toggle" type="button" aria-label="Switch to light mode" title="Switch to light mode" data-theme-toggle>☀</button>
             <a class="portfolio-header__contact" href="{{ '/contact/' | relative_url }}">Contact <span aria-hidden="true">↗</span></a>
         </div>
     </div>
@@ -21,8 +21,10 @@
         if (!toggle) return;
         var updateToggle = function () {
             var isLight = document.documentElement.dataset.theme === "light";
-            toggle.textContent = isLight ? "Dark mode" : "Light mode";
-            toggle.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
+            var label = isLight ? "Switch to dark mode" : "Switch to light mode";
+            toggle.textContent = isLight ? "☾" : "☀";
+            toggle.setAttribute("aria-label", label);
+            toggle.setAttribute("title", label);
         };
         updateToggle();
         toggle.addEventListener("click", function () {
