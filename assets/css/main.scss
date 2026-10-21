@@ -2479,3 +2479,8 @@ blockquote {
     border-left: 0;
     padding-left: 0;
 }
+
+.cv-page .portfolio-prose > h2 + blockquote {
+    border-left: 3px solid var(--portfolio-accent);
+    padding-left: 1.25rem;
+}
