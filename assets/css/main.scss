@@ -2156,3 +2156,25 @@ blockquote {
         gap: 0.55rem;
     }
 }
+
+@media (max-width: 700px) {
+    .portfolio-main,
+    .portfolio-article,
+    .portfolio-article__header,
+    .portfolio-prose {
+        box-sizing: border-box;
+        max-width: 100%;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .portfolio-main {
+        overflow-x: clip;
+    }
+
+    .portfolio-article__header h1,
+    .portfolio-article__dek,
+    .portfolio-prose {
+        overflow-wrap: anywhere;
+    }
+}
