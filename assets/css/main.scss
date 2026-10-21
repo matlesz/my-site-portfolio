@@ -2328,3 +2328,21 @@ blockquote {
     border-color: #effff3;
     color: #ffffff;
 }
+
+.home-page .section-label {
+    font-size: 0.85rem;
+}
+
+.home-page .focus-grid h2 {
+    font-size: 1.35rem;
+}
+
+@media (max-width: 700px) {
+    .home-page .section-label {
+        font-size: 0.8rem;
+    }
+
+    .home-page .focus-grid h2 {
+        font-size: 1.2rem;
+    }
+}
