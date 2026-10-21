@@ -2061,3 +2061,21 @@ blockquote {
     color: var(--portfolio-muted);
     margin-top: 1.5rem;
 }
+
+.cv-inline-list {
+    border-left: 3px solid var(--portfolio-accent);
+    color: var(--portfolio-muted);
+    line-height: 1.75 !important;
+    margin: 1.5rem 0 !important;
+    padding-left: 1rem;
+}
+
+.cv-inline-list strong {
+    color: var(--portfolio-text);
+    font-family: "Space Grotesk", sans-serif;
+}
+
+.cv-inline-list strong::after {
+    content: " · ";
+    white-space: pre;
+}

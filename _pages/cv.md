@@ -32,24 +32,9 @@ eyebrow: "Experience and background"
 **01/21–12/24 | Southeast Technological University in Waterford**  
 *Higher Diploma in Computer Science*
 
-**Main Modules:**
-- Full Stack Web Development
-- Java
-- Computer Systems & Networks
-- Databases
-- DevOps
-- Cyber Security
-- Security Solutions and SoC
-- Agile Workshops
-- Mobile App Development
+<p class="cv-inline-list"><strong>Main Modules</strong> Full Stack Web Development · Java · Computer Systems & Networks · Databases · DevOps · Cyber Security · Security Solutions and SoC · Agile Workshops · Mobile App Development</p>
 
-**Assignments:**
-- IMDB clone in React
-- Real Time Streaming Server on Raspberry Pi
-- JavaScript place marking web app
-- Simple weather station web app in Java
-- Next.JS IMDB clone
-- IMDB Kotlin Clone
+<p class="cv-inline-list"><strong>Selected assignments</strong> IMDB clone in React · Real Time Streaming Server on Raspberry Pi · JavaScript place marking web app · Simple weather station web app in Java · Next.JS IMDB clone · IMDB Kotlin Clone</p>
 
 ---
 
