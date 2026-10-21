@@ -2079,3 +2079,12 @@ blockquote {
     content: " · ";
     white-space: pre;
 }
+
+.portfolio-article__dek {
+    line-height: 1.85;
+}
+
+.portfolio-article .portfolio-prose p,
+.portfolio-article .portfolio-prose li {
+    line-height: 1.85;
+}
