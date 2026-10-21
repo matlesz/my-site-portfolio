@@ -2477,3 +2477,10 @@ blockquote {
 .portfolio-header__contact:focus-visible {
     border-color: var(--portfolio-accent);
 }
+
+@media (max-width: 380px) {
+    .portfolio-header__contact {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+    }
+}
