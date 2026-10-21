@@ -8,6 +8,7 @@ read_time: true
 share: true
 related: true
 tags: [React, Projects]
+description: "A Next.js movie-discovery site using React, Tailwind CSS, and TMDB for browsing, search, and film details."
 ---
 
 I built **geekDb** as a movie-discovery site with Next.js and [The Movie Database (TMDB)](https://www.themoviedb.org/). It gives me a way to browse trending titles, top-rated movies, and films now playing, search for a movie, and open a detail page. The interface uses React and Tailwind CSS; the catalog data comes from TMDB rather than a database I maintain.

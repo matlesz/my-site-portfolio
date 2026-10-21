@@ -8,6 +8,7 @@ read_time: true
 share: true
 related: true
 tags: [Homelab, Self-Hosting, Proxmox, Virtualization, Projects]
+description: "A 2025 homelab layout using Proxmox, VMs, containers, storage, networking, and self-hosted services."
 ---
 
 I built this homelab to run the services I wanted at home—file storage, media, DNS filtering, automation, and remote access—without putting every workload directly on the hypervisor. **Proxmox VE** became the base, with separate VMs and an LXC container for different roles. This is a snapshot of the layout and troubleshooting I documented in 2025, not a claim that every component is still configured the same way today.
