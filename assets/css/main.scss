@@ -2598,3 +2598,7 @@ blockquote {
 .cv-page .portfolio-prose > h2:first-child + table {
     font-size: 1.25rem;
 }
+
+.cv-page .portfolio-prose > h2:first-child + table + h2 {
+    margin-top: 1rem;
+}
