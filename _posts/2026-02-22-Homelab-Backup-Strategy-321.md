@@ -189,11 +189,9 @@ These are the docs I used or wish I had open while doing this:
 
 ```
 TrueNAS (ZFS, encrypted, snapshots)
-  |\
-  | \__ PBS datastore (NFS) -> PBS -> Proxmox backups
-  |
-  \__ App data (SMB) -> restic (Backrest) -> Jottacloud
-                                 \-> RPi (planned)
+↓ PBS datastore (NFS) → PBS → Proxmox backups
+↓ App data (SMB) → restic (Backrest) → Jottacloud
+  ↳ RPi (planned)
 ```
 
 If you are building something similar, take the time to map your data tiers and storage layout first. Everything else becomes much easier once the data model is clean.

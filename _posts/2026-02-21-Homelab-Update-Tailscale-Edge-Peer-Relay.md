@@ -60,22 +60,17 @@ The commands and environment variable names in the original notes reflect the ve
 
 ```
 Internet (webhooks)
-    |
-    v
+↓
 Tailscale Funnel
-    |
-    v
+↓
 Webhook-only proxy
-    |
-    v
+↓
 n8n
 
 Tailnet clients
-    |
-    v
+↓
 Edge Caddy
-    |
-    v
+↓
 Internal services on LAN
 ```
 
