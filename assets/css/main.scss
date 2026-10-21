@@ -1983,3 +1983,46 @@ blockquote {
         text-align: left;
     }
 }
+
+.writing-search {
+    border-bottom: 1px solid var(--portfolio-border);
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.writing-search label {
+    color: var(--portfolio-muted);
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.09em;
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+}
+
+.writing-search input {
+    background: var(--portfolio-surface);
+    border: 1px solid var(--portfolio-border);
+    border-radius: 999px;
+    box-sizing: border-box;
+    color: var(--portfolio-text);
+    font: inherit;
+    padding: 0.8rem 1rem;
+    width: 100%;
+}
+
+.writing-search input:focus {
+    border-color: var(--portfolio-accent);
+    box-shadow: 0 0 0 3px var(--portfolio-accent-soft);
+    outline: none;
+}
+
+.writing-search__status,
+.writing-empty {
+    color: var(--portfolio-muted);
+    font-size: 0.8rem;
+    margin: 0.7rem 0 0;
+}
+
+.writing-card[hidden] {
+    display: none;
+}

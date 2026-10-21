@@ -31,8 +31,9 @@ excerpt: "Support engineer focused on reliable systems, automation, and security
 
 <section class="home-section">
     <div class="section-heading"><div class="section-label">02 / Selected writing</div><a href="/posts/">View all writing ↗</a></div>
+    {% assign latest_posts = site.posts | sort: "date" | reverse %}
     <div class="writing-list writing-list--compact">
-        {% for post in site.posts limit:3 %}
+        {% for post in latest_posts limit:3 %}
         <a class="writing-card" href="{{ post.url | relative_url }}">
             <div class="writing-card__meta">{{ post.date | date: "%d.%m.%Y" }}</div>
             <h2>{{ post.title }}</h2>
@@ -45,8 +46,8 @@ excerpt: "Support engineer focused on reliable systems, automation, and security
 <section class="home-section home-section--bordered home-projects">
     <div class="section-heading"><div class="section-label">03 / Projects</div><a href="/projects/">See projects ↗</a></div>
     <div class="project-strip">
-        <a href="/projects/"><strong>Homelab infrastructure</strong><span>Self-hosting, networking, observability, and backups.</span></a>
-        <a href="/projects/"><strong>Cloud and CI/CD</strong><span>AWS pipelines, deployment automation, and infrastructure research.</span></a>
+        <a href="/Building-My-HomeLab-From-Scratch-to-Self-Hosting/"><strong>Homelab infrastructure</strong><span>Self-hosting, networking, observability, and backups.</span></a>
+        <a href="/Building-Parallel-CI-CD-Pipelines-with-AWS/"><strong>Cloud and CI/CD</strong><span>AWS pipelines, deployment automation, and infrastructure research.</span></a>
         <a href="/contact/"><strong>Start a conversation</strong><span>Reach out through LinkedIn or GitHub without a public email address.</span></a>
     </div>
 </section>
