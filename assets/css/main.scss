@@ -372,21 +372,6 @@ blockquote {
     border-radius: 12px;
 }
 
-.tryhackme-embed {
-    display: flex;
-    justify-content: center;
-    margin: 1.75rem 0;
-    overflow: hidden;
-}
-
-.tryhackme-embed__frame {
-    border: 0;
-    width: min(760px, 100%);
-    max-width: 100%;
-    height: 150px;
-    display: block;
-}
-
 .home-hero {
     background: rgba(17, 24, 39, 0.85);
     border: 1px solid var(--tech-border);
@@ -1917,43 +1902,6 @@ blockquote {
     text-justify: inter-word;
 }
 
-.tryhackme-embed {
-    align-items: center;
-    background: transparent;
-    display: flex;
-    justify-content: center;
-    margin: 2.5rem auto 0;
-    max-width: 100%;
-    overflow: hidden;
-    padding: 0;
-}
-
-.tryhackme-embed__frame {
-    background: transparent;
-    border: 0;
-    display: block;
-    height: 84px;
-    margin: 0 auto;
-    max-width: 100%;
-    width: 326px;
-}
-
-@media (max-width: 600px) {
-    .about-page .portfolio-prose > p {
-        text-align: left;
-    }
-
-    .tryhackme-embed__frame {
-        height: 84px;
-        width: 326px;
-    }
-}
-
-.tryhackme-embed,
-.tryhackme-embed__frame {
-    border-radius: 14px;
-}
-
 /* Keep CV employer/date and role on a single aligned line. */
 .cv-page .portfolio-prose p:has(> strong) br {
     display: none;
@@ -2519,83 +2467,8 @@ blockquote {
     }
 }
 
-.about-page .portfolio-prose > p {
+.about-page .portfolio-prose > p,
+.about-page .about-profile > div > p:not(.portfolio-eyebrow) {
     text-align: justify;
     text-justify: inter-word;
-}
-
-.tryhackme-embed {
-    height: 100px;
-}
-
-.tryhackme-embed__frame {
-    height: 100px;
-    width: 450px;
-}
-
-@media (max-width: 600px) {
-    .tryhackme-embed {
-        height: 85px;
-    }
-
-    .tryhackme-embed__frame {
-        height: 100px;
-        max-width: none;
-        transform: scale(0.85);
-        transform-origin: center center;
-        width: 450px;
-    }
-}
-
-@media (max-width: 400px) {
-    .tryhackme-embed {
-        height: 72px;
-    }
-
-    .tryhackme-embed__frame {
-        transform: scale(0.72);
-    }
-}
-
-.tryhackme-embed__frame {
-    flex-shrink: 0;
-}
-
-.tryhackme-embed {
-    background: #050806;
-}
-
-.tryhackme-embed__frame {
-    width: 435px;
-}
-
-@media (max-width: 600px) {
-    .tryhackme-embed__frame {
-        transform: scale(0.85);
-        width: 435px;
-    }
-}
-
-@media (max-width: 400px) {
-    .tryhackme-embed__frame {
-        transform: scale(0.8);
-    }
-}
-
-@media (max-width: 380px) {
-    .tryhackme-embed__frame {
-        transform: scale(0.75);
-    }
-}
-
-.tryhackme-embed {
-    box-sizing: border-box;
-    overflow: hidden;
-    width: 435px;
-}
-
-@media (max-width: 600px) {
-    .tryhackme-embed {
-        width: 100%;
-    }
 }
