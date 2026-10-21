@@ -1887,3 +1887,9 @@ blockquote {
         text-align: left;
     }
 }
+
+.project-strip a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
