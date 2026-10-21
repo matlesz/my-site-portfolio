@@ -2191,3 +2191,9 @@ blockquote {
         text-justify: inter-word;
     }
 }
+
+@media (max-width: 600px) {
+    .portfolio-article__dek {
+        line-height: 2 !important;
+    }
+}
