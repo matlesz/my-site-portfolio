@@ -32,18 +32,14 @@ The GPU VM owns inference. Open WebUI and llama-swap share a private Docker netw
 
 ```text
 Browser on tailnet
-        |
-        v
+↓
 https://llm.<HOMELAB_DOMAIN>
-        |
-        v
+↓
 Edge Caddy
-        |
-        v
+↓
 Open WebUI
-        |
-        v
-llama-swap -> llama.cpp -> RTX 2000 Ada
+↓
+llama-swap → llama.cpp → RTX 2000 Ada
 ```
 
 The model API has its own hostname and requires an API key. I kept the raw model backend on the LAN side instead of exposing it directly to the internet. Open WebUI connects to llama-swap through its internal Docker address, and trusted clients use the authenticated edge API when they need OpenAI-compatible endpoints.
@@ -102,17 +98,11 @@ The state machine is:
 
 ```text
 LLM_READY
-    |
-    | Jellyfin transcode detected
-    v
+↓ Jellyfin transcode detected
 MEDIA_ACTIVE
-    |
-    | final transcode ends
-    v
-MEDIA_COOLDOWN -- transcode resumes --> MEDIA_ACTIVE
-    |
-    | no transcode for 10 minutes
-    v
+↓ final transcode ends
+MEDIA_COOLDOWN -- transcode resumes → MEDIA_ACTIVE
+↓ no transcode for 10 minutes
 LLM_READY
 ```
 
