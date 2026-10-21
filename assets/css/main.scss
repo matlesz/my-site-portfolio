@@ -2466,3 +2466,14 @@ blockquote {
         width: 36px;
     }
 }
+
+.portfolio-header__contact {
+    border: 1px solid var(--portfolio-border);
+    border-radius: 999px;
+    padding: 0.45rem 0.7rem;
+}
+
+.portfolio-header__contact:hover,
+.portfolio-header__contact:focus-visible {
+    border-color: var(--portfolio-accent);
+}
