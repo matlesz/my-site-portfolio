@@ -2541,3 +2541,23 @@ blockquote {
         font-size: 0.58rem;
     }
 }
+
+@media (max-width: 340px) {
+    .portfolio-nav {
+        gap: 0.1rem;
+    }
+
+    .portfolio-nav a,
+    .portfolio-header__contact {
+        font-size: 0.54rem;
+        min-height: 36px;
+        padding-left: 0.18rem;
+        padding-right: 0.18rem;
+    }
+
+    .portfolio-theme-toggle {
+        height: 34px;
+        min-width: 34px;
+        width: 34px;
+    }
+}
