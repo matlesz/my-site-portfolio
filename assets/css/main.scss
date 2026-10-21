@@ -2280,3 +2280,19 @@ blockquote {
         text-align: justify;
     }
 }
+
+@media (max-width: 700px) {
+    .portfolio-nav a,
+    .portfolio-header__contact {
+        font-size: 0.68rem;
+        letter-spacing: 0.04em;
+    }
+
+    .portfolio-article .portfolio-prose {
+        font-size: 1rem;
+    }
+
+    .portfolio-article .portfolio-prose p {
+        hyphens: auto;
+    }
+}
