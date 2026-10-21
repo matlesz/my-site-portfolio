@@ -1,6 +1,9 @@
 ---
 permalink: /cv/
 title: "Curriculum Vitae"
+layout: portfolio
+classes: cv-page
+eyebrow: "Experience and background"
 ---
 
 ## Lanuages

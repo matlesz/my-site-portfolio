@@ -1,108 +1,52 @@
 ---
-layout: home
-author_profile: true
+layout: portfolio_home
+title: "Mat Leszkiewicz"
+excerpt: "Support engineer focused on reliable systems, automation, and security."
 ---
 
-<div class="home-hero">
-    <p class="home-hero__eyebrow">Infrastructure + Systems Engineering</p>
-    <h1 class="home-hero__title">Building resilient infrastructure with a security-first mindset.</h1>
-    <p class="home-hero__lede">
-        I am Mat Leszkiewicz, a support engineer focused on infrastructure reliability, automation, and security
-        operations.
-        This portfolio captures the homelab builds, system projects, and incident response lessons that define how I
-        work.
-    </p>
-    <div class="home-hero__meta">
-        <span class="home-pill">Infrastructure reliability</span>
-        <span class="home-pill">Systems automation</span>
-        <span class="home-pill">Security operations</span>
-        <span class="home-pill">Threat response</span>
-    </div>
-</div>
-
-<div class="home-metrics">
-    <div class="home-metric">
-        <p class="home-metric__label">Current role</p>
-        <p class="home-metric__value">Technical Support Engineer</p>
-    </div>
-    <div class="home-metric">
-        <p class="home-metric__label">Core focus</p>
-        <p class="home-metric__value">Infrastructure + automation</p>
-    </div>
-    <div class="home-metric">
-        <p class="home-metric__label">Security lens</p>
-        <p class="home-metric__value">Incident response, detection</p>
-    </div>
-    <div class="home-metric">
-        <p class="home-metric__label">Stack</p>
-        <p class="home-metric__value">AWS, Linux, Docker</p>
-    </div>
-</div>
-
-<section class="home-section">
-    <div class="home-section__header">
-        <h2 class="home-section__title">Focus Areas</h2>
-        <span class="home-section__rule" aria-hidden="true"></span>
-    </div>
-    <div class="home-metrics">
-        <div class="home-metric">
-            <p class="home-metric__value">Infrastructure engineering</p>
-            <p class="home-metric__detail">Platform reliability, system design, and performance-aware operations.</p>
+<section class="home-intro">
+    <div class="home-intro__copy">
+        <p class="portfolio-eyebrow">Support engineering · DevOps · Cybersecurity</p>
+        <h1>I make complex systems easier to operate.</h1>
+        <p class="home-intro__lede">I’m Mat Leszkiewicz, a support engineer who enjoys debugging production problems, automating repetitive work, and building reliable infrastructure. This is where I document what I learn.</p>
+        <div class="home-actions">
+            <a class="portfolio-button portfolio-button--solid" href="/projects/">Explore my work <span aria-hidden="true">↗</span></a>
+            <a class="portfolio-button" href="/about/">About me</a>
         </div>
-        <div class="home-metric">
-            <p class="home-metric__value">Security operations</p>
-            <p class="home-metric__detail">Incident response workflows, log analysis, and detection engineering.</p>
-        </div>
-        <div class="home-metric">
-            <p class="home-metric__value">Automation and observability</p>
-            <p class="home-metric__detail">AWS pipelines, tooling, and practical monitoring for production systems.</p>
-        </div>
-        <div class="home-metric">
-
-            <p class="home-metric__value">AI enablement</p>
-            <p class="home-metric__detail">Applied AI tooling, workflow automation, and ops augmentation.</p>
-        </div>
+    </div>
+    <div class="home-intro__aside">
+        <img src="/assets/images/bio-photo.jpg" alt="Portrait of Mat Leszkiewicz">
+        <p>Currently a Support Engineer at n8n, based in Poland and open to remote opportunities.</p>
     </div>
 </section>
 
-{% assign homelab_posts_upper = site.posts | where_exp: "post", "post.tags contains 'Homelab'" %}
-{% assign homelab_posts_lower = site.posts | where_exp: "post", "post.tags contains 'homelab'" %}
-{% assign homelab_posts = homelab_posts_upper | concat: homelab_posts_lower | uniq | sort: "date" | reverse %}
-
-<section class="home-section">
-    <div class="home-section__header">
-        <h2 class="home-section__title">Homelab series</h2>
-        <span class="home-section__rule" aria-hidden="true"></span>
-        <p class="home-section__subtitle">Ongoing infrastructure builds covering Proxmox, storage, networking, and
-            secure remote access.</p>
-    </div>
-    {% assign homelab_featured_titles = "How OpenCode + ChatGPT Accelerated My Homelab|Building My HomeLab: From Scratch
-    to Self-Hosting|How to Choose Your First Home Server Hardware: A Practical Guide" | split: "|" %}
-    <div class="entries-list">
-        {% for homelab_title in homelab_featured_titles %}
-        {% assign featured_post = homelab_posts | where: "title", homelab_title | first %}
-        {% if featured_post %}
-        {% assign post = featured_post %}
-        {% include archive-single.html type="list" %}
-        {% endif %}
-        {% endfor %}
+<section class="home-section home-section--bordered">
+    <div class="section-label">01 / Focus</div>
+    <div class="focus-grid">
+        <div><h2>Support engineering</h2><p>Investigating difficult customer problems across APIs, integrations, networking, and self-hosted deployments.</p></div>
+        <div><h2>Systems and automation</h2><p>Building repeatable workflows, observability, and infrastructure that make the next incident easier.</p></div>
+        <div><h2>Security mindset</h2><p>Learning through incident response, threat intelligence, secure operations, and practical homelab experiments.</p></div>
     </div>
 </section>
 
 <section class="home-section">
-    <div class="home-section__header">
-        <h2 class="home-section__title">Other Projects</h2>
-        <span class="home-section__rule" aria-hidden="true"></span>
-    </div>
-    {% assign project_featured_titles = "geekDb: Exploring TMDB with Next.js|Turning a Raspberry Pi
-    into an RTSP Streaming Server" | split: "|" %}
-    <div class="entries-list">
-        {% for project_title in project_featured_titles %}
-        {% assign project_post = site.posts | where: "title", project_title | first %}
-        {% if project_post %}
-        {% assign post = project_post %}
-        {% include archive-single.html type="list" %}
-        {% endif %}
+    <div class="section-heading"><div class="section-label">02 / Selected writing</div><a href="/posts/">View all writing ↗</a></div>
+    <div class="writing-list writing-list--compact">
+        {% for post in site.posts limit:3 %}
+        <a class="writing-card" href="{{ post.url | relative_url }}">
+            <div class="writing-card__meta">{{ post.date | date: "%d.%m.%Y" }}</div>
+            <h2>{{ post.title }}</h2>
+            <span class="writing-card__arrow" aria-hidden="true">↗</span>
+        </a>
         {% endfor %}
+    </div>
+</section>
+
+<section class="home-section home-section--bordered home-projects">
+    <div class="section-heading"><div class="section-label">03 / Projects</div><a href="/projects/">See projects ↗</a></div>
+    <div class="project-strip">
+        <a href="/projects/"><strong>Homelab infrastructure</strong><span>Self-hosting, networking, observability, and backups.</span></a>
+        <a href="/projects/"><strong>Cloud and CI/CD</strong><span>AWS pipelines, deployment automation, and infrastructure research.</span></a>
+        <a href="/cv/"><strong>Experience and skills</strong><span>View my background, technologies, and current work.</span></a>
     </div>
 </section>

@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% include portfolio-head.html %}
+</head>
+<body class="portfolio-page portfolio-article-page">
+    {% include portfolio-header.html %}
+    <main class="portfolio-main portfolio-main--article">
+        <a class="portfolio-backlink" href="{{ '/posts/' | relative_url }}">← All writing</a>
+        <article class="portfolio-article">
+            <header class="portfolio-article__header">
+                <p class="portfolio-eyebrow">{{ page.date | date: "%d.%m.%Y" }}{% if page.read_time %} · {{ page.read_time }} min read{% endif %}</p>
+                <h1>{{ page.title }}</h1>
+                {% if page.excerpt %}<p class="portfolio-article__dek">{{ page.excerpt }}</p>{% endif %}
+                {% if page.tags %}<div class="portfolio-tags" aria-label="Tags">{% for tag in page.tags %}<span>{{ tag }}</span>{% endfor %}</div>{% endif %}
+            </header>
+            <div class="portfolio-prose">{{ content }}</div>
+        </article>
+    </main>
+    {% include portfolio-footer.html %}
+</body>
+</html>

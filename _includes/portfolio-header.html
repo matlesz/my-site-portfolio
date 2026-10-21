@@ -1,0 +1,14 @@
+<header class="portfolio-header">
+    <div class="portfolio-header__inner">
+        <a class="portfolio-brand" href="{{ '/' | relative_url }}" aria-label="{{ site.title }} home">
+            <span class="portfolio-brand__mark">ML</span>
+            <span class="portfolio-brand__name">Mat Leszkiewicz</span>
+        </a>
+        <nav class="portfolio-nav" aria-label="Primary navigation">
+            {% for item in site.data.navigation.main %}
+            <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+            {% endfor %}
+        </nav>
+        <a class="portfolio-header__contact" href="mailto:{{ site.email }}">Contact <span aria-hidden="true">↗</span></a>
+    </div>
+</header>

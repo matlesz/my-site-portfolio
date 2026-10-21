@@ -1,7 +1,7 @@
 ---
 title: "How to Choose Your First Home Server Hardware: A Practical Guide"
 date: 2025-07-13
-layout: single
+layout: portfolio_article
 author_profile: true
 read_time: true
 share: true

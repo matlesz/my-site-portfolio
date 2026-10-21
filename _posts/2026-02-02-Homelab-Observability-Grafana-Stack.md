@@ -1,7 +1,7 @@
 ---
 title: "Homelab Observability: Grafana + Prometheus + Loki"
 date: 2026-02-02
-layout: single
+layout: portfolio_article
 author_profile: true
 read_time: true
 share: true

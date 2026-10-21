@@ -1,7 +1,7 @@
 ---
 title: "geekDb: Exploring TMDB with Next.js"
 date: 2025-06-29
-layout: single
+layout: portfolio_article
 author_profile: true
 read_time: true
 share: true

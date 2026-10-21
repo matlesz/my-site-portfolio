@@ -1,9 +1,10 @@
 ---
 title: "About"
 permalink: /about/
-layout: single
-author_profile: true
+layout: portfolio
+author_profile: false
 classes: about-page
+eyebrow: "About me"
 ---
 
 Hi, I’m **Mat Leszkiewicz**, a Support Engineer at [n8n](https://n8n.io/) since June 2026. My background spans computer science, software support, and DevOps, with a continuing interest in how systems work and how they can be secured.

@@ -1,7 +1,7 @@
 ---
 title: "Homelab Update: Nextcloud + Music Assistant with Tailscale"
 date: 2026-02-01
-layout: single
+layout: portfolio_article
 author_profile: true
 read_time: true
 share: true

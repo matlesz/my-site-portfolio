@@ -1,0 +1,12 @@
+<footer class="portfolio-footer">
+    <div>
+        <p class="portfolio-footer__eyebrow">Have a question or an interesting problem?</p>
+        <a class="portfolio-footer__cta" href="mailto:{{ site.email }}">Let’s talk <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="portfolio-footer__links">
+        {% for link in site.footer.links %}
+        <a href="{{ link.url }}" rel="nofollow noopener noreferrer">{{ link.label }}</a>
+        {% endfor %}
+        <span>© {{ site.time | date: '%Y' }} {{ site.author.name }}</span>
+    </div>
+</footer>

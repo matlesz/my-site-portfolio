@@ -17,6 +17,8 @@
 
 title: ML Portfolio
 masthead_title: "ML"
+url: "https://matleszkiewicz.dev"
+baseurl: ""
 logo: /favicon.svg
 email: matlesz@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
@@ -110,12 +112,12 @@ defaults:
       path: ""
       type: posts
     values:
-      layout: single
-      author_profile: true
+      layout: portfolio_article
+      author_profile: false
       read_time: true
-      comments: true
-      share: true
-      related: true
+      comments: false
+      share: false
+      related: false
   # _pages
   - scope:
       path: "_pages"

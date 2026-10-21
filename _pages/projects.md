@@ -1,8 +1,10 @@
 ---
 title: "Projects"
 permalink: /projects/
-layout: single
-author_profile: true
+layout: portfolio
+author_profile: false
+classes: projects-page
+eyebrow: "Selected work"
 excerpt: "Selected project case studies focused on security, cloud, and systems work."
 ---
 

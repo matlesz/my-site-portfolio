@@ -1,7 +1,7 @@
 ---
 title: "Building My HomeLab: From Scratch to Self-Hosting"
 date: 2025-07-23
-layout: single
+layout: portfolio_article
 author_profile: true
 read_time: true
 share: true
