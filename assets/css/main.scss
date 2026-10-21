@@ -2472,3 +2472,10 @@ blockquote {
     text-align: justify;
     text-justify: inter-word;
 }
+
+.cv-page .portfolio-prose > h3,
+.cv-page .cv-inline-list,
+.cv-page .portfolio-prose blockquote {
+    border-left: 0;
+    padding-left: 0;
+}
