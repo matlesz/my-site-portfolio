@@ -48,6 +48,8 @@ One concrete result was a **Homepage** dashboard for the lab. I deployed the con
 
 ![Homelab Homepage dashboard on January 25, 2026](/assets/images/homelab-dashboard-2026-01.png)
 
+*Homelab Homepage dashboard showing infrastructure, application, and service cards on January 25, 2026.*
+
 This dashboard was useful as a starting point, not a full monitoring system. It put links and a few status indicators in one place, but deeper metrics and logs were still on the plan. I did not treat a green service check as proof that its data was backed up or that every feature worked.
 
 ## Keep the repository useful—and sanitized

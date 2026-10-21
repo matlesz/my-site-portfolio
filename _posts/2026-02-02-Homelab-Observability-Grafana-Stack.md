@@ -55,6 +55,8 @@ This excerpt shows the kinds of measurements I had connected: CPU usage across n
 
 ![Homelab observability dashboard excerpt from February 2026](/assets/images/homelab-observability-2026-02.png)
 
+*Homelab observability dashboard showing infrastructure metrics and service health in February 2026.*
+
 I embedded the Homelab Overview in Homepage using an iframe. To get past a Grafana login loop, I enabled iframe embedding and anonymous Viewer access, and corrected Grafana's root URL and cookie settings. Anonymous access removes the login prompt; it does not authenticate the viewer. I only wanted this view inside my trusted network, so this configuration must be paired with network access controls and should not be exposed publicly. For a shared or internet-facing dashboard, use an authenticated arrangement or a deliberately public dashboard instead.
 
 ## The problems that took time
