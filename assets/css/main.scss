@@ -2126,3 +2126,13 @@ blockquote {
         line-height: 1.8;
     }
 }
+
+@media (max-width: 600px) {
+    .home-intro__aside img,
+    .about-profile img,
+    .contact-intro__photo {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
