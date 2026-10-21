@@ -2217,3 +2217,25 @@ blockquote {
         text-justify: inter-word;
     }
 }
+
+@media (max-width: 700px) {
+    .portfolio-nav {
+        gap: 0.35rem;
+    }
+
+    .portfolio-nav a,
+    .portfolio-header__contact {
+        border: 1px solid var(--portfolio-border);
+        border-radius: 999px;
+        font-size: 0.62rem;
+        letter-spacing: 0.05em;
+        padding: 0.45rem 0.5rem;
+    }
+
+    .portfolio-nav a:hover,
+    .portfolio-nav a:focus,
+    .portfolio-header__contact:hover,
+    .portfolio-header__contact:focus {
+        border-color: var(--portfolio-accent);
+    }
+}
