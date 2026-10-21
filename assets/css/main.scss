@@ -2523,3 +2523,36 @@ blockquote {
     text-align: left;
     text-justify: auto;
 }
+
+.tryhackme-embed {
+    height: 100px;
+}
+
+.tryhackme-embed__frame {
+    height: 100px;
+    width: 450px;
+}
+
+@media (max-width: 600px) {
+    .tryhackme-embed {
+        height: 85px;
+    }
+
+    .tryhackme-embed__frame {
+        height: 100px;
+        max-width: none;
+        transform: scale(0.85);
+        transform-origin: center center;
+        width: 450px;
+    }
+}
+
+@media (max-width: 400px) {
+    .tryhackme-embed {
+        height: 72px;
+    }
+
+    .tryhackme-embed__frame {
+        transform: scale(0.72);
+    }
+}
