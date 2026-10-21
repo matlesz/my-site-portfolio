@@ -11,7 +11,6 @@ excerpt: "The easiest way to reach me without publishing my email address."
     <img class="contact-intro__photo" src="/assets/images/bio-photo.jpg" alt="Portrait of Mat Leszkiewicz">
     <div>
         <p>If you have a question about one of my projects, want to discuss support engineering, or see a useful way to work together, I’d be glad to hear from you.</p>
-        <p>I keep direct contact behind established platforms rather than publishing an email address on this site.</p>
     </div>
 </div>
 
