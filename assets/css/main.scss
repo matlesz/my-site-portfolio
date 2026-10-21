@@ -1855,3 +1855,35 @@ blockquote {
         font-size: 0.58rem;
     }
 }
+
+/* Centered, editorial article reading measure. */
+.portfolio-article {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.portfolio-article .portfolio-prose {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.portfolio-article .portfolio-prose p {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.portfolio-article .portfolio-prose h2,
+.portfolio-article .portfolio-prose h3,
+.portfolio-article .portfolio-prose h4,
+.portfolio-article .portfolio-prose blockquote,
+.portfolio-article .portfolio-prose pre,
+.portfolio-article .portfolio-prose ul,
+.portfolio-article .portfolio-prose ol {
+    text-align: left;
+}
+
+@media (max-width: 600px) {
+    .portfolio-article .portfolio-prose p {
+        text-align: left;
+    }
+}
