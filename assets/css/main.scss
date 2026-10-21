@@ -1948,3 +1948,23 @@ blockquote {
 .tryhackme-embed__frame {
     border-radius: 14px;
 }
+
+/* Keep CV employer/date and role on a single aligned line. */
+.cv-page .portfolio-prose p:has(> strong) br {
+    display: none;
+}
+
+.cv-page .portfolio-prose p:has(> strong) strong::after {
+    content: " · ";
+    white-space: pre;
+}
+
+.cv-page .portfolio-prose p:has(> strong) em {
+    color: var(--portfolio-muted);
+}
+
+@media (max-width: 600px) {
+    .cv-page .portfolio-prose p:has(> strong) {
+        line-height: 1.45;
+    }
+}
