@@ -1,12 +1,14 @@
 ---
 title: "Building Parallel CI/CD Pipelines with AWS at Fundrecs"
 date: 2025-06-30
-layout: single
+layout: portfolio_article
+project: "CI/CD"
 author_profile: true
 read_time: true
 share: true
 related: true
 tags: ["CI/CD", AWS, DevOps]
+description: "A case study of parallel CI/CD pipelines for a Java application using Bitbucket, AWS, ECS, and CloudFormation."
 ---
 
 During my software developer internship at **FundRecs**, I worked on two CI/CD pipelines for the Java-based Fusion application. The goal was to replace manual deployment steps with a version-controlled path from a Bitbucket change through an AWS build and into ECS. Alongside the pipelines, I worked on CloudFormation infrastructure and a Landingzone feature for sending application outputs to S3.

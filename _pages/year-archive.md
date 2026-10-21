@@ -1,6 +1,7 @@
 ---
-title: "Posts by Year"
+title: "Writing"
 permalink: /posts/
-layout: posts
-author_profile: true
+layout: portfolio_writing
+author_profile: false
+classes: writing-page
 ---

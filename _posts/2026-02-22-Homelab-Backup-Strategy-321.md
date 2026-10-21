@@ -1,7 +1,8 @@
 ---
 title: "Homelab Backup Strategy: 3-2-1 with PBS, Restic, Backrest, and Jottacloud"
 date: 2026-02-22
-layout: single
+layout: portfolio_article
+project: "Homelab"
 author_profile: true
 read_time: true
 share: true
@@ -188,11 +189,9 @@ These are the docs I used or wish I had open while doing this:
 
 ```
 TrueNAS (ZFS, encrypted, snapshots)
-  |\
-  | \__ PBS datastore (NFS) -> PBS -> Proxmox backups
-  |
-  \__ App data (SMB) -> restic (Backrest) -> Jottacloud
-                                 \-> RPi (planned)
+↓ PBS datastore (NFS) → PBS → Proxmox backups
+↓ App data (SMB) → restic (Backrest) → Jottacloud
+  ↳ RPi (planned)
 ```
 
 If you are building something similar, take the time to map your data tiers and storage layout first. Everything else becomes much easier once the data model is clean.

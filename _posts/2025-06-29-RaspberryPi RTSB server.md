@@ -1,12 +1,14 @@
 ---
 title: "Turning a Raspberry Pi into an RTSP Streaming Server"
 date: 2025-06-29
-layout: single
+layout: portfolio_article
+project: "Raspberry Pi"
 author_profile: true
 read_time: true
 share: true
 related: true
 tags: [RaspberryPi, Networking, Linux, Projects]
+description: "A practical Raspberry Pi RTSP camera experiment using v4l2rtspserver, V4L2, and VLC on a second computer."
 ---
 
 I wanted to see whether a Raspberry Pi and its camera could act as a small network camera without replacing the Pi's operating system or building a larger surveillance stack. I installed `v4l2rtspserver`, pointed it at the camera's V4L2 device, and opened the resulting stream from VLC on another computer. In the [walkthrough video](https://youtu.be/OSKRHQbNqq0), the live picture appears in VLC with a slight delay. I did not measure latency, so this is a working demonstration rather than a claim about real-time performance.

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% include portfolio-head.html %}
+</head>
+<body class="portfolio-page portfolio-writing-page">
+    <a class="portfolio-skip-link" href="#main-content">Skip to content</a>
+    {% include portfolio-header.html %}
+    <main id="main-content" class="portfolio-main portfolio-main--writing">
+        <div class="portfolio-page-heading">
+            <p class="portfolio-eyebrow">Notes from the field</p>
+            <h1>Writing</h1>
+            <p class="portfolio-page-heading__lede">Practical notes on support engineering, homelabs, cloud infrastructure, automation, and security.</p>
+        </div>
+        <div class="writing-search">
+            <label for="article-search">Search articles</label>
+            <input id="article-search" type="search" placeholder="Search by title, topic, or tag" autocomplete="off">
+            <p id="article-search-status" class="writing-search__status" role="status" aria-live="polite"></p>
+        </div>
+        <div class="writing-list" data-writing-list>
+            {% for post in site.posts %}
+            {% capture search_text %}{{ post.title }} {{ post.excerpt }} {{ post.tags | join: " " }}{% endcapture %}
+            <a class="writing-card" data-writing-card data-search-text="{{ search_text | strip_html | strip_newlines | escape }}" href="{{ post.url | relative_url }}">
+                <div class="writing-card__meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d.%m.%Y" }}</time>{% if post.tags.first %} · {{ post.tags.first }}{% endif %}</div>
+                <h2>{{ post.title }}</h2>
+                {% if post.excerpt %}<p>{{ post.excerpt | strip_html | truncate: 180 }}</p>{% endif %}
+                <span class="writing-card__arrow" aria-hidden="true">↗</span>
+            </a>
+            {% endfor %}
+        </div>
+        <p class="writing-empty" data-writing-empty hidden>No articles match that search.</p>
+    </main>
+    <script>
+        (function () {
+            var input = document.querySelector("#article-search");
+            var cards = Array.from(document.querySelectorAll("[data-writing-card]"));
+            var status = document.querySelector("#article-search-status");
+            var empty = document.querySelector("[data-writing-empty]");
+            if (!input) return;
+            input.addEventListener("input", function () {
+                var query = input.value.trim().toLowerCase();
+                var visible = cards.filter(function (card) {
+                    var matches = !query || card.dataset.searchText.toLowerCase().indexOf(query) !== -1;
+                    card.hidden = !matches;
+                    return matches;
+                }).length;
+                status.textContent = query ? visible + (visible === 1 ? " article" : " articles") + " found" : "";
+                empty.hidden = visible !== 0;
+            });
+        }());
+    </script>
+    {% include portfolio-footer.html %}
+</body>
+</html>

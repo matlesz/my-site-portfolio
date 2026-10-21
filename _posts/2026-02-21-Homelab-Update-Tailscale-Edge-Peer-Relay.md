@@ -1,7 +1,8 @@
 ---
 title: "Homelab Update: Tailscale Edge + Peer Relay Progress"
 date: 2026-02-21
-layout: single
+layout: portfolio_article
+project: "Homelab"
 author_profile: true
 read_time: true
 share: true
@@ -59,22 +60,17 @@ The commands and environment variable names in the original notes reflect the ve
 
 ```
 Internet (webhooks)
-    |
-    v
+↓
 Tailscale Funnel
-    |
-    v
+↓
 Webhook-only proxy
-    |
-    v
+↓
 n8n
 
 Tailnet clients
-    |
-    v
+↓
 Edge Caddy
-    |
-    v
+↓
 Internal services on LAN
 ```
 

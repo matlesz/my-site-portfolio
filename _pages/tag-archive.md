@@ -1,6 +1,8 @@
 ---
 title: "Posts by Tag"
+layout: portfolio_taxonomy
 permalink: /tags/
-layout: tags
-author_profile: true
+taxonomy: tags
+author_profile: false
+sitemap: true
 ---

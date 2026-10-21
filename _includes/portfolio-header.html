@@ -1,0 +1,39 @@
+<header class="portfolio-header">
+    <div class="portfolio-header__inner">
+        <a class="portfolio-brand" href="{{ '/' | relative_url }}" aria-label="{{ site.title }} home">
+            <span class="portfolio-brand__mark">ML</span>
+            <span class="portfolio-brand__name">Mat Leszkiewicz</span>
+        </a>
+        <nav class="portfolio-nav" aria-label="Primary navigation">
+            {% for item in site.data.navigation.main %}
+            <a href="{{ item.url | relative_url }}">{{ item.title }}</a>
+            {% endfor %}
+        </nav>
+        <div class="portfolio-header__actions">
+            <button class="portfolio-theme-toggle" type="button" aria-label="Switch to light mode" title="Switch to light mode" data-theme-toggle>☀</button>
+            <a class="portfolio-header__contact" href="{{ '/contact/' | relative_url }}">Contact <span aria-hidden="true">↗</span></a>
+        </div>
+    </div>
+</header>
+<script>
+    (function () {
+        var toggle = document.querySelector("[data-theme-toggle]");
+        if (!toggle) return;
+        var updateToggle = function () {
+            var isLight = document.documentElement.dataset.theme === "light";
+            var label = isLight ? "Switch to dark mode" : "Switch to light mode";
+            toggle.textContent = isLight ? "☾" : "☀";
+            toggle.setAttribute("aria-label", label);
+            toggle.setAttribute("title", label);
+        };
+        updateToggle();
+        toggle.addEventListener("click", function () {
+            var nextTheme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+            document.documentElement.dataset.theme = nextTheme;
+            localStorage.setItem("portfolio-theme", nextTheme);
+            var themeColor = document.querySelector('meta[name="theme-color"]');
+            if (themeColor) themeColor.setAttribute("content", nextTheme === "light" ? "#fbfbfa" : "#050806");
+            updateToggle();
+        });
+    }());
+</script>

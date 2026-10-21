@@ -1,7 +1,8 @@
 ---
 title: "Homelab Observability: Grafana + Prometheus + Loki"
 date: 2026-02-02
-layout: single
+layout: portfolio_article
+project: "Homelab"
 author_profile: true
 read_time: true
 share: true
@@ -52,7 +53,10 @@ The dashboards each had a job:
 
 This excerpt shows the kinds of measurements I had connected: CPU usage across nodes, TrueNAS CPU via Netdata, and CPU for individual containers. The graph labels identify the series, but the screenshot is only a point-in-time view; it is not a performance benchmark or proof that every host had complete coverage.
 
-![Homelab observability dashboard excerpt from February 2026](/assets/images/homelab-observability-2026-02.png)
+<figure>
+    <img src="/assets/images/homelab-observability-2026-02.png" alt="Homelab observability dashboard excerpt from February 2026" width="1672" height="1007" loading="lazy" decoding="async">
+    <figcaption>Homelab observability dashboard showing infrastructure metrics and service health in February 2026.</figcaption>
+</figure>
 
 I embedded the Homelab Overview in Homepage using an iframe. To get past a Grafana login loop, I enabled iframe embedding and anonymous Viewer access, and corrected Grafana's root URL and cookie settings. Anonymous access removes the login prompt; it does not authenticate the viewer. I only wanted this view inside my trusted network, so this configuration must be paired with network access controls and should not be exposed publicly. For a shared or internet-facing dashboard, use an authenticated arrangement or a deliberately public dashboard instead.
 

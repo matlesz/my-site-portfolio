@@ -1,12 +1,14 @@
 ---
 title: "MyGeekDB: A Kotlin Movie and TV App"
 date: 2025-06-29
-layout: single
+layout: portfolio_article
+project: "MyGeekDB"
 author_profile: true
 read_time: true
 share: true
 related: true
 tags: [Android, Mobile Development, Projects]
+description: "A Kotlin Android movie and TV app built with Jetpack Compose, TMDB, Firebase, and account-based favourites."
 ---
 
 I built **MyGeekDB** to explore Android development with Kotlin. The app brings movie and TV information into one place: I can browse recommendations, search for something specific, open its details, and save favorites to my account. The screen is built with Jetpack Compose, movie and series information comes from TMDB, and Firebase handles sign-in and the data tied to each user.

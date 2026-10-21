@@ -1,56 +1,66 @@
 ---
 title: "Projects"
 permalink: /projects/
-layout: single
-author_profile: true
-excerpt: "Selected project case studies focused on security, cloud, and systems work."
+layout: portfolio
+classes: projects-page
+eyebrow: "Selected work"
+excerpt: "Projects and lab work focused on security, cloud infrastructure, automation, and systems."
 ---
 
-This page highlights the projects and lab work that represent the way I approach infrastructure engineering, automation, and security operations.
+<p class="projects-lede">These are the projects that best represent how I learn: build something useful, operate it in the real world, and write down what broke.</p>
 
-{% assign homelab_posts_upper = site.posts | where_exp: "post", "post.tags contains 'Homelab'" %}
-{% assign homelab_posts_lower = site.posts | where_exp: "post", "post.tags contains 'homelab'" %}
-{% assign homelab_posts = homelab_posts_upper | concat: homelab_posts_lower | uniq | sort: "date" | reverse %}
+{% assign project_names = site.posts | map: "project" | compact | uniq | sort %}
+<div class="project-filters" role="group" aria-label="Filter projects" aria-controls="project-list">
+    <button class="project-filter project-filter--active" type="button" data-project-filter="all" aria-pressed="true">All projects</button>
+    {% for project_name in project_names %}
+    <button class="project-filter" type="button" data-project-filter="{{ project_name | escape }}" aria-pressed="false">{{ project_name }}</button>
+    {% endfor %}
+</div>
+{% assign project_posts = site.posts | where_exp: "post", "post.project" | sort: "date" | reverse %}
+<p class="project-filter-status" role="status" aria-live="polite">All projects: {{ project_posts.size }} projects</p>
 
-<section class="home-section">
-    <div class="home-section__header">
-        <h2 class="home-section__title">Homelab series</h2>
-        <span class="home-section__rule" aria-hidden="true"></span>
-        <p class="home-section__subtitle">Ongoing infrastructure builds covering Proxmox, storage, networking, and secure remote access.</p>
-    </div>
-    {% assign homelab_featured_titles = "How OpenCode + ChatGPT Accelerated My Homelab|Building My HomeLab: From Scratch to Self-Hosting|How to Choose Your First Home Server Hardware: A Practical Guide" | split: "|" %}
-    <div class="entries-list">
-        {% for homelab_title in homelab_featured_titles %}
-        {% assign featured_post = homelab_posts | where: "title", homelab_title | first %}
-        {% if featured_post %}
-        {% assign post = featured_post %}
-        {% include archive-single.html type="list" %}
-        {% endif %}
-        {% endfor %}
-    </div>
-</section>
+<div id="project-list" class="project-cards" data-project-list>
+    {% for project in project_posts %}
+    <a class="project-card" data-project-card data-project-name="{{ project.project | escape }}" href="{{ project.url | relative_url }}">
+        <div class="project-card__meta"><time datetime="{{ project.date | date_to_xmlschema }}">{{ project.date | date: "%Y" }}</time> · {{ project.project }}</div>
+        <h2>{{ project.title }}</h2>
+        <p>{{ project.excerpt | strip_html | truncate: 190 }}</p>
+        <span class="project-card__link">Read the case study <span aria-hidden="true">↗</span></span>
+    </a>
+    {% endfor %}
+</div>
 
-<section class="home-section">
-    <div class="home-section__header">
-        <h2 class="home-section__title">Other project</h2>
-        <span class="home-section__rule" aria-hidden="true"></span>
-    </div>
-    {% assign project_featured_titles = "geekDb: Exploring TMDB with Next.js|Turning a Raspberry Pi into an RTSP Streaming Server" | split: "|" %}
-    <div class="entries-list">
-        {% for project_title in project_featured_titles %}
-        {% assign project_post = site.posts | where: "title", project_title | first %}
-        {% if project_post %}
-        {% assign post = project_post %}
-        {% include archive-single.html type="list" %}
-        {% endif %}
-        {% endfor %}
-    </div>
-</section>
+<p class="projects-empty" data-project-empty hidden>No projects match that filter.</p>
 
-<section class="home-section">
-    <div class="home-section__header">
-        <h2 class="home-section__title">More work</h2>
-        <span class="home-section__rule" aria-hidden="true"></span>
-    </div>
-    <p>Explore the full archive in the posts section for detailed build notes, experiments, and infrastructure writeups.</p>
-</section>
+<div class="projects-more">
+    <p class="portfolio-eyebrow">More experiments</p>
+    <p>The full <a href="/posts/">writing archive</a> includes the smaller experiments, build notes, and infrastructure decisions behind these projects.</p>
+</div>
+
+<script>
+    (function () {
+        var buttons = Array.from(document.querySelectorAll("[data-project-filter]"));
+        var cards = Array.from(document.querySelectorAll("[data-project-card]"));
+        var empty = document.querySelector("[data-project-empty]");
+        var status = document.querySelector(".project-filter-status");
+        buttons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                var filter = button.dataset.projectFilter;
+                buttons.forEach(function (item) {
+                    var active = item === button;
+                    item.classList.toggle("project-filter--active", active);
+                    item.setAttribute("aria-pressed", active ? "true" : "false");
+                });
+                var visible = cards.filter(function (card) {
+                    var matches = filter === "all" || card.dataset.projectName === filter;
+                    card.hidden = !matches;
+                    return matches;
+                }).length;
+                empty.hidden = visible !== 0;
+                if (status) {
+                    status.textContent = button.textContent.trim() + ": " + visible + (visible === 1 ? " project" : " projects");
+                }
+            });
+        });
+    }());
+</script>

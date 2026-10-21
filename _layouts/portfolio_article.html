@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% include portfolio-head.html %}
+</head>
+<body class="portfolio-page portfolio-article-page">
+    <a class="portfolio-skip-link" href="#main-content">Skip to content</a>
+    {% include portfolio-header.html %}
+    <main id="main-content" class="portfolio-main portfolio-main--article">
+        <a class="portfolio-backlink" href="{{ '/posts/' | relative_url }}">← All writing</a>
+        <article class="portfolio-article">
+            <header class="portfolio-article__header">
+                <p class="portfolio-eyebrow"><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%d.%m.%Y" }}</time>{% if page.read_time %}{% assign article_words = content | strip_html | number_of_words %}{% assign reading_minutes = article_words | divided_by: 200 | plus: 1 %} · {{ reading_minutes }} min read{% endif %}</p>
+                <h1>{{ page.title }}</h1>
+                {% if page.description %}<p class="portfolio-article__dek">{{ page.description }}</p>{% endif %}
+                {% if page.tags %}<div class="portfolio-tags" aria-label="Tags">{% for tag in page.tags %}<span>{{ tag }}</span>{% endfor %}</div>{% endif %}
+            </header>
+            <div class="portfolio-prose">{{ content }}</div>
+        </article>
+        {% assign previous_post = site.posts | where_exp: "post", "post.date < page.date" | first %}
+        {% assign next_post = site.posts | where_exp: "post", "post.date > page.date" | last %}
+        <nav class="article-navigation" aria-label="Article navigation">
+            {% if previous_post %}<a href="{{ previous_post.url | relative_url }}"><span>Older article</span><strong>← {{ previous_post.title }}</strong></a>{% endif %}
+            {% if next_post %}<a href="{{ next_post.url | relative_url }}"><span>Newer article</span><strong>{{ next_post.title }} →</strong></a>{% endif %}
+        </nav>
+        <aside class="article-cta">
+            <p class="portfolio-eyebrow">Want to compare notes?</p>
+            <p>Have a question about this article or a similar systems problem?</p>
+            <a href="{{ '/contact/' | relative_url }}">Get in touch ↗</a>
+        </aside>
+    </main>
+    {% include portfolio-footer.html %}
+</body>
+</html>

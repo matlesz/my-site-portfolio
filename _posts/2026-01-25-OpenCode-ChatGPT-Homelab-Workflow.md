@@ -1,7 +1,8 @@
 ---
 title: "How OpenCode + ChatGPT Accelerated My Homelab"
 date: 2026-01-25
-layout: single
+layout: portfolio_article
+project: "Homelab"
 author_profile: true
 read_time: true
 share: true
@@ -45,7 +46,10 @@ The model could help draft a Compose change, inspect files, or suggest a validat
 
 One concrete result was a **Homepage** dashboard for the lab. I deployed the container, configured service links and widgets, and corrected a host-validation error by adding the allowed host values to the relevant configuration and environment. The screenshot below shows the layout on January 25: resource bars at the top and separate infrastructure, application, and other service cards.
 
-![Homelab Homepage dashboard on January 25, 2026](/assets/images/homelab-dashboard-2026-01.png)
+<figure>
+    <img src="/assets/images/homelab-dashboard-2026-01.png" alt="Homelab Homepage dashboard on January 25, 2026" width="1612" height="1532" loading="lazy" decoding="async">
+    <figcaption>Homelab Homepage dashboard showing infrastructure, application, and service cards on January 25, 2026.</figcaption>
+</figure>
 
 This dashboard was useful as a starting point, not a full monitoring system. It put links and a few status indicators in one place, but deeper metrics and logs were still on the plan. I did not treat a green service check as proof that its data was backed up or that every feature worked.
 
