@@ -2315,3 +2315,16 @@ blockquote {
 .portfolio-article .portfolio-prose li {
     margin-bottom: 0.25rem;
 }
+
+:root[data-theme="dark"] .portfolio-button--solid {
+    background: #0b6b3b;
+    border-color: var(--portfolio-accent);
+    color: #effff3;
+}
+
+:root[data-theme="dark"] .portfolio-button--solid:hover,
+:root[data-theme="dark"] .portfolio-button--solid:focus {
+    background: #0d8a4b;
+    border-color: #effff3;
+    color: #ffffff;
+}
