@@ -4,8 +4,9 @@
     {% include portfolio-head.html %}
 </head>
 <body class="portfolio-page portfolio-article-page">
+    <a class="portfolio-skip-link" href="#main-content">Skip to content</a>
     {% include portfolio-header.html %}
-    <main class="portfolio-main portfolio-main--article">
+    <main id="main-content" class="portfolio-main portfolio-main--article">
         <a class="portfolio-backlink" href="{{ '/posts/' | relative_url }}">← All writing</a>
         <article class="portfolio-article">
             <header class="portfolio-article__header">
@@ -16,6 +17,17 @@
             </header>
             <div class="portfolio-prose">{{ content }}</div>
         </article>
+        {% assign previous_post = site.posts | where_exp: "post", "post.date < page.date" | first %}
+        {% assign next_post = site.posts | where_exp: "post", "post.date > page.date" | last %}
+        <nav class="article-navigation" aria-label="Article navigation">
+            {% if previous_post %}<a href="{{ previous_post.url | relative_url }}"><span>Older article</span><strong>← {{ previous_post.title }}</strong></a>{% endif %}
+            {% if next_post %}<a href="{{ next_post.url | relative_url }}"><span>Newer article</span><strong>{{ next_post.title }} →</strong></a>{% endif %}
+        </nav>
+        <aside class="article-cta">
+            <p class="portfolio-eyebrow">Want to compare notes?</p>
+            <p>Have a question about this article or a similar systems problem?</p>
+            <a href="{{ '/contact/' | relative_url }}">Get in touch ↗</a>
+        </aside>
     </main>
     {% include portfolio-footer.html %}
 </body>

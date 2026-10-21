@@ -4,8 +4,9 @@
     {% include portfolio-head.html %}
 </head>
 <body class="portfolio-page portfolio-home-page">
+    <a class="portfolio-skip-link" href="#main-content">Skip to content</a>
     {% include portfolio-header.html %}
-    <main class="portfolio-main portfolio-main--home">
+    <main id="main-content" class="portfolio-main portfolio-main--home">
         {{ content }}
     </main>
     {% include portfolio-footer.html %}

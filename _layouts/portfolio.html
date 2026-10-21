@@ -4,8 +4,9 @@
     {% include portfolio-head.html %}
 </head>
 <body class="portfolio-page {{ page.classes }}">
+    <a class="portfolio-skip-link" href="#main-content">Skip to content</a>
     {% include portfolio-header.html %}
-    <main class="portfolio-main portfolio-main--reading">
+    <main id="main-content" class="portfolio-main portfolio-main--reading">
         <div class="portfolio-page-heading">
             {% if page.eyebrow %}<p class="portfolio-eyebrow">{{ page.eyebrow }}</p>{% endif %}
             <h1>{{ page.title }}</h1>
