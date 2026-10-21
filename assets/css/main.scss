@@ -2088,3 +2088,16 @@ blockquote {
 .portfolio-article .portfolio-prose li {
     line-height: 1.85;
 }
+
+.article-navigation a,
+.article-navigation a:last-child {
+    text-align: center;
+}
+
+.portfolio-article .portfolio-prose img {
+    display: block;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+}
