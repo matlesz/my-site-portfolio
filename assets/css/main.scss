@@ -2351,3 +2351,33 @@ blockquote {
 .portfolio-writing-page .portfolio-footer {
     border-top: 0;
 }
+
+.focus-grid h3 {
+    font-size: 1.15rem;
+    margin: 0 0 0.75rem;
+}
+
+.portfolio-home-page .section-label {
+    font-size: 0.85rem;
+}
+
+.portfolio-home-page .focus-grid h3 {
+    font-size: 1.35rem;
+}
+
+.project-filter-status {
+    color: var(--portfolio-muted);
+    font-size: 0.8rem;
+    margin: 0 0 1rem;
+    min-height: 1.2em;
+}
+
+@media (max-width: 700px) {
+    .portfolio-home-page .section-label {
+        font-size: 0.8rem;
+    }
+
+    .portfolio-home-page .focus-grid h3 {
+        font-size: 1.2rem;
+    }
+}

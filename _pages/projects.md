@@ -16,12 +16,13 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
     <button class="project-filter" type="button" data-project-filter="{{ project_name | escape }}" aria-pressed="false">{{ project_name }}</button>
     {% endfor %}
 </div>
+<p class="project-filter-status" role="status" aria-live="polite"></p>
 
 <div class="project-cards" data-project-list>
     {% assign project_posts = site.posts | where_exp: "post", "post.project" | sort: "date" | reverse %}
     {% for project in project_posts %}
     <a class="project-card" data-project-card data-project-name="{{ project.project | escape }}" href="{{ project.url | relative_url }}">
-        <div class="project-card__meta">{{ project.date | date: "%Y" }} · {{ project.project }}</div>
+        <div class="project-card__meta"><time datetime="{{ project.date | date_to_xmlschema }}">{{ project.date | date: "%Y" }}</time> · {{ project.project }}</div>
         <h2>{{ project.title }}</h2>
         <p>{{ project.excerpt | strip_html | truncate: 190 }}</p>
         <span class="project-card__link">Read the case study <span aria-hidden="true">↗</span></span>
@@ -41,6 +42,7 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
         var buttons = Array.from(document.querySelectorAll("[data-project-filter]"));
         var cards = Array.from(document.querySelectorAll("[data-project-card]"));
         var empty = document.querySelector("[data-project-empty]");
+        var status = document.querySelector(".project-filter-status");
         buttons.forEach(function (button) {
             button.addEventListener("click", function () {
                 var filter = button.dataset.projectFilter;
@@ -55,6 +57,9 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
                     return matches;
                 }).length;
                 empty.hidden = visible !== 0;
+                if (status) {
+                    status.textContent = button.textContent.trim() + ": " + visible + (visible === 1 ? " project" : " projects");
+                }
             });
         });
     }());

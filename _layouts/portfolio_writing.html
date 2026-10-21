@@ -21,7 +21,7 @@
             {% for post in site.posts %}
             {% capture search_text %}{{ post.title }} {{ post.excerpt }} {{ post.tags | join: " " }}{% endcapture %}
             <a class="writing-card" data-writing-card data-search-text="{{ search_text | strip_html | strip_newlines | escape }}" href="{{ post.url | relative_url }}">
-                <div class="writing-card__meta">{{ post.date | date: "%d.%m.%Y" }}{% if post.tags.first %} · {{ post.tags.first }}{% endif %}</div>
+                <div class="writing-card__meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d.%m.%Y" }}</time>{% if post.tags.first %} · {{ post.tags.first }}{% endif %}</div>
                 <h2>{{ post.title }}</h2>
                 {% if post.excerpt %}<p>{{ post.excerpt | strip_html | truncate: 180 }}</p>{% endif %}
                 <span class="writing-card__arrow" aria-hidden="true">↗</span>

@@ -21,21 +21,21 @@ excerpt: "Support engineer focused on reliable systems, automation, and security
 </section>
 
 <section class="home-section home-section--bordered">
-    <div class="section-label">01 / Focus</div>
+    <h2 class="section-label">01 / Focus</h2>
     <div class="focus-grid">
-        <div><h2>Support engineering</h2><p>Investigating difficult customer problems across APIs, integrations, networking, and self-hosted deployments.</p></div>
-        <div><h2>Systems and automation</h2><p>Building repeatable workflows, observability, and infrastructure that make the next incident easier.</p></div>
-        <div><h2>Security mindset</h2><p>Learning through incident response, threat intelligence, secure operations, and practical homelab experiments.</p></div>
+        <div><h3>Support engineering</h3><p>Investigating difficult customer problems across APIs, integrations, networking, and self-hosted deployments.</p></div>
+        <div><h3>Systems and automation</h3><p>Building repeatable workflows, observability, and infrastructure that make the next incident easier.</p></div>
+        <div><h3>Security mindset</h3><p>Learning through incident response, threat intelligence, secure operations, and practical homelab experiments.</p></div>
     </div>
 </section>
 
 <section class="home-section">
-    <div class="section-heading"><div class="section-label">02 / Selected writing</div><a href="/posts/">View all writing ↗</a></div>
+    <div class="section-heading"><h2 class="section-label">02 / Selected writing</h2><a href="/posts/">View all writing ↗</a></div>
     {% assign latest_posts = site.posts | sort: "date" | reverse %}
     <div class="writing-list writing-list--compact">
         {% for post in latest_posts limit:3 %}
         <a class="writing-card" href="{{ post.url | relative_url }}">
-            <div class="writing-card__meta">{{ post.date | date: "%d.%m.%Y" }}</div>
+            <div class="writing-card__meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d.%m.%Y" }}</time></div>
             <h2>{{ post.title }}</h2>
             <span class="writing-card__arrow" aria-hidden="true">↗</span>
         </a>
@@ -44,7 +44,7 @@ excerpt: "Support engineer focused on reliable systems, automation, and security
 </section>
 
 <section class="home-section home-section--bordered home-projects">
-    <div class="section-heading"><div class="section-label">03 / Projects</div><a href="/projects/">See projects ↗</a></div>
+    <div class="section-heading"><h2 class="section-label">03 / Projects</h2><a href="/projects/">See projects ↗</a></div>
     <div class="project-strip">
         <a href="/Building-My-HomeLab-From-Scratch-to-Self-Hosting/"><strong>Homelab infrastructure</strong><span>Self-hosting, networking, observability, and backups.</span></a>
         <a href="/Building-Parallel-CI-CD-Pipelines-with-AWS/"><strong>Cloud and CI/CD</strong><span>AWS pipelines, deployment automation, and infrastructure research.</span></a>
