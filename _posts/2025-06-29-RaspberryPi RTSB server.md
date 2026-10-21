@@ -2,6 +2,7 @@
 title: "Turning a Raspberry Pi into an RTSP Streaming Server"
 date: 2025-06-29
 layout: portfolio_article
+project: "Raspberry Pi"
 author_profile: true
 read_time: true
 share: true

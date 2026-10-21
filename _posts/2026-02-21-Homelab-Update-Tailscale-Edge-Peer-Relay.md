@@ -2,6 +2,7 @@
 title: "Homelab Update: Tailscale Edge + Peer Relay Progress"
 date: 2026-02-21
 layout: portfolio_article
+project: "Homelab"
 author_profile: true
 read_time: true
 share: true

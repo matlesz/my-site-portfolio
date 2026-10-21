@@ -2,6 +2,7 @@
 title: "Homelab Backup Strategy: 3-2-1 with PBS, Restic, Backrest, and Jottacloud"
 date: 2026-02-22
 layout: portfolio_article
+project: "Homelab"
 author_profile: true
 read_time: true
 share: true

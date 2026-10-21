@@ -2,6 +2,7 @@
 title: "Running a Private AI and SearXNG Stack in My Homelab"
 date: 2026-10-17
 layout: portfolio_article
+project: "Homelab"
 author_profile: true
 read_time: true
 share: true

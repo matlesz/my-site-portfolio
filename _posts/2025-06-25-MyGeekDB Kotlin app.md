@@ -2,6 +2,7 @@
 title: "MyGeekDB: A Kotlin Movie and TV App"
 date: 2025-06-29
 layout: portfolio_article
+project: "MyGeekDB"
 author_profile: true
 read_time: true
 share: true

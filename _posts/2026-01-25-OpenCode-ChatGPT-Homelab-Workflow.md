@@ -2,6 +2,7 @@
 title: "How OpenCode + ChatGPT Accelerated My Homelab"
 date: 2026-01-25
 layout: portfolio_article
+project: "Homelab"
 author_profile: true
 read_time: true
 share: true

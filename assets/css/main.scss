@@ -2026,3 +2026,38 @@ blockquote {
 .writing-card[hidden] {
     display: none;
 }
+
+.project-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin: 2rem 0 1.5rem;
+}
+
+.project-filter {
+    background: transparent;
+    border: 1px solid var(--portfolio-border);
+    border-radius: 999px;
+    color: var(--portfolio-muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.78rem;
+    padding: 0.55rem 0.9rem;
+}
+
+.project-filter:hover,
+.project-filter:focus,
+.project-filter--active {
+    background: var(--portfolio-accent-soft);
+    border-color: var(--portfolio-accent);
+    color: var(--portfolio-accent);
+}
+
+.project-card[hidden] {
+    display: none;
+}
+
+.projects-empty {
+    color: var(--portfolio-muted);
+    margin-top: 1.5rem;
+}

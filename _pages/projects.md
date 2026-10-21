@@ -9,23 +9,53 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
 
 <p class="projects-lede">These are the projects that best represent how I learn: build something useful, operate it in the real world, and write down what broke.</p>
 
-{% assign project_titles = "Running a Private AI and SearXNG Stack in My Homelab|Homelab Backup Strategy: 3-2-1 with PBS, Restic, Backrest, and Jottacloud|Homelab Observability: Grafana + Prometheus + Loki|Building My HomeLab: From Scratch to Self-Hosting|Building Parallel CI/CD Pipelines with AWS at Fundrecs|Turning a Raspberry Pi into an RTSP Streaming Server" | split: "|" %}
+{% assign project_names = site.posts | map: "project" | compact | uniq | sort %}
+<div class="project-filters" role="group" aria-label="Filter projects">
+    <button class="project-filter project-filter--active" type="button" data-project-filter="all" aria-pressed="true">All projects</button>
+    {% for project_name in project_names %}
+    <button class="project-filter" type="button" data-project-filter="{{ project_name | escape }}" aria-pressed="false">{{ project_name }}</button>
+    {% endfor %}
+</div>
 
-<div class="project-cards">
-    {% for project_title in project_titles %}
-    {% assign project = site.posts | where: "title", project_title | first %}
-    {% if project %}
-    <a class="project-card" href="{{ project.url | relative_url }}">
-        <div class="project-card__meta">{{ project.date | date: "%Y" }} · {% if project.tags.first %}{{ project.tags.first }}{% endif %}</div>
+<div class="project-cards" data-project-list>
+    {% assign project_posts = site.posts | where_exp: "post", "post.project" | sort: "date" | reverse %}
+    {% for project in project_posts %}
+    <a class="project-card" data-project-card data-project-name="{{ project.project | escape }}" href="{{ project.url | relative_url }}">
+        <div class="project-card__meta">{{ project.date | date: "%Y" }} · {{ project.project }}</div>
         <h2>{{ project.title }}</h2>
         <p>{{ project.excerpt | strip_html | truncate: 190 }}</p>
         <span class="project-card__link">Read the case study <span aria-hidden="true">↗</span></span>
     </a>
-    {% endif %}
     {% endfor %}
 </div>
+
+<p class="projects-empty" data-project-empty hidden>No projects match that filter.</p>
 
 <div class="projects-more">
     <p class="portfolio-eyebrow">More experiments</p>
     <p>The full <a href="/posts/">writing archive</a> includes the smaller experiments, build notes, and infrastructure decisions behind these projects.</p>
 </div>
+
+<script>
+    (function () {
+        var buttons = Array.from(document.querySelectorAll("[data-project-filter]"));
+        var cards = Array.from(document.querySelectorAll("[data-project-card]"));
+        var empty = document.querySelector("[data-project-empty]");
+        buttons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                var filter = button.dataset.projectFilter;
+                buttons.forEach(function (item) {
+                    var active = item === button;
+                    item.classList.toggle("project-filter--active", active);
+                    item.setAttribute("aria-pressed", active ? "true" : "false");
+                });
+                var visible = cards.filter(function (card) {
+                    var matches = filter === "all" || card.dataset.projectName === filter;
+                    card.hidden = !matches;
+                    return matches;
+                }).length;
+                empty.hidden = visible !== 0;
+            });
+        });
+    }());
+</script>

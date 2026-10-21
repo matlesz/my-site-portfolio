@@ -2,6 +2,7 @@
 title: "Building Parallel CI/CD Pipelines with AWS at Fundrecs"
 date: 2025-06-30
 layout: portfolio_article
+project: "CI/CD"
 author_profile: true
 read_time: true
 share: true
