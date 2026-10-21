@@ -10,16 +10,16 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
 <p class="projects-lede">These are the projects that best represent how I learn: build something useful, operate it in the real world, and write down what broke.</p>
 
 {% assign project_names = site.posts | map: "project" | compact | uniq | sort %}
-<div class="project-filters" role="group" aria-label="Filter projects">
+<div class="project-filters" role="group" aria-label="Filter projects" aria-controls="project-list">
     <button class="project-filter project-filter--active" type="button" data-project-filter="all" aria-pressed="true">All projects</button>
     {% for project_name in project_names %}
     <button class="project-filter" type="button" data-project-filter="{{ project_name | escape }}" aria-pressed="false">{{ project_name }}</button>
     {% endfor %}
 </div>
-<p class="project-filter-status" role="status" aria-live="polite"></p>
+{% assign project_posts = site.posts | where_exp: "post", "post.project" | sort: "date" | reverse %}
+<p class="project-filter-status" role="status" aria-live="polite">All projects: {{ project_posts.size }} projects</p>
 
-<div class="project-cards" data-project-list>
-    {% assign project_posts = site.posts | where_exp: "post", "post.project" | sort: "date" | reverse %}
+<div id="project-list" class="project-cards" data-project-list>
     {% for project in project_posts %}
     <a class="project-card" data-project-card data-project-name="{{ project.project | escape }}" href="{{ project.url | relative_url }}">
         <div class="project-card__meta"><time datetime="{{ project.date | date_to_xmlschema }}">{{ project.date | date: "%Y" }}</time> · {{ project.project }}</div>
