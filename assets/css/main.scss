@@ -1968,3 +1968,18 @@ blockquote {
         line-height: 1.45;
     }
 }
+
+.contact-page .portfolio-prose .contact-intro__photo {
+    border-radius: 50%;
+}
+
+.contact-page .portfolio-prose p {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+@media (max-width: 600px) {
+    .contact-page .portfolio-prose p {
+        text-align: left;
+    }
+}
