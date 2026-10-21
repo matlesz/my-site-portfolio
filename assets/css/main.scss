@@ -2411,3 +2411,24 @@ blockquote {
     max-width: 65ch;
     text-align: center;
 }
+
+@media (max-width: 700px) {
+    .portfolio-nav a,
+    .portfolio-header__contact {
+        min-height: 40px;
+        padding-bottom: 0.55rem;
+        padding-top: 0.55rem;
+    }
+
+    .portfolio-theme-toggle {
+        height: 40px;
+        min-width: 40px;
+        width: 40px;
+    }
+}
+
+@media (max-width: 600px) {
+    .project-filter {
+        min-height: 44px;
+    }
+}
