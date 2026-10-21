@@ -2484,3 +2484,37 @@ blockquote {
         padding-right: 0.25rem;
     }
 }
+
+@media (max-width: 480px) {
+    .portfolio-header__inner {
+        gap: 0.25rem;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .portfolio-brand__name {
+        display: none;
+    }
+
+    .portfolio-nav {
+        gap: 0.2rem;
+    }
+
+    .portfolio-nav a,
+    .portfolio-header__contact {
+        font-size: 0.52rem;
+        letter-spacing: 0.02em;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+    }
+
+    .portfolio-header__actions {
+        gap: 0.25rem;
+    }
+
+    .portfolio-theme-toggle {
+        height: 36px;
+        min-width: 36px;
+        width: 36px;
+    }
+}
