@@ -2,57 +2,30 @@
 title: "Projects"
 permalink: /projects/
 layout: portfolio
-author_profile: false
 classes: projects-page
 eyebrow: "Selected work"
-excerpt: "Selected project case studies focused on security, cloud, and systems work."
+excerpt: "Projects and lab work focused on security, cloud infrastructure, automation, and systems."
 ---
 
-This page highlights the projects and lab work that represent the way I approach infrastructure engineering, automation, and security operations.
+<p class="projects-lede">These are the projects that best represent how I learn: build something useful, operate it in the real world, and write down what broke.</p>
 
-{% assign homelab_posts_upper = site.posts | where_exp: "post", "post.tags contains 'Homelab'" %}
-{% assign homelab_posts_lower = site.posts | where_exp: "post", "post.tags contains 'homelab'" %}
-{% assign homelab_posts = homelab_posts_upper | concat: homelab_posts_lower | uniq | sort: "date" | reverse %}
+{% assign project_titles = "Running a Private AI and SearXNG Stack in My Homelab|Homelab Backup Strategy: 3-2-1 with PBS, Restic, Backrest, and Jottacloud|Homelab Observability: Grafana + Prometheus + Loki|Building My HomeLab: From Scratch to Self-Hosting|Building Parallel CI/CD Pipelines with AWS at Fundrecs|Turning a Raspberry Pi into an RTSP Streaming Server" | split: "|" %}
 
-<section class="home-section">
-    <div class="home-section__header">
-        <h2 class="home-section__title">Homelab series</h2>
-        <span class="home-section__rule" aria-hidden="true"></span>
-        <p class="home-section__subtitle">Ongoing infrastructure builds covering Proxmox, storage, networking, and secure remote access.</p>
-    </div>
-    {% assign homelab_featured_titles = "How OpenCode + ChatGPT Accelerated My Homelab|Building My HomeLab: From Scratch to Self-Hosting|How to Choose Your First Home Server Hardware: A Practical Guide" | split: "|" %}
-    <div class="entries-list">
-        {% for homelab_title in homelab_featured_titles %}
-        {% assign featured_post = homelab_posts | where: "title", homelab_title | first %}
-        {% if featured_post %}
-        {% assign post = featured_post %}
-        {% include archive-single.html type="list" %}
-        {% endif %}
-        {% endfor %}
-    </div>
-</section>
+<div class="project-cards">
+    {% for project_title in project_titles %}
+    {% assign project = site.posts | where: "title", project_title | first %}
+    {% if project %}
+    <a class="project-card" href="{{ project.url | relative_url }}">
+        <div class="project-card__meta">{{ project.date | date: "%Y" }} · {% if project.tags.first %}{{ project.tags.first }}{% endif %}</div>
+        <h2>{{ project.title }}</h2>
+        <p>{{ project.excerpt | strip_html | truncate: 190 }}</p>
+        <span class="project-card__link">Read the case study <span aria-hidden="true">↗</span></span>
+    </a>
+    {% endif %}
+    {% endfor %}
+</div>
 
-<section class="home-section">
-    <div class="home-section__header">
-        <h2 class="home-section__title">Other project</h2>
-        <span class="home-section__rule" aria-hidden="true"></span>
-    </div>
-    {% assign project_featured_titles = "geekDb: Exploring TMDB with Next.js|Turning a Raspberry Pi into an RTSP Streaming Server" | split: "|" %}
-    <div class="entries-list">
-        {% for project_title in project_featured_titles %}
-        {% assign project_post = site.posts | where: "title", project_title | first %}
-        {% if project_post %}
-        {% assign post = project_post %}
-        {% include archive-single.html type="list" %}
-        {% endif %}
-        {% endfor %}
-    </div>
-</section>
-
-<section class="home-section">
-    <div class="home-section__header">
-        <h2 class="home-section__title">More work</h2>
-        <span class="home-section__rule" aria-hidden="true"></span>
-    </div>
-    <p>Explore the full archive in the posts section for detailed build notes, experiments, and infrastructure writeups.</p>
-</section>
+<div class="projects-more">
+    <p class="portfolio-eyebrow">More experiments</p>
+    <p>The full <a href="/posts/">writing archive</a> includes the smaller experiments, build notes, and infrastructure decisions behind these projects.</p>
+</div>
