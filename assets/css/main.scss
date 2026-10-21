@@ -2397,3 +2397,17 @@ blockquote {
         animation-iteration-count: 1 !important;
     }
 }
+
+.portfolio-article .portfolio-prose figure {
+    margin: 2rem 0;
+}
+
+.portfolio-article .portfolio-prose figcaption {
+    color: var(--portfolio-muted);
+    font-size: 0.85rem;
+    font-style: italic;
+    line-height: 1.5;
+    margin: 0.75rem auto 0;
+    max-width: 65ch;
+    text-align: center;
+}

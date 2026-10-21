@@ -22,9 +22,10 @@ The stack now has four important pieces:
 
 I also connected the local OpenCode client to the authenticated OpenAI-compatible API. That gives me a local model option for coding and tool-use work without changing the default model for every OpenCode session.
 
-![Open WebUI with the local Qwen3 14B model selected](/assets/images/open-webui-qwen3-14b.svg)
-
-*Open WebUI showing the local Qwen3 14B model selected.*
+<figure>
+    <img src="/assets/images/open-webui-qwen3-14b.svg" alt="Open WebUI with the local Qwen3 14B model selected" width="960" height="360" loading="lazy" decoding="async">
+    <figcaption>Open WebUI showing the local Qwen3 14B model selected.</figcaption>
+</figure>
 
 ## The architecture
 
