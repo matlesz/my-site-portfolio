@@ -2178,3 +2178,9 @@ blockquote {
         overflow-wrap: anywhere;
     }
 }
+
+@media (max-width: 700px) {
+    .home-intro__aside {
+        order: -1;
+    }
+}
