@@ -1834,7 +1834,12 @@ blockquote {
     color: var(--portfolio-bg);
 }
 
-.portfolio-prose code,
+.portfolio-prose code {
+    background: var(--portfolio-surface);
+    border: 0;
+    color: var(--portfolio-text);
+}
+
 .portfolio-prose pre {
     background: var(--portfolio-surface);
     border: 1px solid var(--portfolio-border);
