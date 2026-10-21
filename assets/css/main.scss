@@ -2505,3 +2505,39 @@ blockquote {
         font-size: 0.58rem;
     }
 }
+
+@media (max-width: 480px) {
+    .portfolio-nav a,
+    .portfolio-header__contact {
+        align-items: center;
+        border: 1px solid var(--portfolio-border);
+        border-radius: 999px;
+        display: inline-flex;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0 0.35rem;
+        text-align: center;
+    }
+
+    .portfolio-nav a {
+        font-size: 0.64rem;
+    }
+
+    .portfolio-header__contact {
+        font-size: 0.64rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .portfolio-nav a,
+    .portfolio-header__contact {
+        min-height: 36px;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+    }
+
+    .portfolio-nav a,
+    .portfolio-header__contact {
+        font-size: 0.58rem;
+    }
+}
