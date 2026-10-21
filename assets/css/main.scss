@@ -2556,3 +2556,7 @@ blockquote {
         transform: scale(0.72);
     }
 }
+
+.tryhackme-embed__frame {
+    flex-shrink: 0;
+}
