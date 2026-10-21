@@ -2301,3 +2301,17 @@ blockquote {
         hyphens: auto;
     }
 }
+
+.portfolio-article .portfolio-prose p,
+.portfolio-article .portfolio-prose ul,
+.portfolio-article .portfolio-prose ol {
+    margin-bottom: 0.75rem;
+}
+
+.portfolio-article .portfolio-prose p + p {
+    margin-top: 0;
+}
+
+.portfolio-article .portfolio-prose li {
+    margin-bottom: 0.25rem;
+}
