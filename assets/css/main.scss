@@ -2520,8 +2520,8 @@ blockquote {
 }
 
 .about-page .portfolio-prose > p {
-    text-align: left;
-    text-justify: auto;
+    text-align: justify;
+    text-justify: inter-word;
 }
 
 .tryhackme-embed {
