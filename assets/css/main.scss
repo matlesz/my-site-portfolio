@@ -1721,3 +1721,31 @@ blockquote {
         text-align: left;
     }
 }
+
+.taxonomy-group {
+    border-top: 1px solid var(--portfolio-border);
+    padding: 1.5rem 0 2rem;
+}
+
+.taxonomy-group .section-heading {
+    margin-bottom: 0.5rem;
+}
+
+.taxonomy-group h2 {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.taxonomy-group .section-heading > span {
+    color: var(--portfolio-muted);
+    font-size: 0.75rem;
+}
+
+.taxonomy-group .writing-card {
+    padding: 0.9rem 0;
+}
+
+.taxonomy-group .writing-card h3 {
+    font-size: 1rem;
+    margin: 0;
+}

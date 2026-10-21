@@ -1,6 +1,8 @@
 ---
 title: "Posts by Category"
-layout: categories
+layout: portfolio_taxonomy
 permalink: /categories/
-author_profile: true
+taxonomy: categories
+author_profile: false
+sitemap: true
 ---
