@@ -31,6 +31,8 @@
             var nextTheme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
             document.documentElement.dataset.theme = nextTheme;
             localStorage.setItem("portfolio-theme", nextTheme);
+            var themeColor = document.querySelector('meta[name="theme-color"]');
+            if (themeColor) themeColor.setAttribute("content", nextTheme === "light" ? "#fbfbfa" : "#050806");
             updateToggle();
         });
     }());
