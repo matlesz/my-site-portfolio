@@ -8,7 +8,7 @@ eyebrow: "About me"
 ---
 
 <div class="about-profile">
-    <img src="/assets/images/bio-photo.jpg" alt="Portrait of Mat Leszkiewicz">
+    <img src="/assets/images/bio-photo.jpg" alt="Portrait of Mat Leszkiewicz" width="800" height="800">
     <div>
         <p class="portfolio-eyebrow">Support engineering · DevOps · Cybersecurity</p>
         <p>Hi, I’m <strong>Mat Leszkiewicz</strong>, a Support Engineer at <a href="https://n8n.io/" rel="nofollow noopener noreferrer">n8n</a> since June 2026. My background spans computer science, software support, and DevOps, with a continuing interest in how systems work and how they can be secured.</p>
