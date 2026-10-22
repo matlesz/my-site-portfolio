@@ -82,7 +82,7 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
             var activePosition = Math.max(1, visibleCards.indexOf(activeCard) + 1);
             var perView = carousel.slidesPerViewDynamic ? carousel.slidesPerViewDynamic() : carousel.params.slidesPerView;
             var endPosition = Math.min(activePosition + perView - 1, visibleCards.length);
-            count.textContent = visibleCards.length ? activePosition + "–" + endPosition + " of " + visibleCards.length : "0 of 0";
+            count.textContent = visibleCards.length ? (activePosition === endPosition ? activePosition + " of " + visibleCards.length : activePosition + "–" + endPosition + " of " + visibleCards.length) : "0 of 0";
         };
         if (carousel) {
             carousel.on("slideChange resize", updateCount);
