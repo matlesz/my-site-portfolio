@@ -81,7 +81,11 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
             if (controls) controls.hidden = singleProject;
             if (pagination) pagination.hidden = singleProject;
             if (carouselElement) carouselElement.classList.toggle("projects-carousel--single", singleProject);
-            var activeCard = carousel.slides[carousel.activeIndex];
+            var viewport = document.querySelector(".projects-carousel .swiper").getBoundingClientRect();
+            var activeCard = visibleCards.find(function (card) {
+                var rect = card.getBoundingClientRect();
+                return rect.right > viewport.left && rect.left < viewport.right;
+            }) || carousel.slides[carousel.activeIndex];
             var activePosition = Math.max(1, visibleCards.indexOf(activeCard) + 1);
             var perView = carousel.slidesPerViewDynamic ? carousel.slidesPerViewDynamic() : carousel.params.slidesPerView;
             var endPosition = Math.min(activePosition + perView - 1, visibleCards.length);
