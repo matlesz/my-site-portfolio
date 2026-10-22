@@ -1605,7 +1605,7 @@ blockquote {
 
 .projects-more {
     border-top: 1px solid var(--portfolio-border);
-    margin-top: 4rem;
+    margin-top: 2rem;
     padding-top: 1.5rem;
 }
 
@@ -1613,6 +1613,10 @@ blockquote {
     color: var(--portfolio-muted);
     line-height: 1.6;
     max-width: 60ch;
+}
+
+.projects-page .portfolio-main {
+    padding-bottom: 3rem;
 }
 
 @media (max-width: 700px) {
