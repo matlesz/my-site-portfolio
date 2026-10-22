@@ -67,6 +67,8 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
             navigation: { nextEl: ".projects-carousel__controls .swiper-button-next", prevEl: ".projects-carousel__controls .swiper-button-prev" },
             pagination: { clickable: true, el: ".projects-carousel .swiper-pagination" },
             slidesPerView: 1,
+            slidesOffsetBefore: 1,
+            slidesOffsetAfter: 1,
             spaceBetween: 16,
             speed: reducedMotion ? 0 : 420,
             breakpoints: { 700: { slidesPerView: 2 }, 1100: { slidesPerView: 3 } }
