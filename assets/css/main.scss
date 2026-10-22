@@ -1659,6 +1659,10 @@ blockquote {
     max-width: 820px;
 }
 
+.cv-page .portfolio-page-heading h1 {
+    margin-top: 2rem;
+}
+
 .cv-page .portfolio-prose > h2 {
     color: var(--portfolio-accent);
     font-size: 1.45rem;
@@ -1677,6 +1681,30 @@ blockquote {
 
 .cv-page .portfolio-prose strong:first-child {
     color: var(--portfolio-text);
+}
+
+.cv-page .cv-profile-headline {
+    text-align: center;
+}
+
+.cv-page .cv-profile-headline strong::after,
+.cv-page .cv-skill-category strong::after,
+.cv-page .cv-languages strong::after {
+    content: none !important;
+}
+
+.cv-page .cv-profile-copy {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.cv-page .cv-core-areas,
+.cv-page .cv-languages {
+    text-align: center;
+}
+
+.cv-page .cv-skill-category {
+    text-align: left;
 }
 
 .cv-page .portfolio-prose hr {
@@ -2344,7 +2372,7 @@ blockquote {
 }
 
 .cv-page .cv-skills-heading + p {
-    text-align: center;
+    text-align: left;
 }
 
 @media (max-width: 600px) {

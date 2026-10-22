@@ -6,24 +6,23 @@ classes: cv-page
 eyebrow: "Experience and background"
 ---
 
-## Languages
-
-**Polish Native** | **English Fluent**
-
-
 ## Profile
 
-> I finished a Higher Diploma in Computer Science degree at South East Technological University (previously known as WIT) with a passion to learn cybersecurity and SoC.
->
-> Over the past four years, I have gained exposure to a wide range of industry-standard technologies in the fields of networking, cloud computing, and cybersecurity, such as AWS (CloudFormation), Heroku, load balancing, networking protocols, ELK Stack, Windows, macOS, and Linux operating systems.
->
-> My most recent experience was as a software developer intern at FundRecs, a fintech company, where I focused on designing AWS CI/CD pipelines, infrastructure research for new features in the existing program, and product development.
->
-> Additionally, I have spent the past five years working for top international IT companies, including TikTok and Accenture, in content moderation and model optimization.
->
-> As a skilled IT professional, I have experience in scripting and coding, including Python, Java, JavaScript, Bash, NodeJS, and test-driven development. My full-stack experience also includes SQL/NoSQL databases such as MySQL and MongoDB.
->
-> Furthermore, I am an EU citizen with a full permit to work in Ireland and am motivated to start a full-time job in any environment, whether it be work-from-home, hybrid, or on-site.
+<p class="cv-profile-headline"><strong>Support Engineer</strong> | <strong>DevOps &amp; Platform Engineering</strong> | <strong>Production Troubleshooting</strong></p>
+
+<p class="cv-profile-copy">Support Engineer with experience troubleshooting workflow execution, APIs, integrations, networking, and self-hosted deployments. I use logs, reproducible cases, and cross-functional escalation to identify configuration, infrastructure, integration, and product issues.</p>
+
+<p class="cv-profile-copy">My infrastructure experience includes AWS CI/CD pipelines for Java applications and 25 AWS CloudFormation scripts developed at FundRecs. I also work with Docker, Linux, networking, Elasticsearch, Python, JavaScript, Ruby, and Java.</p>
+
+<p class="cv-profile-copy">I am building toward DevOps and Platform Engineering roles through practical work in infrastructure automation, observability, networking, backups, and cybersecurity in my homelab.</p>
+
+## Core areas
+
+<p class="cv-core-areas">Production troubleshooting · AWS infrastructure · CI/CD · Docker · Linux · Networking · Observability · Infrastructure automation · Self-hosted systems</p>
+
+## Languages
+
+<p class="cv-languages"><strong>Polish Native</strong> | <strong>English Fluent</strong></p>
 
 ---
 
@@ -93,7 +92,21 @@ eyebrow: "Experience and background"
 ## Technology Skills
 {: .cv-skills-heading}
 
-**Network Architecture** • **Docker** • **AWS** • **Elastic Stack** • **Honeycomb** • **Git** • **HTML5** • **CSS3** • **Python** • **Linux** • **Bash** • **Raspberry Pi** • **JavaScript** • **Ruby** • **Java** • **SQL** • **NoSQL** • **Application architecture** • **Full Stack** • **Web API** • **NodeJS** • **Atlassian Stack** • **Heroku** • **Next.JS** • **Kotlin** • **AWS** • **AI Automation** • **Code Analysis** • **Kibana** • **Honeycomb** • **Log Analysis** • **Incident Response**
+<p class="cv-skill-category"><strong>Cloud &amp; Infrastructure:</strong></p>
+
+AWS · CloudFormation · Docker · Linux · Networking · Raspberry Pi · Heroku
+
+<p class="cv-skill-category"><strong>CI/CD &amp; Automation:</strong></p>
+
+Git · CI/CD pipelines · Bash · Python · AI automation · Code analysis
+
+<p class="cv-skill-category"><strong>Observability &amp; Operations:</strong></p>
+
+Elastic Stack · Elasticsearch · Kibana · Honeycomb · Log analysis · Incident response
+
+<p class="cv-skill-category"><strong>Development:</strong></p>
+
+JavaScript · Ruby · Java · NodeJS · SQL · NoSQL · HTML5 · CSS3 · Next.JS · Kotlin · Web API · Full Stack · Application architecture · Atlassian Stack
 
 ---
 
