@@ -1466,8 +1466,7 @@ blockquote {
 
 .projects-carousel {
     margin-top: 2.5rem;
-    padding: 0 2.75rem 2.5rem;
-    position: relative;
+    padding-bottom: 1rem;
 }
 
 .projects-carousel .swiper {
@@ -1502,17 +1501,59 @@ blockquote {
     transform: translateY(-2px);
 }
 
-.projects-carousel .swiper-button-prev,
-.projects-carousel .swiper-button-next {
+.projects-carousel__controls {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.projects-carousel__controls .swiper-button-prev,
+.projects-carousel__controls .swiper-button-next {
+    align-items: center;
+    background: transparent;
+    border: 1px solid var(--portfolio-border);
+    border-radius: 50%;
     color: var(--portfolio-accent);
+    display: inline-flex;
+    font-size: 1.15rem;
+    height: 40px;
+    justify-content: center;
+    line-height: 1;
+    margin: 0;
+    position: static;
+    width: 40px;
+}
+
+.projects-carousel__controls .swiper-button-prev::after,
+.projects-carousel__controls .swiper-button-next::after {
+    content: none;
+}
+
+.projects-carousel__controls .swiper-button-prev:hover,
+.projects-carousel__controls .swiper-button-next:hover,
+.projects-carousel__controls .swiper-button-prev:focus-visible,
+.projects-carousel__controls .swiper-button-next:focus-visible {
+    background: var(--portfolio-accent-soft);
+    border-color: var(--portfolio-accent);
+}
+
+.projects-carousel__count {
+    color: var(--portfolio-muted);
+    font-size: 0.78rem;
+    min-width: 5.5rem;
+    text-align: center;
+}
+
+.projects-carousel .swiper-pagination {
+    margin-top: 0.75rem;
+    position: static;
+    transform: none;
 }
 
 .projects-carousel .swiper-pagination-bullet-active {
     background: var(--portfolio-accent);
-}
-
-.projects-carousel .swiper-pagination {
-    bottom: 0;
 }
 
 .project-card__meta {
@@ -1555,9 +1596,8 @@ blockquote {
 }
 
 @media (max-width: 700px) {
-    .projects-carousel {
-        padding-left: 0;
-        padding-right: 0;
+    .projects-carousel__controls {
+        margin-top: 0.75rem;
     }
 }
 

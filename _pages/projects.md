@@ -33,10 +33,13 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
             </a>
             {% endfor %}
         </div>
-        <button class="swiper-button-prev" type="button" aria-label="Previous projects"></button>
-        <button class="swiper-button-next" type="button" aria-label="Next projects"></button>
-        <div class="swiper-pagination" aria-label="Project pages"></div>
     </div>
+    <div class="projects-carousel__controls">
+        <button class="swiper-button-prev" type="button" aria-label="Previous projects">←</button>
+        <span class="projects-carousel__count" data-project-count aria-live="polite">1–1 of {{ project_posts.size }}</span>
+        <button class="swiper-button-next" type="button" aria-label="Next projects">→</button>
+    </div>
+    <div class="swiper-pagination" aria-label="Project pages"></div>
 </div>
 
 <p class="projects-empty" data-project-empty hidden>No projects match that filter.</p>
@@ -53,17 +56,31 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
         var cards = Array.from(document.querySelectorAll("[data-project-card]"));
         var empty = document.querySelector("[data-project-empty]");
         var status = document.querySelector(".project-filter-status");
+        var count = document.querySelector("[data-project-count]");
         var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         var carousel = window.Swiper ? new window.Swiper(".projects-carousel .swiper", {
             a11y: { enabled: true },
             keyboard: { enabled: true },
-            navigation: { nextEl: ".projects-carousel .swiper-button-next", prevEl: ".projects-carousel .swiper-button-prev" },
+            navigation: { nextEl: ".projects-carousel__controls .swiper-button-next", prevEl: ".projects-carousel__controls .swiper-button-prev" },
             pagination: { clickable: true, el: ".projects-carousel .swiper-pagination" },
             slidesPerView: 1,
             spaceBetween: 16,
             speed: reducedMotion ? 0 : 420,
             breakpoints: { 700: { slidesPerView: 2 }, 1100: { slidesPerView: 3 } }
         }) : null;
+        var updateCount = function () {
+            if (!carousel || !count) return;
+            var visibleCards = cards.filter(function (card) { return !card.hidden; });
+            var activeCard = carousel.slides[carousel.activeIndex];
+            var activePosition = visibleCards.indexOf(activeCard) + 1;
+            var perView = carousel.slidesPerViewDynamic ? carousel.slidesPerViewDynamic() : carousel.params.slidesPerView;
+            var endPosition = Math.min(activePosition + perView - 1, visibleCards.length);
+            count.textContent = visibleCards.length ? activePosition + "–" + endPosition + " of " + visibleCards.length : "0 of 0";
+        };
+        if (carousel) {
+            carousel.on("slideChange resize", updateCount);
+            updateCount();
+        }
         buttons.forEach(function (button) {
             button.addEventListener("click", function () {
                 var filter = button.dataset.projectFilter;
@@ -83,6 +100,7 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
                 if (carousel) {
                     carousel.update();
                     carousel.slideTo(firstVisible === -1 ? 0 : firstVisible, reducedMotion ? 0 : 420);
+                    updateCount();
                 }
                 if (status) {
                     status.textContent = button.textContent.trim() + ": " + visible + (visible === 1 ? " project" : " projects");
