@@ -1138,7 +1138,7 @@ blockquote {
 }
 
 .home-intro {
-    align-items: end;
+    align-items: center;
     border-bottom: 1px solid var(--portfolio-border);
     display: grid;
     gap: 4rem;
@@ -1155,9 +1155,8 @@ blockquote {
 }
 
 .home-intro__aside {
-    border-left: 1px solid var(--portfolio-border);
     color: var(--portfolio-muted);
-    padding-left: 1.5rem;
+    padding-left: 0;
     text-align: center;
 }
 
