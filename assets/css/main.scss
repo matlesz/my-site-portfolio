@@ -1307,7 +1307,7 @@ blockquote {
 }
 
 .portfolio-article {
-    max-width: 820px;
+    max-width: none;
 }
 
 .portfolio-article__header {
@@ -2182,6 +2182,7 @@ blockquote {
 .portfolio-article .portfolio-prose {
     margin-left: auto;
     margin-right: auto;
+    max-width: none;
 }
 
 .portfolio-article .portfolio-prose p {

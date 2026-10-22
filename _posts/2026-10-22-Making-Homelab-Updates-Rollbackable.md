@@ -11,61 +11,103 @@ tags: [Homelab, Automation, Observability, Docker, Reliability]
 description: "How I turned weekly Docker updates into an observable, health-gated process with WUD, Grafana, backups, and rollback snapshots."
 ---
 
-I wanted my homelab to update itself, but I did not want “automatic” to mean “hope the new container works.” The lab runs enough services that a weekly update is useful, yet it also includes databases, a GPU host, a VPN network namespace, and a public-facing Nextcloud instance. A failed update can affect more than one container.
+I wanted my homelab to update itself, but I did not want “automatic” to mean hoping the new container works. The lab runs enough services that weekly updates are useful, but it also includes databases, a GPU host, a VPN network namespace, and a public-facing Nextcloud instance. One bad update can affect more than one container.
 
-This week I started turning updates into a controlled operation: detect a candidate version, preserve the current state, deploy the change, observe the result, and restore the previous version if the health check fails.
+I started turning the process into a controlled operation: detect a candidate version, preserve the current state, deploy the change, watch what happens, and restore the previous version if the health check fails.
 
-## Starting with a clearer inventory
+## Starting with application inventory
 
-The first missing piece was visibility. I already had Prometheus, Grafana, blackbox probes, cAdvisor, and Homepage, but the dashboards did not answer a simple question: which image is each application actually running?
+The first thing I was missing was visibility. I already had Grafana and Prometheus, but I needed a clearer view of what each Docker host was actually running.
 
-I added a small host-side inventory exporter for the two Docker hosts. It publishes container state, health, configured image, deployed tag, image digest, container recreation time, and image creation time through the existing node-exporter textfile collector. The Docker socket stays on the host; Grafana and n8n never receive it.
+I extended the existing stack with a small Docker inventory exporter. It reports:
 
-The resulting Grafana dashboard combines three views:
+- container state and health;
+- configured image and deployed version;
+- image digest;
+- container recreation time;
+- image creation time; and
+- HTTP availability.
 
-- application HTTP availability;
-- Docker container state and health;
-- deployed image versions and local update timestamps.
+The exporter runs on both Docker hosts and publishes the data through the existing node-exporter textfile collector. The Docker socket stays on the host; Grafana and n8n never receive it.
 
-That made the current state easier to review before touching anything.
+The Grafana dashboard brings together application availability, Docker health, and deployed image versions. Now I can review the current state before changing anything.
 
 ## Adding registry awareness with WUD
 
-The inventory tells me what is running. It does not tell me whether the registry has a newer tag or digest. For that, I deployed What’s Up Docker (WUD) on both hosts.
+The inventory tells me what is running, but not whether a registry has a newer image. I deployed What’s Up Docker (WUD) on both Docker hosts for that part.
 
-WUD runs behind an internal Docker socket proxy and uses an authenticated, tailnet-only interface. Its automatic trigger is disabled. It can report candidates such as a newer Prometheus or exporter version, while manual actions remain deliberate.
+WUD checks registries for newer image tags and digests. It runs behind an internal Docker socket proxy and uses an authenticated, tailnet-only interface. Automatic updates remain disabled by default, so WUD reports candidates without applying them by itself.
 
-The update workflow now reads WUD’s local metrics before a Compose transaction. Non-major candidate tags can be promoted into the Compose file before the image is pulled. Major candidates remain pending. That distinction matters for images such as PostgreSQL: a new image tag is not automatically a safe database migration.
+The updater reads WUD’s local metrics before a Compose transaction. Compatible, non-major candidates can be promoted into the Compose file before the image is pulled. Major candidates remain pending. That distinction matters for PostgreSQL: changing `postgres:15` to `postgres:18` is not automatically a safe database migration.
 
-## The transaction
+## Cleaning up the Nextcloud database migration
 
-The updater runs as a systemd service rather than depending on a web UI being available. For each Compose project it:
+The active Nextcloud instance is now PostgreSQL-backed and managed separately from the retired MariaDB stack. As part of that cleanup, I:
+
+- removed the obsolete MariaDB containers and images;
+- retained the old database and configuration data for recovery;
+- added a dedicated PostgreSQL backup service;
+- verified the backup with a real database dump;
+- converted the active Nextcloud instance into a managed Compose project; and
+- updated the updater so it cannot accidentally resurrect the old MariaDB deployment.
+
+This separation matters for rollback. Keeping old files around for recovery is different from allowing the old deployment to become part of a normal update transaction again.
+
+## The update transaction
+
+The updater runs as a systemd service, so it does not depend on a web UI being available. For each Compose project it:
 
 1. checks required backup freshness for stateful services;
-2. records the Compose file and environment file;
-3. tags the currently running images for rollback;
-4. applies a WUD candidate when it is a compatible non-major update;
-5. pulls and recreates the project;
-6. checks the service endpoint or container health;
-7. observes the service for two minutes with ten-second checks;
-8. restores the previous Compose and image state if the service fails.
+2. records the current Compose and environment files;
+3. snapshots the running images and creates rollback tags;
+4. selects a WUD candidate version;
+5. pulls the image and recreates the containers;
+6. verifies the service health;
+7. observes the service for two minutes;
+8. rolls back automatically if the health gate fails; and
+9. keeps rollback snapshots for fourteen days.
 
-Snapshots are kept for fourteen days. Broad Docker image pruning is disabled because it can remove the very images needed for rollback.
+Healthchecks failure reporting is routed towards Telegram, and the update interface remains available through Portainer and WUD. The rollback mechanism was also tested independently with a temporary Compose canary rather than relying only on a successful update run.
 
-For stateful applications, the image snapshot is only part of the story. Nextcloud now has a dedicated PostgreSQL backup service, and n8n and Home Assistant have freshness gates before updates. A database major upgrade still requires a separate migration and restore procedure; changing `postgres:15` to `postgres:18` is not a rollback plan.
+For stateful applications, an image snapshot is only part of the story. Nextcloud has its dedicated PostgreSQL backup service, and other stateful services use backup freshness gates before an update. A database major upgrade still requires a separate migration and restore procedure.
 
 ## A real failure was more useful than a green test
 
-The first full run surfaced a genuine SearXNG problem. Its Gluetun container repeatedly received `AUTH_FAILED` from NordVPN. SearXNG’s web process was still present, but its VPN health was not acceptable.
+A full update run exposed an actual SearXNG problem. Its Gluetun container repeatedly returned `AUTH_FAILED` from NordVPN. SearXNG’s HTTP endpoint could still appear available, but its VPN tunnel was not healthy enough for the service to pass the update gate.
 
-That exposed two design issues. The updater needed to treat VPN health as part of SearXNG health, and rollback images must not be pruned at the end of an update. I added a pre-update and post-update VPN gate, disabled destructive image pruning, repaired the VPN session, and verified that SearXNG returned live search results again.
+The failure exposed two weaknesses in the updater:
 
-Grafana provided another useful test. WUD reported version 13.2.4 while the Compose file still referenced 10.4.3. The first upgrade attempt failed its short startup grace and automatically restored 10.4.3. A retry with a longer readiness window succeeded, and Grafana is now healthy on 13.2.4 with its dashboards and database intact.
+- rollback image pruning could remove images that were still needed; and
+- checking only SearXNG’s HTTP endpoint could miss an unhealthy VPN tunnel.
 
-## What I am deliberately not automating yet
+I corrected both behaviours. Rollback images are no longer aggressively pruned, and SearXNG now requires a healthy VPN before and after an update. I repaired the VPN session and verified that SearXNG returned live search results again.
 
-The weekly timers are designed to run during the night on both Docker hosts, with Healthchecks pings routed to Telegram on failure. Manual update access is available through Portainer and WUD.
+## Grafana as a complete upgrade test
 
-I am keeping major database upgrades manual until I can test the complete path in a disposable copy: backup, migration, application validation, and data restore. The same rule applies to any update that changes a persistent data format rather than simply replacing an image.
+Grafana gave me a second useful test of the transaction. WUD detected version 13.2.4 while the Compose file still referenced 10.4.3.
 
-This is a better definition of automation for my homelab. The system can do routine work by itself, but it also records what changed, keeps a way back, and stops at the boundary where an image update becomes a data migration.
+The first upgrade attempt failed because the startup grace period was too short. The updater restored Grafana 10.4.3 automatically. I retried with a longer readiness window, and Grafana 13.2.4 started successfully. I also verified that the dashboards and database were healthy after the upgrade.
+
+That failure was useful because the rollback was not theoretical. The system made a change, rejected the result, restored the previous version, and then succeeded after I adjusted the readiness window.
+
+## What remains manual
+
+Major database upgrades, such as PostgreSQL 15 to 18, remain manual. A database major upgrade needs a tested migration and restore procedure; changing the image tag alone is not a rollback strategy. The same rule applies to updates that change a persistent data format rather than simply replacing an image.
+
+The weekly schedule can handle compatible image and tag changes automatically, but schema-changing upgrades remain explicitly approved operations. I can still access the update process through Portainer and WUD when I want to review a candidate or intervene manually.
+
+## The result
+
+The homelab now has:
+
+- centralized application and version visibility;
+- registry update detection;
+- weekly automated update scheduling;
+- per-service rollback snapshots;
+- health-gated updates;
+- a post-update observation window;
+- Telegram failure notification paths;
+- GUI access through Portainer and WUD; and
+- an explicit separation between routine updates and major database migrations.
+
+The important change is not that every update is automatic. It is that routine updates have a transaction around them, failures have a recovery path, and data migrations stop for an explicit decision.
