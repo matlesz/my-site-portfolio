@@ -9,6 +9,70 @@ $indent-var: 0.55em;
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
 
+@font-face {
+    font-family: "Manrope";
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url("../fonts/manrope-300.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Manrope";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../fonts/manrope-400.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Manrope";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("../fonts/manrope-500.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Manrope";
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("../fonts/manrope-600.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Manrope";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../fonts/manrope-700.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Space Grotesk";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("../fonts/space-grotesk-500.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Space Grotesk";
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("../fonts/space-grotesk-600.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Space Grotesk";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url("../fonts/space-grotesk-700.ttf") format("truetype");
+}
+
 .search__toggle,
 .fa-search {
     display: inline-block !important;
@@ -1291,6 +1355,77 @@ blockquote {
     text-decoration: none;
 }
 
+.portfolio-footer__settings {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+}
+
+.portfolio-consent {
+    align-items: center;
+    background: var(--portfolio-surface);
+    border: 1px solid var(--portfolio-border);
+    bottom: 1rem;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.3);
+    display: flex;
+    gap: 1.5rem;
+    justify-content: space-between;
+    left: 50%;
+    max-width: 42rem;
+    padding: 1rem 1.25rem;
+    position: fixed;
+    right: auto;
+    transform: translateX(-50%);
+    width: calc(100% - 2rem);
+    z-index: 1000;
+}
+
+.portfolio-consent[hidden] {
+    display: none;
+}
+
+.portfolio-consent h2,
+.portfolio-consent p {
+    margin: 0;
+}
+
+.portfolio-consent h2 {
+    font-size: 1rem;
+    margin-bottom: 0.35rem;
+}
+
+.portfolio-consent p {
+    color: var(--portfolio-muted);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.portfolio-consent__actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: 0.5rem;
+}
+
+.portfolio-consent__button {
+    background: transparent;
+    border: 1px solid var(--portfolio-border);
+    color: var(--portfolio-text);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.8rem;
+    padding: 0.65rem 0.8rem;
+}
+
+.portfolio-consent__button--primary {
+    background: var(--portfolio-accent);
+    border-color: var(--portfolio-accent);
+    color: var(--portfolio-bg);
+}
+
 .portfolio-footer__links {
     align-items: end;
     display: flex;
@@ -1300,7 +1435,8 @@ blockquote {
 }
 
 .portfolio-footer__links a,
-.portfolio-footer__links span {
+.portfolio-footer__links span,
+.portfolio-footer__settings {
     color: var(--portfolio-muted);
     font-size: 0.75rem;
 }
@@ -2471,6 +2607,20 @@ blockquote {
 }
 
 @media (max-width: 700px) {
+    .portfolio-consent {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 0.85rem;
+    }
+
+    .portfolio-consent__actions {
+        width: 100%;
+    }
+
+    .portfolio-consent__button {
+        flex: 1;
+    }
+
     .portfolio-home-page .section-label {
         font-size: 0.8rem;
     }

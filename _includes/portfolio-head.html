@@ -25,9 +25,7 @@
     }());
 </script>
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}?v={{ site.time | date: '%s' }}">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script defer src="{{ '/assets/js/analytics-consent.js' | relative_url }}" data-tracking-id="{{ site.analytics.google.tracking_id | escape }}"></script>
 <title>{{ page.title | default: site.title }}{% unless page.url == '/' %} · {{ site.title }}{% endunless %}</title>
 <script type="application/ld+json">
 {
@@ -59,12 +57,3 @@
     ]
 }
 </script>
-{% if site.analytics.provider == "google-gtag" and site.analytics.google.tracking_id %}
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.analytics.google.tracking_id }}"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag("js", new Date());
-    gtag("config", "{{ site.analytics.google.tracking_id }}", { "anonymize_ip": true });
-</script>
-{% endif %}

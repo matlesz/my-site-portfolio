@@ -37,7 +37,7 @@ analytics:
   provider: "google-gtag"
   google:
     tracking_id: "G-ZZ2462N63Z"
-    anonymize_ip: false # default
+    anonymize_ip: true
 
 
 # Outputting

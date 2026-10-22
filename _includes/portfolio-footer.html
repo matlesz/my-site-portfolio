@@ -4,9 +4,12 @@
         <a class="portfolio-footer__cta" href="{{ '/contact/' | relative_url }}">Let’s talk <span aria-hidden="true">↗</span></a>
     </div>
     <div class="portfolio-footer__links">
+        <a href="{{ '/privacy-policy/' | relative_url }}">Privacy policy</a>
+        <button type="button" class="portfolio-footer__settings" data-cookie-settings>Cookie settings</button>
         {% for link in site.footer.links %}
         <a href="{{ link.url }}" rel="nofollow noopener noreferrer">{{ link.label }}</a>
         {% endfor %}
         <span>© {{ site.time | date: '%Y' }} {{ site.author.name }}</span>
     </div>
 </footer>
+{% include portfolio-consent.html %}
