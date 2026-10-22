@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+    [ "$local_ref" = "refs/heads/master" ] || continue
+
+    approval_file="$(git rev-parse --git-path portfolio-preview-approved)"
+    preview_url="${PORTFOLIO_PREVIEW_URL:-http://127.0.0.1:4001/}"
+
+    if [ ! -f "$approval_file" ] || ! grep -Fxq "$local_sha" "$approval_file" || ! grep -Fxq "$preview_url" "$approval_file"; then
+        cat >&2 <<EOF
+Push blocked: master requires local preview approval for commit $local_sha.
+
+1. Start the site locally:
+   ./scripts/site.sh serve --host 127.0.0.1 --port 4001
+2. Review the changes at: $preview_url
+3. Approve this exact commit:
+   ./scripts/approve-preview.sh "$preview_url"
+4. Push master again.
+EOF
+        exit 1
+    fi
+
+done
