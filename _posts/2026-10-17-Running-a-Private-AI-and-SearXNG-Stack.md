@@ -9,6 +9,12 @@ share: true
 related: true
 tags: [Homelab, Local AI, SearXNG, Open WebUI, llama.cpp, OpenCode, Networking]
 description: "How I connected local GGUF models, Open WebUI, self-hosted SearXNG search, and GPU handoff controls in my homelab."
+gallery:
+  - image: "/assets/images/open-webui-qwen3-14b.svg"
+    alt: "Open WebUI with the local Qwen3 14B model selected"
+    width: 960
+    height: 360
+    caption: "Open WebUI showing the local Qwen3 14B model selected."
 ---
 
 On October 17, 2026, I turned a collection of local AI experiments into a more usable stack. The result was not just a model running on a GPU. It was a private path from a chat interface to local inference, with web search supplied by my own SearXNG instance and a controller that gives Jellyfin priority when the same GPU is needed for transcoding.

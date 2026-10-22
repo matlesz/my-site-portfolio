@@ -9,6 +9,12 @@ share: true
 related: true
 tags: [Homelab, Observability, Grafana, Prometheus, Loki, Promtail, Monitoring, PlatformEngineering]
 description: "A platform-engineer style recap of wiring a full observability stack for my homelab, with metrics, logs, and dashboards that stay useful after reboot day."
+gallery:
+  - image: "/assets/images/homelab-observability-2026-02.png"
+    alt: "Homelab observability dashboard showing infrastructure metrics and service health"
+    width: 1672
+    height: 1007
+    caption: "Homelab observability dashboard from February 2026."
 ---
 
 On February 2, 2026, I spent a homelab session on a different kind of feature: **observability**. I wanted one place to check whether services were responding, which host or container was busy, and what the logs said when something failed. I connected Prometheus metrics and Loki logs to Grafana, then built dashboards around the questions I wanted to answer.

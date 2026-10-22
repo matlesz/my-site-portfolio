@@ -9,6 +9,12 @@ share: true
 related: true
 tags: [Homelab, Automation, ChatGPT, OpenCode, DevOps]
 description: "How I used OpenCode with ChatGPT to turn homelab chaos into a documented, repeatable workflow with dashboards, runbooks, and service snapshots."
+gallery:
+  - image: "/assets/images/homelab-dashboard-2026-01.png"
+    alt: "Homelab Homepage dashboard showing infrastructure, application, and service cards"
+    width: 1612
+    height: 1532
+    caption: "Homelab Homepage dashboard documented on January 25, 2026."
 ---
 
 Running a homelab means making small changes across Proxmox, VMs, LXC containers, Docker Compose projects, and shared storage. I wanted help working through those changes without relying on chat history or my memory as the only record of what the lab looked like. In January 2026, I started using **OpenCode** with **ChatGPT** alongside a repository of service definitions, plans, and runbooks.

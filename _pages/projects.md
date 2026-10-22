@@ -22,6 +22,7 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
 <div id="project-list" class="project-cards" data-project-list>
     {% for project in project_posts %}
     <a class="project-card" data-project-card data-project-name="{{ project.project | escape }}" href="{{ project.url | relative_url }}">
+        {% if project.gallery.first.image %}<img class="project-card__image" src="{{ project.gallery.first.image | relative_url }}" alt="{{ project.gallery.first.alt | escape }}" loading="lazy" decoding="async">{% endif %}
         <div class="project-card__meta"><time datetime="{{ project.date | date_to_xmlschema }}">{{ project.date | date: "%Y" }}</time> · {{ project.project }}</div>
         <h2>{{ project.title }}</h2>
         <p>{{ project.excerpt | strip_html | truncate: 190 }}</p>

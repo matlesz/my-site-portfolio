@@ -1489,6 +1489,15 @@ blockquote {
     transform: translateY(-2px);
 }
 
+.project-card__image {
+    aspect-ratio: 16 / 9;
+    border-radius: calc(var(--portfolio-radius) - 4px);
+    display: block;
+    margin: -0.5rem -0.5rem 1.25rem;
+    object-fit: cover;
+    width: calc(100% + 1rem);
+}
+
 .project-card__meta {
     color: var(--portfolio-muted);
     font-size: 0.68rem;
@@ -2173,7 +2182,7 @@ blockquote {
 
 @media (max-width: 700px) {
     .portfolio-nav {
-        gap: 0.35rem;
+        gap: 0.7rem;
     }
 
     .portfolio-nav a,
@@ -2584,7 +2593,7 @@ blockquote {
 
 @media (max-width: 340px) {
     .portfolio-nav {
-        gap: 0.1rem;
+        gap: 0.35rem;
     }
 
     .portfolio-nav a,
@@ -2644,8 +2653,16 @@ blockquote {
     .portfolio-header__contact {
         border: 0;
         border-radius: 0;
-        padding-left: 0;
-        padding-right: 0;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+    }
+}
+
+@media (max-width: 340px) {
+    .portfolio-nav a,
+    .portfolio-header__contact {
+        padding-left: 0.18rem;
+        padding-right: 0.18rem;
     }
 }
 
