@@ -2211,6 +2211,19 @@ blockquote {
     .home-intro__aside {
         order: -1;
     }
+
+    .portfolio-home-page .home-intro__aside img {
+        margin-bottom: 1.75rem;
+    }
+
+    .portfolio-home-page .home-intro__aside p {
+        font-size: 1rem;
+    }
+
+    .portfolio-home-page .home-intro__copy > .portfolio-eyebrow {
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+    }
 }
 
 @media (max-width: 600px) {
