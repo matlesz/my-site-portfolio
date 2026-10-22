@@ -1547,6 +1547,11 @@ blockquote {
     content: none;
 }
 
+.projects-carousel__controls button:disabled {
+    cursor: default;
+    opacity: 0.35;
+}
+
 .projects-carousel__controls .swiper-button-prev:hover,
 .projects-carousel__controls .swiper-button-next:hover,
 .projects-carousel__controls .swiper-button-prev:focus-visible,

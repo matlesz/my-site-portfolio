@@ -58,6 +58,8 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
         var status = document.querySelector(".project-filter-status");
         var count = document.querySelector("[data-project-count]");
         var controls = document.querySelector("[data-project-controls]");
+        var previousButton = document.querySelector(".projects-carousel__controls .swiper-button-prev");
+        var nextButton = document.querySelector(".projects-carousel__controls .swiper-button-next");
         var pagination = document.querySelector("[data-project-pagination]");
         var carouselElement = document.querySelector("[data-project-carousel]");
         var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -89,6 +91,16 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
             var activePosition = Math.max(1, visibleCards.indexOf(activeCard) + 1);
             var perView = carousel.slidesPerViewDynamic ? carousel.slidesPerViewDynamic() : carousel.params.slidesPerView;
             var endPosition = Math.min(activePosition + perView - 1, visibleCards.length);
+            var atStart = activePosition <= 1;
+            var atEnd = endPosition >= visibleCards.length;
+            if (previousButton) {
+                previousButton.disabled = atStart;
+                previousButton.setAttribute("aria-disabled", atStart ? "true" : "false");
+            }
+            if (nextButton) {
+                nextButton.disabled = atEnd;
+                nextButton.setAttribute("aria-disabled", atEnd ? "true" : "false");
+            }
             count.textContent = visibleCards.length ? (activePosition === endPosition ? activePosition + " of " + visibleCards.length : activePosition + "–" + endPosition + " of " + visibleCards.length) : "0 of 0";
         };
         if (carousel) {
