@@ -15,18 +15,6 @@
                 {% if page.description %}<p class="portfolio-article__dek">{{ page.description }}</p>{% endif %}
                 {% if page.tags %}<div class="portfolio-tags" aria-label="Tags">{% for tag in page.tags %}<span>{{ tag }}</span>{% endfor %}</div>{% endif %}
             </header>
-            {% if page.gallery %}
-            <div class="portfolio-gallery" aria-label="Project gallery">
-                {% for item in page.gallery %}
-                <figure class="portfolio-gallery__item">
-                    <a href="{{ item.image | relative_url }}">
-                        <img src="{{ item.image | relative_url }}" alt="{{ item.alt | escape }}"{% if item.width %} width="{{ item.width }}"{% endif %}{% if item.height %} height="{{ item.height }}"{% endif %} loading="lazy" decoding="async">
-                    </a>
-                    {% if item.caption %}<figcaption>{{ item.caption }}</figcaption>{% endif %}
-                </figure>
-                {% endfor %}
-            </div>
-            {% endif %}
             <div class="portfolio-prose">{{ content }}</div>
         </article>
         {% assign previous_post = site.posts | where_exp: "post", "post.date < page.date" | first %}
