@@ -1478,6 +1478,15 @@ blockquote {
     align-items: stretch;
 }
 
+.projects-carousel--single .swiper-wrapper {
+    justify-content: center;
+}
+
+.projects-carousel--single .swiper-slide {
+    margin-right: 0 !important;
+    width: min(100%, 520px) !important;
+}
+
 .project-cards {
     margin-top: 0;
 }
@@ -1550,6 +1559,10 @@ blockquote {
     margin-top: 0.75rem;
     position: static;
     transform: none;
+}
+
+.projects-carousel [hidden] {
+    display: none;
 }
 
 .projects-carousel .swiper-pagination-bullet-active {

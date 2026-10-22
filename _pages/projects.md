@@ -21,7 +21,7 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
 {% assign project_posts = site.posts | where_exp: "post", "post.project" | sort: "date" | reverse %}
 <p class="project-filter-status" role="status" aria-live="polite">All projects: {{ project_posts.size }} projects</p>
 
-<div class="projects-carousel" aria-label="Project case studies">
+<div class="projects-carousel" aria-label="Project case studies" data-project-carousel>
     <div id="project-list" class="swiper project-cards" data-project-list>
         <div class="swiper-wrapper">
             {% for project in project_posts %}
@@ -34,12 +34,12 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
             {% endfor %}
         </div>
     </div>
-    <div class="projects-carousel__controls">
+    <div class="projects-carousel__controls" data-project-controls>
         <button class="swiper-button-prev" type="button" aria-label="Previous projects">←</button>
         <span class="projects-carousel__count" data-project-count aria-live="polite">1–1 of {{ project_posts.size }}</span>
         <button class="swiper-button-next" type="button" aria-label="Next projects">→</button>
     </div>
-    <div class="swiper-pagination" aria-label="Project pages"></div>
+    <div class="swiper-pagination" aria-label="Project pages" data-project-pagination></div>
 </div>
 
 <p class="projects-empty" data-project-empty hidden>No projects match that filter.</p>
@@ -57,6 +57,9 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
         var empty = document.querySelector("[data-project-empty]");
         var status = document.querySelector(".project-filter-status");
         var count = document.querySelector("[data-project-count]");
+        var controls = document.querySelector("[data-project-controls]");
+        var pagination = document.querySelector("[data-project-pagination]");
+        var carouselElement = document.querySelector("[data-project-carousel]");
         var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         var carousel = window.Swiper ? new window.Swiper(".projects-carousel .swiper", {
             a11y: { enabled: true },
@@ -71,8 +74,12 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
         var updateCount = function () {
             if (!carousel || !count) return;
             var visibleCards = cards.filter(function (card) { return !card.hidden; });
+            var singleProject = visibleCards.length <= 1;
+            if (controls) controls.hidden = singleProject;
+            if (pagination) pagination.hidden = singleProject;
+            if (carouselElement) carouselElement.classList.toggle("projects-carousel--single", singleProject);
             var activeCard = carousel.slides[carousel.activeIndex];
-            var activePosition = visibleCards.indexOf(activeCard) + 1;
+            var activePosition = Math.max(1, visibleCards.indexOf(activeCard) + 1);
             var perView = carousel.slidesPerViewDynamic ? carousel.slidesPerViewDynamic() : carousel.params.slidesPerView;
             var endPosition = Math.min(activePosition + perView - 1, visibleCards.length);
             count.textContent = visibleCards.length ? activePosition + "–" + endPosition + " of " + visibleCards.length : "0 of 0";
@@ -102,6 +109,7 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
                     carousel.slideTo(firstVisible === -1 ? 0 : firstVisible, reducedMotion ? 0 : 420);
                     updateCount();
                 }
+                updateCount();
                 if (status) {
                     status.textContent = button.textContent.trim() + ": " + visible + (visible === 1 ? " project" : " projects");
                 }
