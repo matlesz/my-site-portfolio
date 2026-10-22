@@ -945,11 +945,17 @@ blockquote {
 }
 
 .portfolio-brand__mark {
-    border-radius: 8px;
-    display: block;
+    align-items: center;
+    background: var(--portfolio-text);
+    border-radius: 50%;
+    color: #fff;
+    display: inline-flex;
     flex-shrink: 0;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 0.68rem;
     height: 32px;
-    object-fit: cover;
+    justify-content: center;
+    letter-spacing: -0.04em;
     width: 32px;
 }
 
