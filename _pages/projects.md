@@ -63,6 +63,7 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
         var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         var carousel = window.Swiper ? new window.Swiper(".projects-carousel .swiper", {
             a11y: { enabled: true },
+            centerInsufficientSlides: true,
             keyboard: { enabled: true },
             navigation: { nextEl: ".projects-carousel__controls .swiper-button-next", prevEl: ".projects-carousel__controls .swiper-button-prev" },
             pagination: { clickable: true, el: ".projects-carousel .swiper-pagination" },
