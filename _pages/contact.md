@@ -4,7 +4,6 @@ permalink: /contact/
 layout: portfolio
 classes: contact-page
 eyebrow: "Get in touch"
-excerpt: "The easiest way to reach me without publishing my email address."
 ---
 
 <div class="contact-intro">

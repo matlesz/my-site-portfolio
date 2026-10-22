@@ -982,8 +982,8 @@ blockquote {
 .portfolio-footer {
     margin: 0 auto;
     max-width: 1160px;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
 }
 
 .portfolio-header__inner {
@@ -1062,22 +1062,23 @@ blockquote {
 }
 
 .portfolio-main {
+    box-sizing: border-box;
     padding-bottom: 6rem;
     padding-top: 5.5rem;
+    width: calc(100% - 2rem);
 }
 
 .portfolio-main--home {
-    padding-top: 5rem;
+    padding-top: 5.5rem;
 }
 
 .portfolio-main--reading,
 .portfolio-main--writing {
-    max-width: 920px;
+    max-width: 1160px;
 }
 
 .portfolio-page-heading {
     margin-bottom: 3.5rem;
-    max-width: 680px;
 }
 
 .portfolio-page-heading h1,
@@ -1543,7 +1544,7 @@ blockquote {
 
 .contact-intro p:last-child {
     color: var(--portfolio-muted);
-    font-size: 0.9rem;
+    font-size: 1rem;
 }
 
 .contact-options {
@@ -1611,12 +1612,14 @@ blockquote {
 
 .projects-carousel {
     margin-top: 2.5rem;
-    padding-bottom: 1rem;
+    min-height: 410px;
+    padding-bottom: 0;
 }
 
 .projects-carousel .swiper {
     box-sizing: border-box;
     display: block;
+    min-height: 325px;
     overflow: hidden;
     padding-left: 1px;
     padding-right: 2px;
@@ -1628,7 +1631,7 @@ blockquote {
 }
 
 .projects-carousel--single .swiper-wrapper {
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .projects-carousel--single .swiper-slide {
@@ -1636,16 +1639,49 @@ blockquote {
     width: min(100%, 520px) !important;
 }
 
+.projects-carousel--single .projects-carousel__controls,
+.projects-carousel--single .swiper-pagination {
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.projects-carousel--single .swiper-pagination {
+    display: block !important;
+    min-height: 28px;
+}
+
+@media (min-width: 701px) {
+    .projects-carousel {
+        min-height: 520px;
+    }
+
+    .projects-carousel .swiper {
+        min-height: 413px;
+    }
+
+    .projects-carousel--single .swiper-pagination {
+        min-height: 39px;
+    }
+}
+
+@media (min-width: 701px) {
+    .projects-carousel--single .swiper-wrapper {
+        justify-content: center;
+    }
+}
+
 .project-cards {
     margin-top: 0;
 }
 
 .project-card {
+    box-sizing: border-box;
     border: 1px solid var(--portfolio-border);
     border-radius: var(--portfolio-radius);
     color: var(--portfolio-text);
     display: flex;
     flex-direction: column;
+    height: 100%;
     min-height: 220px;
     padding: 1.5rem;
     text-decoration: none;
@@ -1664,7 +1700,7 @@ blockquote {
     display: flex;
     gap: 1rem;
     justify-content: center;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
 }
 
 .projects-carousel__controls .swiper-button-prev,
@@ -1710,7 +1746,7 @@ blockquote {
 }
 
 .projects-carousel .swiper-pagination {
-    margin-top: 0.75rem;
+    margin-top: 0.5rem;
     position: static;
     transform: none;
 }
@@ -1752,7 +1788,7 @@ blockquote {
 
 .projects-more {
     border-top: 1px solid var(--portfolio-border);
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     padding-top: 1.5rem;
 }
 
@@ -1764,6 +1800,29 @@ blockquote {
 
 .projects-page .portfolio-page-heading {
     margin-bottom: 1.5rem;
+    max-width: none;
+}
+
+.projects-page .portfolio-prose {
+    max-width: none;
+}
+
+.projects-page .projects-lede {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: none;
+}
+
+.projects-page .project-filter-status {
+    text-align: center;
+}
+
+.about-page .portfolio-prose,
+.contact-page .portfolio-prose,
+.cv-page .portfolio-prose {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: none;
 }
 
 .projects-page .portfolio-main {
@@ -1798,11 +1857,9 @@ blockquote {
 }
 
 .cv-page .portfolio-prose {
-    max-width: 820px;
-}
-
-.cv-page .portfolio-page-heading h1 {
-    margin-top: 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: none;
 }
 
 .cv-page .portfolio-prose > h2 {
@@ -2887,13 +2944,16 @@ blockquote {
     padding-bottom: 1rem;
 }
 
-.portfolio-home-page .home-intro__aside p,
-.portfolio-home-page .home-intro__copy > .portfolio-eyebrow {
+.portfolio-home-page .home-intro__aside p {
     text-align: center;
 }
 
 .portfolio-home-page .home-intro__copy > .portfolio-eyebrow {
-    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.portfolio-home-page .home-intro__copy > .portfolio-eyebrow {
+    margin-bottom: 1rem;
 }
 
 .cv-page .portfolio-prose > h2:first-child {

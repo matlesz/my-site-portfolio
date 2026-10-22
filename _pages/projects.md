@@ -65,13 +65,13 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
         var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         var carousel = window.Swiper ? new window.Swiper(".projects-carousel .swiper", {
             a11y: { enabled: true },
-            centerInsufficientSlides: true,
+            centerInsufficientSlides: false,
             keyboard: { enabled: true },
             navigation: { nextEl: ".projects-carousel__controls .swiper-button-next", prevEl: ".projects-carousel__controls .swiper-button-prev" },
             pagination: { clickable: true, el: ".projects-carousel .swiper-pagination" },
             slidesPerView: 1,
-            slidesOffsetBefore: 1,
-            slidesOffsetAfter: 2,
+            slidesOffsetBefore: 0,
+            slidesOffsetAfter: 0,
             spaceBetween: 16,
             speed: reducedMotion ? 0 : 420,
             breakpoints: { 700: { slidesPerView: 2 } }
@@ -80,10 +80,17 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
             if (!carousel || !count) return;
             var visibleCards = cards.filter(function (card) { return !card.hidden; });
             var singleProject = visibleCards.length <= 1;
-            if (controls) controls.hidden = singleProject;
-            if (pagination) pagination.hidden = singleProject;
+            if (controls) {
+                controls.hidden = false;
+                controls.setAttribute("aria-hidden", singleProject ? "true" : "false");
+            }
+            if (pagination) {
+                pagination.hidden = false;
+                pagination.setAttribute("aria-hidden", singleProject ? "true" : "false");
+            }
+            var swiperElement = document.querySelector(".projects-carousel .swiper");
             if (carouselElement) carouselElement.classList.toggle("projects-carousel--single", singleProject);
-            var viewport = document.querySelector(".projects-carousel .swiper").getBoundingClientRect();
+            var viewport = swiperElement.getBoundingClientRect();
             var activeCard = visibleCards.find(function (card) {
                 var rect = card.getBoundingClientRect();
                 return rect.right > viewport.left && rect.left < viewport.right;
