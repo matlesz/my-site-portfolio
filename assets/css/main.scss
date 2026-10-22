@@ -2403,17 +2403,27 @@ blockquote {
 }
 
 @media (max-width: 700px) {
+    .portfolio-home-page .home-intro {
+        padding-bottom: 2rem;
+    }
+
+    .portfolio-home-page .home-intro__copy {
+        display: contents;
+    }
+
     .home-intro__aside {
-        order: -1;
+        margin-top: 2.25rem;
+        order: 5;
     }
 
     .portfolio-home-page .home-intro__aside img {
         margin-bottom: 1.75rem;
+        width: 220px;
     }
 
     .portfolio-home-page .home-intro__aside p {
         font-size: 1rem;
-        margin-bottom: 2rem;
+        margin-bottom: 0.5rem;
     }
 
     .portfolio-home-page .home-intro__copy > .portfolio-eyebrow {
