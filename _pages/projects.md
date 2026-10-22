@@ -72,7 +72,7 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
             slidesOffsetAfter: 2,
             spaceBetween: 16,
             speed: reducedMotion ? 0 : 420,
-            breakpoints: { 700: { slidesPerView: 2 }, 1100: { slidesPerView: 3 } }
+            breakpoints: { 700: { slidesPerView: 2 } }
         }) : null;
         var updateCount = function () {
             if (!carousel || !count) return;
