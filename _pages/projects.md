@@ -92,7 +92,7 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
             count.textContent = visibleCards.length ? (activePosition === endPosition ? activePosition + " of " + visibleCards.length : activePosition + "–" + endPosition + " of " + visibleCards.length) : "0 of 0";
         };
         if (carousel) {
-            carousel.on("slideChange resize", updateCount);
+            carousel.on("transitionEnd resize", updateCount);
             updateCount();
         }
         buttons.forEach(function (button) {
