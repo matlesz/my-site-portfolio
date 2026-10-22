@@ -1474,8 +1474,11 @@ blockquote {
 }
 
 .projects-carousel .swiper {
+    box-sizing: border-box;
     display: block;
     overflow: hidden;
+    padding-left: 1px;
+    padding-right: 2px;
 }
 
 .projects-carousel .swiper-wrapper {
