@@ -2237,8 +2237,11 @@ blockquote {
 @media (max-width: 700px) {
     .portfolio-nav a,
     .portfolio-header__contact {
+        border: 0;
         font-size: 0.68rem;
         letter-spacing: 0.04em;
+        padding-left: 0;
+        padding-right: 0;
     }
 
     .portfolio-article .portfolio-prose {
@@ -2262,6 +2265,43 @@ blockquote {
 
 .portfolio-article .portfolio-prose li {
     margin-bottom: 0.25rem;
+}
+
+.portfolio-gallery {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 2rem 0 2.5rem;
+}
+
+.portfolio-gallery__item {
+    margin: 0;
+}
+
+.portfolio-gallery__item a {
+    display: block;
+}
+
+.portfolio-gallery__item img {
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--portfolio-border);
+    border-radius: var(--portfolio-radius);
+    display: block;
+    object-fit: cover;
+    width: 100%;
+}
+
+.portfolio-gallery__item figcaption {
+    color: var(--portfolio-muted);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    margin-top: 0.55rem;
+}
+
+@media (max-width: 600px) {
+    .portfolio-gallery {
+        grid-template-columns: 1fr;
+    }
 }
 
 :root[data-theme="dark"] .portfolio-button--solid {
@@ -2597,6 +2637,16 @@ blockquote {
 
 .cv-page .portfolio-prose > h2:first-child + table {
     font-size: 1.25rem;
+}
+
+@media (max-width: 700px) {
+    .portfolio-nav a,
+    .portfolio-header__contact {
+        border: 0;
+        border-radius: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
 }
 
 .cv-page .portfolio-prose > h2:first-child + table + h2 {
