@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 430" role="img" aria-labelledby="title desc">
+  <title id="title">Homelab update and rollback flow</title>
+  <desc id="desc">A What’s Up Docker candidate passes a backup freshness check, the current state is snapshotted, and a Compose update is deployed. A health gate and two-minute observation either confirm success or trigger rollback.</desc>
+  <defs>
+    <style>
+      .bg { fill: #050806; }
+      .box { fill: #0b1710; stroke: #285943; stroke-width: 2; }
+      .decision { fill: #10251a; stroke: #39f58b; stroke-width: 2; }
+      .text { fill: #d8f2df; font: 600 20px Manrope, Arial, sans-serif; text-anchor: middle; }
+      .small { fill: #91b39b; font: 400 16px Manrope, Arial, sans-serif; text-anchor: middle; }
+      .arrow { fill: none; stroke: #39f58b; stroke-width: 3; marker-end: url(#arrowhead); }
+      .rollback { fill: none; stroke: #e79a9a; stroke-width: 3; marker-end: url(#rollbackhead); }
+      .label { fill: #91b39b; font: 400 15px Manrope, Arial, sans-serif; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#39f58b" />
+    </marker>
+    <marker id="rollbackhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#e79a9a" />
+    </marker>
+  </defs>
+  <rect class="bg" width="1200" height="430" rx="18" />
+
+  <rect class="box" x="35" y="55" width="170" height="105" rx="14" />
+  <text class="text" x="120" y="98">WUD</text>
+  <text class="small" x="120" y="126">candidate version</text>
+
+  <rect class="box" x="255" y="55" width="170" height="105" rx="14" />
+  <text class="text" x="340" y="98">Backup gate</text>
+  <text class="small" x="340" y="126">freshness check</text>
+
+  <rect class="box" x="475" y="55" width="170" height="105" rx="14" />
+  <text class="text" x="560" y="98">Snapshot</text>
+  <text class="small" x="560" y="126">Compose + images</text>
+
+  <rect class="box" x="695" y="55" width="170" height="105" rx="14" />
+  <text class="text" x="780" y="98">Deploy</text>
+  <text class="small" x="780" y="126">pull + recreate</text>
+
+  <rect class="decision" x="915" y="55" width="230" height="105" rx="14" />
+  <text class="text" x="1030" y="98">Health gate</text>
+  <text class="small" x="1030" y="126">service + VPN health</text>
+
+  <path class="arrow" d="M205 107 H250" />
+  <path class="arrow" d="M425 107 H470" />
+  <path class="arrow" d="M645 107 H690" />
+  <path class="arrow" d="M865 107 H910" />
+
+  <rect class="box" x="420" y="250" width="260" height="105" rx="14" />
+  <text class="text" x="550" y="293">Observe</text>
+  <text class="small" x="550" y="321">two minutes, 10-second checks</text>
+
+  <rect class="decision" x="790" y="250" width="220" height="105" rx="14" />
+  <text class="text" x="900" y="293">Success</text>
+  <text class="small" x="900" y="321">keep the new version</text>
+
+  <rect class="box" x="85" y="250" width="220" height="105" rx="14" />
+  <text class="text" x="195" y="293">Rollback</text>
+  <text class="small" x="195" y="321">restore tagged state</text>
+
+  <path class="arrow" d="M1030 160 V205 H550 V245" />
+  <path class="arrow" d="M680 302 H785" />
+  <path class="rollback" d="M420 302 H310" />
+  <text class="label" x="705" y="290">pass</text>
+  <text class="label" x="350" y="290" text-anchor="end">fail</text>
+</svg>

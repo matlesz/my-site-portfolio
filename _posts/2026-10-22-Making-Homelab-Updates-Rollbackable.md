@@ -17,6 +17,11 @@ I started turning the process into a controlled operation: detect a candidate ve
 
 I am treating this as a test platform before introducing a real GitOps workflow. I want to prove the inventory, health gates, rollback path, and failure reporting first. A GitOps controller should not simply reconcile a bad image faster; it should have a safe operational boundary around the change.
 
+<figure>
+    <img src="/assets/images/homelab-update-rollback-flow.svg" alt="Update flow from WUD candidate detection through backup freshness checks, snapshots, deployment, health gates, observation, and rollback on failure" width="1200" height="430" loading="lazy" decoding="async">
+    <figcaption>The update path checks the current state before deployment, then keeps or rolls back the new version based on service health.</figcaption>
+</figure>
+
 ## Starting with application inventory
 
 The first thing I was missing was visibility. I already had Grafana and Prometheus, but I needed a clearer view of what each Docker host was actually running.
