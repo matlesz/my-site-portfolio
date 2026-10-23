@@ -15,6 +15,8 @@ I wanted my homelab to update itself, but I did not want “automatic” to mean
 
 I started turning the process into a controlled operation: detect a candidate version, preserve the current state, deploy the change, watch what happens, and restore the previous version if the health check fails.
 
+I am treating this as a test platform before introducing a real GitOps workflow. I want to prove the inventory, health gates, rollback path, and failure reporting first. A GitOps controller should not simply reconcile a bad image faster; it should have a safe operational boundary around the change.
+
 ## Starting with application inventory
 
 The first thing I was missing was visibility. I already had Grafana and Prometheus, but I needed a clearer view of what each Docker host was actually running.
@@ -110,4 +112,15 @@ The homelab now has:
 - GUI access through Portainer and WUD; and
 - an explicit separation between routine updates and major database migrations.
 
-The important change is not that every update is automatic. It is that routine updates have a transaction around them, failures have a recovery path, and data migrations stop for an explicit decision.
+The important change is not that every update is automatic. It is that routine updates have a transaction around them, failures have a recovery path, and data migrations stop for an explicit decision. Once these controls are reliable, they give me a better foundation for deciding which parts of the homelab should move to a real GitOps model.
+
+## Research and project references
+
+- [Docker Compose documentation](https://docs.docker.com/compose/)
+- [Prometheus documentation](https://prometheus.io/docs/)
+- [Grafana documentation](https://grafana.com/docs/)
+- [What’s Up Docker documentation](https://getwud.github.io/wud/)
+- [Healthchecks documentation](https://healthchecks.io/docs/)
+- [Portainer documentation](https://docs.portainer.io/)
+- [SearXNG documentation](https://docs.searxng.org/)
+- [Gluetun project](https://github.com/qdm12/gluetun)
