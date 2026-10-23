@@ -33,25 +33,26 @@ the iCloud-synced checkout. On another machine, install that Ruby/Bundler and
 the `Gemfile` dependencies before running the wrapper. `Gemfile.lock` and
 `vendor/bundle/` are local, ignored files; do not commit them or `_site/`.
 
-## Preview and branch workflow
+## Preview before publishing `master`
 
-This checkout uses the versioned `.githooks/pre-push` hook to block all direct
-pushes to `master`. Install it once after cloning:
+This checkout uses the versioned `.githooks/pre-push` hook to require a local
+review before pushing `master`. Install it once after cloning:
 
 ```bash
 git config core.hooksPath .githooks
 ```
 
-Create a feature branch, start a preview, and review the changed pages before
-opening a pull request:
+Start a preview, review the changed pages, then approve the exact commit before
+pushing:
 
 ```bash
 ./scripts/site.sh serve --host 127.0.0.1 --port 4001
-git switch -c article/my-change
-git push origin HEAD
+./scripts/approve-preview.sh http://127.0.0.1:4001/
+git push origin master
 ```
 
-The hook rejects `refs/heads/master` even when a local preview approval exists.
+The approval is stored under `.git/`, is not committed, and becomes invalid
+when a new commit is created.
 
 ---
 
