@@ -35,9 +35,9 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
         </div>
     </div>
     <div class="projects-carousel__controls" data-project-controls>
-        <button class="swiper-button-prev" type="button" aria-label="Previous projects">←</button>
-        <span class="projects-carousel__count" data-project-count aria-live="polite">1–1 of {{ project_posts.size }}</span>
-        <button class="swiper-button-next" type="button" aria-label="Next projects">→</button>
+        <button class="swiper-button-prev" type="button" aria-label="Previous projects">PREV</button>
+        <span class="projects-carousel__count" data-project-count aria-live="polite">01 / {{ project_posts.size | prepend: '0' | slice: -2, 2 }}</span>
+        <button class="swiper-button-next" type="button" aria-label="Next projects">NEXT</button>
     </div>
     <div class="swiper-pagination" aria-label="Project pages" data-project-pagination></div>
 </div>
@@ -108,7 +108,8 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
                 nextButton.disabled = atEnd;
                 nextButton.setAttribute("aria-disabled", atEnd ? "true" : "false");
             }
-            count.textContent = visibleCards.length ? (activePosition === endPosition ? activePosition + " of " + visibleCards.length : activePosition + "–" + endPosition + " of " + visibleCards.length) : "0 of 0";
+            var formatPosition = function (position) { return String(position).padStart(2, "0"); };
+            count.textContent = visibleCards.length ? (activePosition === endPosition ? formatPosition(activePosition) + " / " + formatPosition(visibleCards.length) : formatPosition(activePosition) + "–" + formatPosition(endPosition) + " / " + formatPosition(visibleCards.length)) : "00 / 00";
         };
         if (carousel) {
             carousel.on("transitionEnd resize", updateCount);

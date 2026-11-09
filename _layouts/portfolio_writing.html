@@ -13,14 +13,19 @@
             <p class="portfolio-page-heading__lede">Practical notes on support engineering, homelabs, cloud infrastructure, automation, and security.</p>
         </div>
         <div class="writing-search">
-            <label for="article-search">Search articles</label>
-            <input id="article-search" type="search" placeholder="Search by title, topic, or tag" autocomplete="off">
+            <div class="writing-search__controls">
+                <div>
+                    <label for="article-search">Search articles</label>
+                    <input id="article-search" type="search" placeholder="Search by title, topic, or tag" autocomplete="off">
+                </div>
+                <button class="writing-sort" type="button" data-writing-sort aria-label="Sort articles, newest first" title="Sort articles, newest first" aria-pressed="false"><span class="writing-sort__icon" aria-hidden="true">↕</span><span class="writing-sort__label">Sort: newest first</span></button>
+            </div>
             <p id="article-search-status" class="writing-search__status" role="status" aria-live="polite"></p>
         </div>
         <div class="writing-list" data-writing-list>
             {% for post in site.posts %}
             {% capture search_text %}{{ post.title }} {{ post.excerpt }} {{ post.tags | join: " " }}{% endcapture %}
-            <a class="writing-card" data-writing-card data-search-text="{{ search_text | strip_html | strip_newlines | escape }}" href="{{ post.url | relative_url }}">
+            <a class="writing-card" data-writing-card data-date="{{ post.date | date: '%Y-%m-%d' }}" data-search-text="{{ search_text | strip_html | strip_newlines | escape }}" href="{{ post.url | relative_url }}">
                 <div class="writing-card__meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d.%m.%Y" }}</time>{% if post.tags.first %} · {{ post.tags.first }}{% endif %}</div>
                 <h2>{{ post.title }}</h2>
                 {% if post.excerpt %}<p>{{ post.excerpt | strip_html | truncate: 180 }}</p>{% endif %}
@@ -33,11 +38,15 @@
     <script>
         (function () {
             var input = document.querySelector("#article-search");
+            var list = document.querySelector("[data-writing-list]");
             var cards = Array.from(document.querySelectorAll("[data-writing-card]"));
             var status = document.querySelector("#article-search-status");
             var empty = document.querySelector("[data-writing-empty]");
-            if (!input) return;
-            input.addEventListener("input", function () {
+            var sortButton = document.querySelector("[data-writing-sort]");
+            var sortLabel = sortButton ? sortButton.querySelector(".writing-sort__label") : null;
+            var newestFirst = true;
+            if (!input || !list) return;
+            var updateResults = function () {
                 var query = input.value.trim().toLowerCase();
                 var visible = cards.filter(function (card) {
                     var matches = !query || card.dataset.searchText.toLowerCase().indexOf(query) !== -1;
@@ -46,7 +55,24 @@
                 }).length;
                 status.textContent = query ? visible + (visible === 1 ? " article" : " articles") + " found" : "";
                 empty.hidden = visible !== 0;
-            });
+            };
+            input.addEventListener("input", updateResults);
+            if (sortButton) {
+                sortButton.addEventListener("click", function () {
+                    newestFirst = !newestFirst;
+                    cards.sort(function (first, second) {
+                        var comparison = first.dataset.date.localeCompare(second.dataset.date);
+                        return newestFirst ? -comparison : comparison;
+                    });
+                    cards.forEach(function (card) { list.appendChild(card); });
+                    var sortText = newestFirst ? "Sort: newest first" : "Sort: oldest first";
+                    if (sortLabel) sortLabel.textContent = sortText;
+                    sortButton.setAttribute("aria-label", "Sort articles, " + (newestFirst ? "newest first" : "oldest first"));
+                    sortButton.setAttribute("title", "Sort articles, " + (newestFirst ? "newest first" : "oldest first"));
+                    sortButton.setAttribute("aria-pressed", newestFirst ? "false" : "true");
+                    updateResults();
+                });
+            }
         }());
     </script>
     {% include portfolio-footer.html %}
