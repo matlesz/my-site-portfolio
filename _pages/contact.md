@@ -16,12 +16,12 @@ eyebrow: "Get in touch"
 <div class="contact-options">
     <a class="contact-option" href="https://www.linkedin.com/in/mat-leszkiewicz/" rel="nofollow noopener noreferrer">
         <span class="contact-option__label">Professional conversations</span>
-        <strong>Message me on LinkedIn <span aria-hidden="true">↗</span></strong>
+        <strong>Message me on LinkedIn <span class="portfolio-link-mark" aria-hidden="true">&gt;</span></strong>
         <span>Best for opportunities, collaboration, and introductions.</span>
     </a>
     <a class="contact-option" href="https://github.com/matlesz" rel="nofollow noopener noreferrer">
         <span class="contact-option__label">Technical conversations</span>
-        <strong>Find me on GitHub <span aria-hidden="true">↗</span></strong>
+        <strong>Find me on GitHub <span class="portfolio-link-mark" aria-hidden="true">&gt;</span></strong>
         <span>Best for project discussions, code, and open-source work.</span>
     </a>
 </div>

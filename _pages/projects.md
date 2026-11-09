@@ -29,7 +29,7 @@ excerpt: "Projects and lab work focused on security, cloud infrastructure, autom
                 <div class="project-card__meta"><time datetime="{{ project.date | date_to_xmlschema }}">{{ project.date | date: "%Y" }}</time> · {{ project.project }}</div>
                 <h2>{{ project.title }}</h2>
                 <p>{{ project.excerpt | strip_html | truncate: 190 }}</p>
-                <span class="project-card__link">Read the case study <span aria-hidden="true">↗</span></span>
+                <span class="project-card__link">Read the case study <span class="portfolio-link-mark" aria-hidden="true">&gt;</span></span>
             </a>
             {% endfor %}
         </div>

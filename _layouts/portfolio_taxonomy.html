@@ -26,7 +26,7 @@
                     <a class="writing-card" href="{{ post.url | relative_url }}">
                         <div class="writing-card__meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%d.%m.%Y" }}</time></div>
                         <h3>{{ post.title }}</h3>
-                        <span class="writing-card__arrow" aria-hidden="true">↗</span>
+                        <span class="writing-card__arrow portfolio-link-mark" aria-hidden="true">&gt;</span>
                     </a>
                     {% endfor %}
                 </div>

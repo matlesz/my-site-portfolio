@@ -1293,6 +1293,14 @@ blockquote {
     color: var(--portfolio-muted);
 }
 
+.portfolio-link-mark {
+    color: var(--portfolio-accent);
+    display: inline-block;
+    font-family: "Space Grotesk", sans-serif;
+    font-weight: 700;
+    margin-left: 0.2em;
+}
+
 .writing-card__arrow {
     color: var(--portfolio-accent);
     font-size: 1.25rem;
